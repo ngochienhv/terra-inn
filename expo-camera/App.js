@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Text, View, StyleSheet, Button, Modal, Alert, Pressable, Dimensions, Image, ImageBackground } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
+import {WithSplashScreen} from './WithSplashScreen';
 
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
@@ -12,12 +13,9 @@ export default function App() {
   const [isAppReady, setIsAppReady] = useState(false);
 
   useEffect(() => {
-    initialize().then((context) => {
-      store.current = context.store;
-      queryClient.current = context.queryClient;
-
+    setTimeout(() => {
       setIsAppReady(true);
-    });
+    }, 1000);
   }, []);
 
   const [hasPermission, setHasPermission] = useState(null);

@@ -21,9 +21,11 @@ export default function App() {
   }, []);
 
   const handleBarCodeScanned = ({ type, data }) => {
+    //alert(!isNaN(+data)); 
     setScanned(true);
-    setModalVisible(!modalVisible)
-    setstudentID(data)
+    if (!isNaN(+data)) setModalVisible(!modalVisible);
+    else alert('Please scan BKNet ID !');
+    setstudentID(data);
     //alert(`Bar code with type ${type} and data ${data} has been scanned!`);
   };
 

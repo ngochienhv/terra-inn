@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Text, View, StyleSheet, Button, Modal, Alert, Pressable, Dimensions, Image, ImageBackground } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 
@@ -6,6 +6,20 @@ const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 
 export default function App() {
+  const store = useRef(undefined);
+  const queryClient = useRef(undefined);
+
+  const [isAppReady, setIsAppReady] = useState(false);
+
+  useEffect(() => {
+    initialize().then((context) => {
+      store.current = context.store;
+      queryClient.current = context.queryClient;
+
+      setIsAppReady(true);
+    });
+  }, []);
+
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
@@ -37,6 +51,7 @@ export default function App() {
   }
 
   return (
+    <WithSplashScreen isAppReady={isAppReady}>
     <View style={styles.container}>
       <BarCodeScanner
         onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
@@ -69,6 +84,7 @@ export default function App() {
         </View>
       </Modal>
     </View>
+    </WithSplashScreen>
   );
 }
 

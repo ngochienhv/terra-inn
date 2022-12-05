@@ -4,17 +4,14 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { View, TextField, Text, Colors, Typography, Button } from 'react-native-ui-lib';
 import { TERRA_COLOR } from '../../constants/theme/color';
 import { AuthenNavigatorParamList } from 'types/navigator';
-import { useAppDispatch } from '../../redux/store';
-import { signIn } from '../../redux/slices/userSlice';
 
-export default function SigninScreen({
+export default function SignupScreen({
   navigation,
 }: {
-  navigation: NativeStackNavigationProp<AuthenNavigatorParamList, 'Signin'>;
+  navigation: NativeStackNavigationProp<AuthenNavigatorParamList, 'Signup'>;
 }) {
   const [phone, setPhone] = useState<string>();
   const [password, setPassword] = useState<string>();
-  const dispatch = useAppDispatch();
 
   const textFieldProps = {
     floatingPlaceholder: true,
@@ -23,7 +20,7 @@ export default function SigninScreen({
       default: TERRA_COLOR.PRIMARY[4],
     },
     containerStyle: {
-      width: '80%',
+      width: '90%',
       marginBottom: 10,
     },
     fieldStyle: styles.withUnderline,
@@ -31,23 +28,25 @@ export default function SigninScreen({
   };
 
   const handleSignin = () => {
-    if (phone === '0000000000' && password === '12345678') {
-      dispatch(signIn());
-    }
+    navigation.navigate('Signin');
   };
 
   return (
     <View style={styles.container}>
       <ImageBackground
-        source={require('../../assets/login-background.png')}
+        source={require('../../assets/register-background.png')}
         resizeMode="cover"
         style={styles.image}
       >
-        <View flex center>
-          <Text text40>Đăng nhập</Text>
-          <Text color="red" text50 style={{ marginBottom: 20 }}>
+        <View center>
+          <Text color="white" text40>
+            Đăng Ký
+          </Text>
+          <Text color="white" text50>
             TerraInn
           </Text>
+        </View>
+        <View center style={styles.box}>
           <TextField
             placeholder="Số điện thoại"
             {...textFieldProps}
@@ -62,19 +61,19 @@ export default function SigninScreen({
             secureTextEntry={true}
           />
           <Button
-            label="Đăng nhập"
+            label="Đăng Ký"
             backgroundColor={TERRA_COLOR.PRIMARY[3]}
             style={styles.button}
+            onPress={() => handleSignin()}
             text60
-            onPress={handleSignin}
           />
           <Button
-            label="Chưa có tài khoản? Đăng ký ngay"
+            label="Đã có tài khoản? Đăng nhập ngay"
             color={TERRA_COLOR.PRIMARY[3]}
             style={styles.hyperLink}
             link
             text70
-            onPress={() => navigation.navigate('Signup')}
+            onPress={() => navigation.navigate('Signin')}
           />
         </View>
       </ImageBackground>
@@ -89,6 +88,13 @@ const styles = StyleSheet.create({
   image: {
     flex: 1,
     justifyContent: 'center',
+  },
+  box: {
+    height: 'auto',
+    backgroundColor: 'white',
+    padding: 20,
+    margin: 20,
+    borderRadius: 20,
   },
   withUnderline: {
     borderBottomWidth: 1,

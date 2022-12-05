@@ -1,5 +1,8 @@
 {
   "extends": "expo/tsconfig.base",
+  "include": [
+    "./**/*"
+  ],
   "compilerOptions": {
     "strict": true,
     "baseUrl": ".",
@@ -16,7 +19,7 @@
       "@/screens/*": [
         "screens/*"
       ],
-      "@redux/*": [
+      "@/redux/*": [
         "redux/*"
       ]
     }

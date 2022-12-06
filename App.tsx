@@ -30,7 +30,11 @@ const HomeStack = createNativeStackNavigator<HomeNavigatorParamList>();
 const HomeStackScreen = () => {
   return (
     <HomeStack.Navigator>
-      <HomeStack.Screen name="Home" component={HomeScreen} options={{ title: 'Trang chủ' }} />
+      <HomeStack.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{ title: 'Trang chủ', headerShown: false }}
+      />
     </HomeStack.Navigator>
   );
 };

@@ -1,10 +1,16 @@
 import React from 'react';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Button, Card, Image, Text, View } from 'react-native-ui-lib';
 import { TERRA_COLOR } from '../../constants/theme/color';
+import { HomeNavigatorParamList } from 'types/navigator';
 
-export default function InnCard() {
+export default function InnCard({
+  navigation,
+}: {
+  navigation: NativeStackNavigationProp<HomeNavigatorParamList>;
+}) {
   return (
-    <Card containerStyle={{ marginBottom: 15 }} onPress={() => console.log('press on a card')}>
+    <Card containerStyle={{ marginBottom: 15 }} onPress={() => navigation.navigate('Detail')}>
       <Card.Image
         style={{ height: 200 }}
         source={{

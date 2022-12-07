@@ -24,6 +24,10 @@ import { selectSigninStatus } from './redux/selectors/userSelectors';
 import { TERRA_COLOR } from './constants/theme';
 import ProfileScreen from './screens/profile/ProfileScreen';
 import RequestScreen from './screens/request/RequestScreen';
+import DetailScreen from './screens/detail/DetailScreen';
+import { loadTypographies } from './constants/theme/typography';
+
+loadTypographies();
 
 const HomeStack = createNativeStackNavigator<HomeNavigatorParamList>();
 
@@ -35,6 +39,7 @@ const HomeStackScreen = () => {
         component={HomeScreen}
         options={{ title: 'Trang chủ', headerShown: false }}
       />
+      <HomeStack.Screen name="Detail" component={DetailScreen} />
     </HomeStack.Navigator>
   );
 };

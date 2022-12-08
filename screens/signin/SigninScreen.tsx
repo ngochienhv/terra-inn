@@ -31,9 +31,10 @@ export default function SigninScreen({
   };
 
   const handleSignin = () => {
-    if (phone === '0000000000' && password === '12345678') {
-      dispatch(signIn());
-    }
+    // if (phone === '0000000000' && password === '12345678') {
+    //   dispatch(signIn());
+    // }
+    dispatch(signIn());
   };
 
   return (

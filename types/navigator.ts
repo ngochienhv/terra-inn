@@ -1,5 +1,6 @@
 export type HomeNavigatorParamList = {
   Home: undefined;
+  Detail: undefined;
 };
 
 export type AuthenNavigatorParamList = {

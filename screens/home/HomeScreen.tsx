@@ -1,10 +1,16 @@
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
 import { ImageBackground, StyleSheet, TextInput } from 'react-native';
 import { Avatar, Carousel, Text, TextField, View } from 'react-native-ui-lib';
+import { HomeNavigatorParamList } from 'types/navigator';
 import InnCard from '../../components/InnCard/InnCard';
 import { TERRA_COLOR } from '../../constants/theme/color';
 
-export default function HomeScreen() {
+export default function HomeScreen({
+  navigation,
+}: {
+  navigation: NativeStackNavigationProp<HomeNavigatorParamList>;
+}) {
   return (
     <ImageBackground
       source={require('../../assets/home-background.png')}
@@ -29,7 +35,7 @@ export default function HomeScreen() {
         </Text>
         <Carousel onChangePage={() => console.log('page changed')} loop pageControlPosition="under">
           {[1, 2, 3, 4, 5].map(() => (
-            <InnCard />
+            <InnCard navigation={navigation} />
           ))}
         </Carousel>
       </View>

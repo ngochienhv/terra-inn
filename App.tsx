@@ -26,6 +26,7 @@ import ProfileScreen from './screens/profile/ProfileScreen';
 import RequestScreen from './screens/request/RequestScreen';
 import DetailScreen from './screens/detail/DetailScreen';
 import { loadTypographies } from './constants/theme/typography';
+import ChangePasswordScreen from './screens/changePassword/ChangePasswordScreen';
 
 loadTypographies();
 
@@ -77,6 +78,11 @@ const ProfileStackScreen = () => {
         name="Profile"
         component={ProfileScreen}
         options={{ title: 'Tài khoản' }}
+      />
+      <ProfileStack.Screen
+        name="ChangePassword"
+        component={ChangePasswordScreen}
+        options={{ title: 'Đổi mật khẩu' }}
       />
     </ProfileStack.Navigator>
   );

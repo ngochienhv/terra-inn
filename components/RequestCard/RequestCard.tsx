@@ -5,6 +5,7 @@ import { View, TextField, Text, Button, Modal, Image } from 'react-native-ui-lib
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
+
 export default function RequestCard (props: any) {
     return (
         <View>
@@ -14,9 +15,11 @@ export default function RequestCard (props: any) {
             <View style={styles.textView} flex left>
             <Text style={styles.headerText}><Text style={{fontWeight: "bold"}}>{props.request}</Text> • {props.time}</Text>
             
-            <View style={{flex: 1, flexDirection: 'row', alignItems: 'flex-end'}}>
+            <View style={{flex: 1, flexDirection: 'row', alignItems: 'flex-end', marginRight: 10}}>
                 <Text style={styles.nameText} numberOfLines={1}>{props.name}</Text> 
-                <Text style={styles.status}>{props.status}</Text>
+                <Text style={(props.status == "Đã hoàn thành" ? styles.statusDone : 
+                              props.status == "Chờ thanh toán" ? styles.statusPending :
+                              styles.statusDonent)}>{props.status}</Text>
             </View>
             <Text style={styles.footerText}><Text style={{fontWeight: "bold"}}>Nhà trọ {props.inn}</Text> • Phòng {props.room}</Text>
             </View>
@@ -58,7 +61,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
   textView: {
-    flex: 4,
+    flex: 5,
     flexDirection: 'column',
     justifyContent: 'center',
   },
@@ -76,11 +79,29 @@ const styles = StyleSheet.create({
     fontSize: 12,
     textAlign: 'center',
   },
-  status: {
+  statusDone: {
     flex: 1,
     fontSize: 10,
     fontWeight: 'bold',
-    color: 'green',
+    color: '#66BB6A',
+    justifyContent: 'center',
+    textAlign: 'right',
+    top: -4,
+  },
+  statusDonent: {
+    flex: 1.25,
+    fontSize: 10,
+    fontWeight: 'bold',
+    color: '#FF3939',
+    justifyContent: 'center',
+    textAlign: 'right',
+    top: -4,
+  },
+  statusPending: {
+    flex: 1,
+    fontSize: 10,
+    fontWeight: 'bold',
+    color: '#FFA726',
     justifyContent: 'center',
     textAlign: 'right',
     top: -4,

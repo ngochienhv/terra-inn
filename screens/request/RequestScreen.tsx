@@ -15,7 +15,7 @@ const users = [
       inn: 'An Khang',
       room: '02',
       request: 'Đăng ký thuê phòng',
-      status: 'Đã hoàn thành',
+      status: 'Chưa hoàn thành',
   },
   {
       id: 2,
@@ -35,7 +35,7 @@ const users = [
     inn: 'An Khang',
     room: '02',
     request: 'Đăng ký thuê phòng',
-      status: 'Đã hoàn thành',
+      status: 'Chờ thanh toán',
   },
   {
     id: 4,
@@ -45,7 +45,7 @@ const users = [
     inn: 'An Khang',
     room: '02',
     request: 'Đăng ký thuê phòng',
-      status: 'Đã hoàn thành',
+      status: 'Chưa hoàn thành',
   },
   {
     id: 5,

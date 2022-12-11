@@ -6,10 +6,13 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { StatusBar } from 'expo-status-bar';
 
 import HomeScreen from './screens/home/HomeScreen';
+import AdminHomeScreen from './screens/admin/home/AdminHomeScreen';
 import SigninScreen from './screens/signin/SigninScreen';
 import SignupScreen from './screens/signup/SignupScreen';
 import ManageScreen from './screens/manage/ManageScreen';
+import AdminManageScreen from './screens/admin/manage/AdminManageScreen';
 import NotificationScreen from './screens/notification/NotificationScreen';
+import AdminRequestScreen from './screens/admin/request/AdminRequestScreen';
 import { Provider, useSelector } from 'react-redux';
 import { store } from './redux/store';
 import {
@@ -37,7 +40,7 @@ const HomeStackScreen = () => {
     <HomeStack.Navigator>
       <HomeStack.Screen
         name="Home"
-        component={HomeScreen}
+        component={AdminHomeScreen}
         options={{ title: 'Trang chủ', headerShown: false }}
       />
       <HomeStack.Screen name="Detail" component={DetailScreen} />
@@ -50,7 +53,7 @@ const ManageStack = createNativeStackNavigator<ManageNavigatorParamList>();
 const ManageStackScreen = () => {
   return (
     <ManageStack.Navigator>
-      <ManageStack.Screen name="Manage" component={ManageScreen} options={{ title: 'Quản lý' }} />
+      <ManageStack.Screen name="Manage" component={AdminManageScreen} options={{ title: 'Quản lý' }} />
     </ManageStack.Navigator>
   );
 };
@@ -95,7 +98,7 @@ const RequestStackScreen = () => {
     <RequestStack.Navigator>
       <RequestStack.Screen
         name="Request"
-        component={RequestScreen}
+        component={AdminRequestScreen}
         options={{ title: 'Yêu cầu' }}
       />
     </RequestStack.Navigator>

@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { StatusBar } from 'expo-status-bar';
+import { Button, Card, Image, Text, View } from 'react-native-ui-lib';
 
 import HomeScreen from './screens/home/HomeScreen';
 import SigninScreen from './screens/signin/SigninScreen';
@@ -26,6 +27,9 @@ import ProfileScreen from './screens/profile/ProfileScreen';
 import RequestScreen from './screens/request/RequestScreen';
 import DetailScreen from './screens/detail/DetailScreen';
 import { loadTypographies } from './constants/theme/typography';
+import {InnHeader } from './components/Header/InnHeader';
+import {BackButton} from './components/Header/BackButton';
+import { getHeaderTitle } from '@react-navigation/elements';
 
 loadTypographies();
 
@@ -49,7 +53,7 @@ const ManageStack = createNativeStackNavigator<ManageNavigatorParamList>();
 const ManageStackScreen = () => {
   return (
     <ManageStack.Navigator>
-      <ManageStack.Screen name="Manage" component={ManageScreen} options={{ title: 'Quản lý' }} />
+      <ManageStack.Screen name="Manage" component={ManageScreen}/>
     </ManageStack.Navigator>
   );
 };
@@ -62,7 +66,6 @@ const NotificationStackScreen = () => {
       <NotificationStack.Screen
         name="Notification"
         component={NotificationScreen}
-        options={{ title: 'Thông báo' }}
       />
     </NotificationStack.Navigator>
   );
@@ -76,7 +79,6 @@ const ProfileStackScreen = () => {
       <ProfileStack.Screen
         name="Profile"
         component={ProfileScreen}
-        options={{ title: 'Tài khoản' }}
       />
     </ProfileStack.Navigator>
   );
@@ -84,13 +86,28 @@ const ProfileStackScreen = () => {
 
 const RequestStack = createNativeStackNavigator<RequestNavigatorParamList>();
 
+
+
+
 const RequestStackScreen = () => {
   return (
     <RequestStack.Navigator>
       <RequestStack.Screen
         name="Request"
         component={RequestScreen}
-        options={{ title: 'Yêu cầu' }}
+        options={{
+          header: ({ navigation, route, options, back }) => {          
+            return (
+              <InnHeader
+                title={getHeaderTitle(options, route.name)}
+                leftButton={
+                  !back ? <BackButton onPress={navigation.goBack} /> : undefined
+                }
+                style={options.headerStyle}
+              />
+            )
+          },
+        }}
       />
     </RequestStack.Navigator>
   );
@@ -100,26 +117,30 @@ const AuthenStack = createNativeStackNavigator<AuthenNavigatorParamList>();
 
 const AuthenStackScreen = () => {
   return (
-    <AuthenStack.Navigator>
-      <AuthenStack.Screen
+    <AuthenStack.Navigator >
+    <AuthenStack.Screen
         name="Signin"
         component={SigninScreen}
-        options={{
-          headerShown: false,
-        }}
       />
       <AuthenStack.Screen
         name="Signup"
         component={SignupScreen}
-        options={{
-          headerShown: false,
-        }}
       />
     </AuthenStack.Navigator>
   );
 };
 
 const Tab = createBottomTabNavigator();
+
+
+function LogoTitle(route, options) {
+  const title = getHeaderTitle(options, route.name);
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>{title}</Text>
+    </View>
+  );
+}
 
 function AppComponents() {
   const isSignedIn = useSelector(selectSigninStatus);
@@ -129,7 +150,15 @@ function AppComponents() {
       {isSignedIn ? (
         <Tab.Navigator
           initialRouteName="Home"
-          screenOptions={({ route }) => ({
+          screenOptions={({ route, back, options }) => ({
+            // title: route.name,
+            // headerStyle: {
+            //   backgroundColor: '#fffffff',
+            // },
+            // headerTintColor: '#fff',
+            // headerTitleStyle: {
+            //   fontWeight: 'bold',
+            // },
             headerShown: false,
             tabBarIcon: ({ focused, color, size }) => {
               let iconName;
@@ -154,19 +183,17 @@ function AppComponents() {
           <Tab.Screen
             name="Request"
             component={RequestStackScreen}
-            options={{ title: 'Yêu cầu' }}
+            
           />
           <Tab.Screen
             name="Notification"
             component={NotificationStackScreen}
-            options={{ title: 'Thông báo' }}
           />
-          <Tab.Screen name="Home" component={HomeStackScreen} options={{ title: 'Trang chủ' }} />
-          <Tab.Screen name="Manage" component={ManageStackScreen} options={{ title: 'Quản lý' }} />
+          <Tab.Screen name="Home" component={HomeStackScreen}  />
+          <Tab.Screen name="Manage" component={ManageStackScreen}/>
           <Tab.Screen
             name="Profile"
             component={ProfileStackScreen}
-            options={{ title: 'Tài khoản' }}
           />
         </Tab.Navigator>
       ) : (

@@ -2,6 +2,7 @@ import React from 'react';
 import { ImageBackground, StyleSheet, TextInput, Dimensions, ScrollView } from 'react-native';
 import { View, TextField, Text, Button, Modal, Image } from 'react-native-ui-lib';
 import RequestCard from '../../components/RequestCard/RequestCard'
+import FilterBar from '../../components/FilterBar/FilterBar'
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -129,25 +130,67 @@ const users = [
   },
   ]
 
+const filters = [
+  {
+      id: 1,
+      name: 'Tất cả',
+  },
+  {
+      id: 2,
+      name: 'Đã hoàn thành',
+  },
+  {
+    id: 3,
+    name: 'Chờ thanh toán',
+  },
+  {
+    id: 4,
+    name: 'Chưa hoàn thành',
+  },
+  {
+    id: 5,
+    name: 'Sửa chữa',
+  },
+  {
+    id: 6,
+    name: 'Dịch vụ',
+  },
+  {
+    id: 7,
+    name: 'QL trọ',
+  },
+  ]
+
 export default function RequestScreen() {
+  const toggleStatus = (filter: any) => {
+    console.log("ABCD")
+  };
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        {users.map((user) => (
-          <RequestCard 
-            key = {user.id}
-            name = {user.name}
-            request = {user.request}
-            inn = {user.inn}
-            room = {user.room}
-            time = {user.time}
-            image = {user.image}
-            status = {user.status}/>
+    <View>
+      <ScrollView /*style={{marginRight: 40}}*/ horizontal={true} showsHorizontalScrollIndicator={false} alwaysBounceHorizontal={false} bounces={false}>
+      {filters.map((filter, index) => (
+            <FilterBar 
+              name = {filter.name} key = {index} index = {index} onPress={() => console.log('Test 1')}/>
         ))}
-          
-      </View>
-    {/* <View style={{padding: 50 }} /> */}
-    </ScrollView>
+      </ScrollView>
+      <ScrollView alwaysBounceHorizontal={false} alwaysBounceVertical={false} bounces={false}>
+        <View style={styles.container}>
+          {users.map((user) => (
+            <RequestCard 
+              key = {user.id}
+              name = {user.name}
+              request = {user.request}
+              inn = {user.inn}
+              room = {user.room}
+              time = {user.time}
+              image = {user.image}
+              status = {user.status}/>
+          ))}
+            
+        </View>
+      <View style={{padding: screenHeight/30}} /> 
+      </ScrollView>
+    </View>
   );
 }
 

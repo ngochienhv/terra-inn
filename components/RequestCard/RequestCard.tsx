@@ -21,7 +21,7 @@ export default function RequestCard (props: any) {
                               props.status == "Chờ thanh toán" ? styles.statusPending :
                               styles.statusDonent)}>{props.status}</Text>
             </View>
-            <Text style={styles.footerText}><Text style={{fontWeight: "bold"}}>Nhà trọ {props.inn}</Text> • Phòng {props.room}</Text>
+            <Text style={styles.footerText}><Text style={{fontWeight: "bold"}}>{props.inn}</Text> {props.inn ? '•' : ''} {props.room}</Text>
             </View>
             </View>
         </View>

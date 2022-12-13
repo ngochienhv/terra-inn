@@ -10,7 +10,8 @@ import SigninScreen from './screens/signin/SigninScreen';
 import SignupScreen from './screens/signup/SignupScreen';
 import ManageScreen from './screens/manage/ManageScreen';
 import NotificationScreen from './screens/notification/NotificationScreen';
-// import AdminRequestScreen from './screens/admin/request/AdminRequestScreen';
+import AdminRequestScreen from './screens/admin/request/AdminRequestScreen';
+
 import { Provider, useSelector } from 'react-redux';
 import { store } from './redux/store';
 import {
@@ -41,6 +42,7 @@ const HomeStackScreen = () => {
         name="Home"
         component={HomeScreen}
         options={{ title: 'Trang chủ', headerShown: false }}
+
       />
       <HomeStack.Screen name="Detail" component={DetailScreen} />
     </HomeStack.Navigator>

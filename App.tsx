@@ -10,6 +10,7 @@ import SigninScreen from './screens/signin/SigninScreen';
 import SignupScreen from './screens/signup/SignupScreen';
 import ManageScreen from './screens/manage/ManageScreen';
 import NotificationScreen from './screens/notification/NotificationScreen';
+import AdminRequestScreen from './screens/admin/request/AdminRequestScreen';
 import { Provider, useSelector } from 'react-redux';
 import { store } from './redux/store';
 import {
@@ -38,8 +39,13 @@ const HomeStackScreen = () => {
     <HomeStack.Navigator>
       <HomeStack.Screen
         name="Home"
+<<<<<<< HEAD
+        component={DetailScreen}
+        options={{ title: 'Room detail', headerShown: true }}
+=======
         component={HomeScreen}
         options={{ title: 'Trang chủ', headerShown: false }}
+>>>>>>> bc9b1db82e52ef3f8a85a83eeb37fbf7d8061c21
       />
       <HomeStack.Screen name="Detail" component={DetailScreen} />
     </HomeStack.Navigator>
@@ -64,7 +70,7 @@ const NotificationStackScreen = () => {
       <NotificationStack.Screen
         name="Notification"
         component={NotificationScreen}
-        options={{ title: 'Thông báo' }}
+        options={{ title: 'Thống kê' }}
       />
       <NotificationStack.Screen
         name="NotificationDetail"

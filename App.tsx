@@ -13,6 +13,7 @@ import ManageScreen from './screens/manage/ManageScreen';
 import AdminManageScreen from './screens/admin/manage/AdminManageScreen';
 import NotificationScreen from './screens/notification/NotificationScreen';
 import AdminRequestScreen from './screens/admin/request/AdminRequestScreen';
+import AdminDetailScreen from './screens/admin/detail/AdminDetailScreen';
 import { Provider, useSelector } from 'react-redux';
 import { store } from './redux/store';
 import {
@@ -40,8 +41,8 @@ const HomeStackScreen = () => {
     <HomeStack.Navigator>
       <HomeStack.Screen
         name="Home"
-        component={AdminHomeScreen}
-        options={{ title: 'Trang chủ', headerShown: false }}
+        component={AdminDetailScreen}
+        options={{ title: 'Room detail', headerShown: true }}
       />
       <HomeStack.Screen name="Detail" component={DetailScreen} />
     </HomeStack.Navigator>
@@ -66,7 +67,7 @@ const NotificationStackScreen = () => {
       <NotificationStack.Screen
         name="Notification"
         component={NotificationScreen}
-        options={{ title: 'Thông báo' }}
+        options={{ title: 'Thống kê' }}
       />
     </NotificationStack.Navigator>
   );

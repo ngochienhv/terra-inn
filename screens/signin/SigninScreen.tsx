@@ -46,7 +46,7 @@ export default function SigninScreen({
       >
         <View flex center>
           <Text text40>Đăng nhập</Text>
-          <Text color="red" text50 style={{ marginBottom: 20 }}>
+          <Text color={TERRA_COLOR.ERROR[4]} text50 style={{ marginBottom: 20 }}>
             TerraInn
           </Text>
           <TextField

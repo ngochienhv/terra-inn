@@ -6,11 +6,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { StatusBar } from 'expo-status-bar';
 
 import HomeScreen from './screens/home/HomeScreen';
-import AdminHomeScreen from './screens/admin/home/AdminHomeScreen';
 import SigninScreen from './screens/signin/SigninScreen';
 import SignupScreen from './screens/signup/SignupScreen';
 import ManageScreen from './screens/manage/ManageScreen';
-import AdminManageScreen from './screens/admin/manage/AdminManageScreen';
 import NotificationScreen from './screens/notification/NotificationScreen';
 import AdminRequestScreen from './screens/admin/request/AdminRequestScreen';
 import { Provider, useSelector } from 'react-redux';
@@ -30,6 +28,7 @@ import RequestScreen from './screens/request/RequestScreen';
 import DetailScreen from './screens/detail/DetailScreen';
 import { loadTypographies } from './constants/theme/typography';
 import ChangePasswordScreen from './screens/changePassword/ChangePasswordScreen';
+import NotiDetailScreen from './screens/notification/NotiDetailScreen';
 
 loadTypographies();
 
@@ -40,8 +39,13 @@ const HomeStackScreen = () => {
     <HomeStack.Navigator>
       <HomeStack.Screen
         name="Home"
+<<<<<<< HEAD
         component={DetailScreen}
         options={{ title: 'Room detail', headerShown: true }}
+=======
+        component={HomeScreen}
+        options={{ title: 'Trang chủ', headerShown: false }}
+>>>>>>> bc9b1db82e52ef3f8a85a83eeb37fbf7d8061c21
       />
       <HomeStack.Screen name="Detail" component={DetailScreen} />
     </HomeStack.Navigator>
@@ -67,6 +71,11 @@ const NotificationStackScreen = () => {
         name="Notification"
         component={NotificationScreen}
         options={{ title: 'Thống kê' }}
+      />
+      <NotificationStack.Screen
+        name="NotificationDetail"
+        component={NotiDetailScreen}
+        options={{ title: 'Thông báo' }}
       />
     </NotificationStack.Navigator>
   );
@@ -98,7 +107,7 @@ const RequestStackScreen = () => {
     <RequestStack.Navigator>
       <RequestStack.Screen
         name="Request"
-        component={AdminRequestScreen}
+        component={RequestScreen}
         options={{ title: 'Yêu cầu' }}
       />
     </RequestStack.Navigator>
@@ -135,52 +144,48 @@ function AppComponents() {
 
   return (
     <NavigationContainer>
-      {isSignedIn ? (
-        <Tab.Navigator
-          initialRouteName="Home"
-          screenOptions={({ route }) => ({
-            headerShown: false,
-            tabBarIcon: ({ focused, color, size }) => {
-              let iconName;
-              if (route.name === 'Home') {
-                iconName = focused ? 'ios-home' : 'ios-home-outline';
-              } else if (route.name === 'Manage') {
-                iconName = focused ? 'ios-grid' : 'ios-grid-outline';
-              } else if (route.name === 'Notification') {
-                iconName = focused ? 'ios-notifications' : 'ios-notifications-outline';
-              } else if (route.name === 'Profile') {
-                iconName = focused ? 'ios-person' : 'ios-person-outline';
-              } else if (route.name === 'Request') {
-                iconName = focused ? 'ios-paper-plane' : 'ios-paper-plane-outline';
-              }
+      {/* {isSignedIn ? ( */}
+      <Tab.Navigator
+        initialRouteName="Home"
+        screenOptions={({ route }) => ({
+          headerShown: false,
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+            if (route.name === 'Home') {
+              iconName = focused ? 'ios-home' : 'ios-home-outline';
+            } else if (route.name === 'Manage') {
+              iconName = focused ? 'ios-grid' : 'ios-grid-outline';
+            } else if (route.name === 'Notification') {
+              iconName = focused ? 'ios-notifications' : 'ios-notifications-outline';
+            } else if (route.name === 'Profile') {
+              iconName = focused ? 'ios-person' : 'ios-person-outline';
+            } else if (route.name === 'Request') {
+              iconName = focused ? 'ios-paper-plane' : 'ios-paper-plane-outline';
+            }
 
-              return <Ionicons name={iconName as string} size={size} color={color} />;
-            },
-            tabBarActiveTintColor: TERRA_COLOR.PRIMARY[3],
-            tabBarInactiveTintColor: 'gray',
-          })}
-        >
-          <Tab.Screen
-            name="Request"
-            component={RequestStackScreen}
-            options={{ title: 'Yêu cầu' }}
-          />
-          <Tab.Screen
-            name="Notification"
-            component={NotificationStackScreen}
-            options={{ title: 'Thông báo' }}
-          />
-          <Tab.Screen name="Home" component={HomeStackScreen} options={{ title: 'Trang chủ' }} />
-          <Tab.Screen name="Manage" component={ManageStackScreen} options={{ title: 'Quản lý' }} />
-          <Tab.Screen
-            name="Profile"
-            component={ProfileStackScreen}
-            options={{ title: 'Tài khoản' }}
-          />
-        </Tab.Navigator>
-      ) : (
+            return <Ionicons name={iconName as string} size={size} color={color} />;
+          },
+          tabBarActiveTintColor: TERRA_COLOR.PRIMARY[3],
+          tabBarInactiveTintColor: 'gray',
+        })}
+      >
+        <Tab.Screen name="Request" component={RequestStackScreen} options={{ title: 'Yêu cầu' }} />
+        <Tab.Screen
+          name="Notification"
+          component={NotificationStackScreen}
+          options={{ title: 'Thông báo' }}
+        />
+        <Tab.Screen name="Home" component={HomeStackScreen} options={{ title: 'Trang chủ' }} />
+        <Tab.Screen name="Manage" component={ManageStackScreen} options={{ title: 'Quản lý' }} />
+        <Tab.Screen
+          name="Profile"
+          component={ProfileStackScreen}
+          options={{ title: 'Tài khoản' }}
+        />
+      </Tab.Navigator>
+      {/* ) : (
         <AuthenStackScreen />
-      )}
+      )} */}
     </NavigationContainer>
   );
 }

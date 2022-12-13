@@ -14,6 +14,7 @@ export type ManageNavigatorParamList = {
 
 export type NotificationNavigatorParamList = {
   Notification: undefined;
+  NotificationDetail: undefined;
 };
 
 export type ProfileNavigatorParamList = {

@@ -27,6 +27,7 @@ import RequestScreen from './screens/request/RequestScreen';
 import DetailScreen from './screens/detail/DetailScreen';
 import { loadTypographies } from './constants/theme/typography';
 import ChangePasswordScreen from './screens/changePassword/ChangePasswordScreen';
+import NotiDetailScreen from './screens/notification/NotiDetailScreen';
 
 loadTypographies();
 
@@ -63,6 +64,11 @@ const NotificationStackScreen = () => {
       <NotificationStack.Screen
         name="Notification"
         component={NotificationScreen}
+        options={{ title: 'Thông báo' }}
+      />
+      <NotificationStack.Screen
+        name="NotificationDetail"
+        component={NotiDetailScreen}
         options={{ title: 'Thông báo' }}
       />
     </NotificationStack.Navigator>
@@ -132,52 +138,48 @@ function AppComponents() {
 
   return (
     <NavigationContainer>
-      {isSignedIn ? (
-        <Tab.Navigator
-          initialRouteName="Home"
-          screenOptions={({ route }) => ({
-            headerShown: false,
-            tabBarIcon: ({ focused, color, size }) => {
-              let iconName;
-              if (route.name === 'Home') {
-                iconName = focused ? 'ios-home' : 'ios-home-outline';
-              } else if (route.name === 'Manage') {
-                iconName = focused ? 'ios-grid' : 'ios-grid-outline';
-              } else if (route.name === 'Notification') {
-                iconName = focused ? 'ios-notifications' : 'ios-notifications-outline';
-              } else if (route.name === 'Profile') {
-                iconName = focused ? 'ios-person' : 'ios-person-outline';
-              } else if (route.name === 'Request') {
-                iconName = focused ? 'ios-paper-plane' : 'ios-paper-plane-outline';
-              }
+      {/* {isSignedIn ? ( */}
+      <Tab.Navigator
+        initialRouteName="Home"
+        screenOptions={({ route }) => ({
+          headerShown: false,
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+            if (route.name === 'Home') {
+              iconName = focused ? 'ios-home' : 'ios-home-outline';
+            } else if (route.name === 'Manage') {
+              iconName = focused ? 'ios-grid' : 'ios-grid-outline';
+            } else if (route.name === 'Notification') {
+              iconName = focused ? 'ios-notifications' : 'ios-notifications-outline';
+            } else if (route.name === 'Profile') {
+              iconName = focused ? 'ios-person' : 'ios-person-outline';
+            } else if (route.name === 'Request') {
+              iconName = focused ? 'ios-paper-plane' : 'ios-paper-plane-outline';
+            }
 
-              return <Ionicons name={iconName as string} size={size} color={color} />;
-            },
-            tabBarActiveTintColor: TERRA_COLOR.PRIMARY[3],
-            tabBarInactiveTintColor: 'gray',
-          })}
-        >
-          <Tab.Screen
-            name="Request"
-            component={RequestStackScreen}
-            options={{ title: 'Yêu cầu' }}
-          />
-          <Tab.Screen
-            name="Notification"
-            component={NotificationStackScreen}
-            options={{ title: 'Thông báo' }}
-          />
-          <Tab.Screen name="Home" component={HomeStackScreen} options={{ title: 'Trang chủ' }} />
-          <Tab.Screen name="Manage" component={ManageStackScreen} options={{ title: 'Quản lý' }} />
-          <Tab.Screen
-            name="Profile"
-            component={ProfileStackScreen}
-            options={{ title: 'Tài khoản' }}
-          />
-        </Tab.Navigator>
-      ) : (
+            return <Ionicons name={iconName as string} size={size} color={color} />;
+          },
+          tabBarActiveTintColor: TERRA_COLOR.PRIMARY[3],
+          tabBarInactiveTintColor: 'gray',
+        })}
+      >
+        <Tab.Screen name="Request" component={RequestStackScreen} options={{ title: 'Yêu cầu' }} />
+        <Tab.Screen
+          name="Notification"
+          component={NotificationStackScreen}
+          options={{ title: 'Thông báo' }}
+        />
+        <Tab.Screen name="Home" component={HomeStackScreen} options={{ title: 'Trang chủ' }} />
+        <Tab.Screen name="Manage" component={ManageStackScreen} options={{ title: 'Quản lý' }} />
+        <Tab.Screen
+          name="Profile"
+          component={ProfileStackScreen}
+          options={{ title: 'Tài khoản' }}
+        />
+      </Tab.Navigator>
+      {/* ) : (
         <AuthenStackScreen />
-      )}
+      )} */}
     </NavigationContainer>
   );
 }

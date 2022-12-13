@@ -25,3 +25,15 @@ export type ProfileNavigatorParamList = {
 export type RequestNavigatorParamList = {
   Request: undefined;
 };
+
+export type AdminHomeNavigatorParamList = {
+  AdminHome: undefined;
+};
+
+export type AdminBillNavigatorParamList = {
+  AdminBill: undefined;
+};
+
+export type AdminStatisticNavigatorParamList = {
+  AdminStatistic: undefined;
+};

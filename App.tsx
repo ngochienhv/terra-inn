@@ -13,7 +13,6 @@ import ManageScreen from './screens/manage/ManageScreen';
 import AdminManageScreen from './screens/admin/manage/AdminManageScreen';
 import NotificationScreen from './screens/notification/NotificationScreen';
 import AdminRequestScreen from './screens/admin/request/AdminRequestScreen';
-import AdminDetailScreen from './screens/admin/detail/AdminDetailScreen';
 import { Provider, useSelector } from 'react-redux';
 import { store } from './redux/store';
 import {
@@ -41,7 +40,7 @@ const HomeStackScreen = () => {
     <HomeStack.Navigator>
       <HomeStack.Screen
         name="Home"
-        component={AdminDetailScreen}
+        component={DetailScreen}
         options={{ title: 'Room detail', headerShown: true }}
       />
       <HomeStack.Screen name="Detail" component={DetailScreen} />
@@ -54,7 +53,7 @@ const ManageStack = createNativeStackNavigator<ManageNavigatorParamList>();
 const ManageStackScreen = () => {
   return (
     <ManageStack.Navigator>
-      <ManageStack.Screen name="Manage" component={AdminManageScreen} options={{ title: 'Quản lý' }} />
+      <ManageStack.Screen name="Manage" component={ManageScreen} options={{ title: 'Quản lý' }} />
     </ManageStack.Navigator>
   );
 };

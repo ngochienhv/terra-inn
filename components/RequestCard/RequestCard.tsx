@@ -5,27 +5,46 @@ import { View, TextField, Text, Button, Modal, Image } from 'react-native-ui-lib
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
-
-export default function RequestCard (props: any) {
-    return (
-        <View>
-            <View style={styles.modalView}>
-            <View flex center><Image style={styles.profileImage} source={(props.image)}/></View>
-            
-            <View style={styles.textView} flex left>
-            <Text style={styles.headerText}><Text style={{fontWeight: "bold"}}>{props.request}</Text> • {props.time}</Text>
-            
-            <View style={{flex: 1, flexDirection: 'row', alignItems: 'flex-end', marginRight: 10}}>
-                <Text style={styles.nameText} numberOfLines={1}>{props.name}</Text> 
-                <Text style={(props.status == "Đã hoàn thành" ? styles.statusDone : 
-                              props.status == "Chờ thanh toán" ? styles.statusPending :
-                              styles.statusDonent)}>{props.status}</Text>
-            </View>
-            <Text style={styles.footerText}><Text style={{fontWeight: "bold"}}>Nhà trọ {props.inn}</Text> • Phòng {props.room}</Text>
-            </View>
-            </View>
+export default function RequestCard(props: any) {
+  return (
+    <View>
+      <View style={styles.modalView}>
+        <View flex center>
+          <Image style={styles.profileImage} source={props.image} />
         </View>
-    );
+
+        <View style={styles.textView} flex left>
+          <Text style={styles.headerText}>
+            <Text style={{ fontWeight: 'bold' }}>{props.request}</Text> • {props.time}
+          </Text>
+
+          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-end', marginRight: 10 }}>
+            <View style={{ width: '80%' }}>
+              <Text style={styles.nameText} numberOfLines={1}>
+                {props.name}
+              </Text>
+            </View>
+            <View style={{ width: '20%' }}>
+              <Text
+                style={
+                  props.status == 'Đã hoàn thành'
+                    ? styles.statusDone
+                    : props.status == 'Chờ thanh toán'
+                    ? styles.statusPending
+                    : styles.statusDonent
+                }
+              >
+                {props.status}
+              </Text>
+            </View>
+          </View>
+          <Text style={styles.footerText}>
+            <Text style={{ fontWeight: 'bold' }}>Nhà trọ {props.inn}</Text> • Phòng {props.room}
+          </Text>
+        </View>
+      </View>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -51,21 +70,21 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    marginTop: 5
+    marginTop: 5,
   },
-  profileImage:{
+  profileImage: {
     justifyContent: 'center',
     alignItems: 'center',
     width: 40,
     height: 40,
-    borderRadius: 15,
+    borderRadius: 64,
   },
   textView: {
     flex: 5,
     flexDirection: 'column',
     justifyContent: 'center',
   },
-  headerText:{
+  headerText: {
     textAlign: 'center',
     fontSize: 12,
   },
@@ -107,4 +126,3 @@ const styles = StyleSheet.create({
     top: -4,
   },
 });
-  

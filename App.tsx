@@ -10,7 +10,6 @@ import SigninScreen from './screens/signin/SigninScreen';
 import SignupScreen from './screens/signup/SignupScreen';
 import ManageScreen from './screens/manage/ManageScreen';
 import NotificationScreen from './screens/notification/NotificationScreen';
-import AdminRequestScreen from './screens/admin/request/AdminRequestScreen';
 
 import { Provider, useSelector } from 'react-redux';
 import { store } from './redux/store';
@@ -33,6 +32,8 @@ import DetailScreen from './screens/detail/DetailScreen';
 import { loadTypographies } from './constants/theme/typography';
 import ChangePasswordScreen from './screens/changePassword/ChangePasswordScreen';
 import NotiDetailScreen from './screens/notification/NotiDetailScreen';
+import AdminHomeScreen from './screens/admin/home/AdminHomeScreen';
+import AdminManageBillScreen from './screens/admin/manage-bill/AdminManageBillScreen';
 
 loadTypographies();
 
@@ -45,7 +46,6 @@ const HomeStackScreen = () => {
         name="Home"
         component={HomeScreen}
         options={{ title: 'Trang chủ', headerShown: false }}
-
       />
       <HomeStack.Screen name="Detail" component={DetailScreen} />
     </HomeStack.Navigator>
@@ -144,7 +144,7 @@ const AdminHomeStackScreen = () => {
     <AdminHomeStack.Navigator>
       <AdminHomeStack.Screen
         name="AdminHome"
-        component={HomeScreen}
+        component={AdminHomeScreen}
         options={{ title: 'Trang chủ', headerShown: false }}
       />
     </AdminHomeStack.Navigator>
@@ -158,8 +158,8 @@ const AdminBillStackScreen = () => {
     <AdminBillStack.Navigator>
       <AdminBillStack.Screen
         name="AdminBill"
-        component={HomeScreen}
-        options={{ title: 'Hóa đơn', headerShown: false }}
+        component={AdminManageBillScreen}
+        options={{ title: 'Hóa đơn' }}
       />
     </AdminBillStack.Navigator>
   );

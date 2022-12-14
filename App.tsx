@@ -34,6 +34,7 @@ import ChangePasswordScreen from './screens/changePassword/ChangePasswordScreen'
 import NotiDetailScreen from './screens/notification/NotiDetailScreen';
 import AdminHomeScreen from './screens/admin/home/AdminHomeScreen';
 import AdminManageBillScreen from './screens/admin/manage-bill/AdminManageBillScreen';
+import BillDetailScreen from './screens/bill-detail/BillDetailScreen';
 
 loadTypographies();
 
@@ -160,6 +161,11 @@ const AdminBillStackScreen = () => {
         name="AdminBill"
         component={AdminManageBillScreen}
         options={{ title: 'Hóa đơn' }}
+      />
+      <AdminBillStack.Screen
+        name="BillDetail"
+        component={BillDetailScreen}
+        options={{ title: 'Chi tiết' }}
       />
     </AdminBillStack.Navigator>
   );

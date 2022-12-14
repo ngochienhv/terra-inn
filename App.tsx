@@ -19,10 +19,10 @@ import {
   ManageNavigatorParamList,
   NotificationNavigatorParamList,
   ProfileNavigatorParamList,
-  RequestNavigatorParamList,
   AdminHomeNavigatorParamList,
   AdminBillNavigatorParamList,
   AdminStatisticNavigatorParamList,
+  AdminRequestNavigatorParamList,
 } from 'types/navigator';
 import { selectSigninStatus, selectUserRole } from './redux/selectors/userSelectors';
 import { TERRA_COLOR } from './constants/theme';
@@ -35,6 +35,7 @@ import NotiDetailScreen from './screens/notification/NotiDetailScreen';
 import AdminHomeScreen from './screens/admin/home/AdminHomeScreen';
 import AdminManageBillScreen from './screens/admin/manage-bill/AdminManageBillScreen';
 import BillDetailScreen from './screens/bill-detail/BillDetailScreen';
+import ElectricWaterScreen from './screens/admin/electric-water/ElectricWaterScreen';
 
 loadTypographies();
 
@@ -101,17 +102,17 @@ const ProfileStackScreen = () => {
   );
 };
 
-const RequestStack = createNativeStackNavigator<RequestNavigatorParamList>();
+const AdminRequestStack = createNativeStackNavigator<AdminRequestNavigatorParamList>();
 
-const RequestStackScreen = () => {
+const AdminRequestStackScreen = () => {
   return (
-    <RequestStack.Navigator>
-      <RequestStack.Screen
-        name="Request"
+    <AdminRequestStack.Navigator>
+      <AdminRequestStack.Screen
+        name="AllRequest"
         component={AdminRequestScreen}
         options={{ title: 'Yêu cầu' }}
       />
-    </RequestStack.Navigator>
+    </AdminRequestStack.Navigator>
   );
 };
 
@@ -147,6 +148,11 @@ const AdminHomeStackScreen = () => {
         name="AdminHome"
         component={AdminHomeScreen}
         options={{ title: 'Trang chủ', headerShown: false }}
+      />
+      <AdminHomeStack.Screen
+        name="ElectricWater"
+        component={ElectricWaterScreen}
+        options={{ title: 'Điện nước' }}
       />
     </AdminHomeStack.Navigator>
   );
@@ -205,7 +211,7 @@ const AdminTabNavigator = () => {
             iconName = focused ? 'ios-bar-chart' : 'ios-bar-chart-outline';
           } else if (route.name === 'Profile') {
             iconName = focused ? 'ios-person' : 'ios-person-outline';
-          } else if (route.name === 'Request') {
+          } else if (route.name === 'Request' || 'AdminRequest') {
             iconName = focused ? 'ios-paper-plane' : 'ios-paper-plane-outline';
           }
 
@@ -216,8 +222,8 @@ const AdminTabNavigator = () => {
       })}
     >
       <AdminTab.Screen
-        name="Request"
-        component={RequestStackScreen}
+        name="AdminRequest"
+        component={AdminRequestStackScreen}
         options={{ title: 'Yêu cầu' }}
       />
       <AdminTab.Screen
@@ -272,7 +278,7 @@ const GuestTabNavigator = () => {
     >
       <GuestTab.Screen
         name="Request"
-        component={RequestStackScreen}
+        component={AdminRequestStackScreen}
         options={{ title: 'Yêu cầu' }}
       />
       <GuestTab.Screen

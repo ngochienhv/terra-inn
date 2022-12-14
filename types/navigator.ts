@@ -22,12 +22,13 @@ export type ProfileNavigatorParamList = {
   ChangePassword: undefined;
 };
 
-export type RequestNavigatorParamList = {
-  Request: undefined;
+export type AdminRequestNavigatorParamList = {
+  AllRequest: undefined;
 };
 
 export type AdminHomeNavigatorParamList = {
   AdminHome: undefined;
+  ElectricWater: undefined;
 };
 
 export type AdminBillNavigatorParamList = {

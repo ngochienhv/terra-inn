@@ -2,7 +2,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
 import { Dimensions, ImageBackground, ScrollView, StyleSheet, TextInput } from 'react-native';
 import { Avatar, Carousel, Text, TextField, View, Button, Card } from 'react-native-ui-lib';
-import { HomeNavigatorParamList } from 'types/navigator';
+import { AdminHomeNavigatorParamList, HomeNavigatorParamList } from 'types/navigator';
 import InnCard from '../../../components/InnCard/InnCard';
 import { TERRA_COLOR } from '../../../constants/theme/color';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -12,7 +12,7 @@ const screenWidth = Dimensions.get('window').width;
 export default function AdminHomeScreen({
   navigation,
 }: {
-  navigation: NativeStackNavigationProp<HomeNavigatorParamList>;
+  navigation: NativeStackNavigationProp<AdminHomeNavigatorParamList>;
 }) {
   return (
     <ScrollView>
@@ -31,24 +31,32 @@ export default function AdminHomeScreen({
               <Ionicons name={'ios-home'} size={30} />
               <Text text70>Quản lý</Text>
               <Text text60 color={TERRA_COLOR.GRAY[4]}>
-                Phòng trọ
+                Khu trọ
               </Text>
             </Card>
-            <Card style={styles.utilityItem}>
+            <Card
+              style={styles.utilityItem}
+              //@ts-ignore
+              onPress={() => navigation.navigate('AdminRequest', { screen: 'AllRequest' })}
+            >
               <Ionicons name={'ios-paper-plane'} size={30} />
               <Text text70>Quản lý</Text>
               <Text text60 color={TERRA_COLOR.GRAY[4]}>
                 Yêu cầu
               </Text>
             </Card>
-            <Card style={styles.utilityItem}>
+            <Card
+              style={styles.utilityItem}
+              //@ts-ignore
+              onPress={() => navigation.navigate('Bill', { screen: 'AdminBill' })}
+            >
               <Ionicons name={'ios-cash'} size={30} />
               <Text text70>Quản lý</Text>
               <Text text60 color={TERRA_COLOR.GRAY[4]}>
                 Hóa đơn
               </Text>
             </Card>
-            <Card style={styles.utilityItem}>
+            <Card style={styles.utilityItem} onPress={() => navigation.navigate('ElectricWater')}>
               <Ionicons name={'ios-flash'} size={30} />
               <Text text70>Quản lý</Text>
               <Text text60 color={TERRA_COLOR.GRAY[4]}>
@@ -62,24 +70,30 @@ export default function AdminHomeScreen({
         </Text>
 
         <View style={{ flexDirection: 'column', alignItems: 'center' }}>
-          <View style={styles.notiItem}>
-            <Ionicons name={'build'} size={30} color={TERRA_COLOR.ERROR[4]} />
-            <Text text70 marginL-10>
-              Phòng 771 có 1 yêu cầu sửa chữa
-            </Text>
-          </View>
-          <View style={styles.notiItem}>
-            <Ionicons name={'build'} size={30} color={TERRA_COLOR.ERROR[4]} />
-            <Text text70 marginL-10>
-              Phòng 771 có 1 yêu cầu sửa chữa
-            </Text>
-          </View>
-          <View style={styles.notiItem}>
-            <Ionicons name={'build'} size={30} color={TERRA_COLOR.ERROR[4]} />
-            <Text text70 marginL-10>
-              Phòng 771 có 1 yêu cầu sửa chữa
-            </Text>
-          </View>
+          <Card margin-8>
+            <View style={styles.notiItem}>
+              <Ionicons name={'build'} size={30} color={TERRA_COLOR.ERROR[4]} />
+              <Text text70 marginL-10>
+                Phòng 771 có 1 yêu cầu sửa chữa
+              </Text>
+            </View>
+          </Card>
+          <Card margin-8>
+            <View style={styles.notiItem}>
+              <Ionicons name={'build'} size={30} color={TERRA_COLOR.ERROR[4]} />
+              <Text text70 marginL-10>
+                Phòng 771 có 1 yêu cầu sửa chữa
+              </Text>
+            </View>
+          </Card>
+          <Card margin-8>
+            <View style={styles.notiItem}>
+              <Ionicons name={'build'} size={30} color={TERRA_COLOR.ERROR[4]} />
+              <Text text70 marginL-10>
+                Phòng 771 có 1 yêu cầu sửa chữa
+              </Text>
+            </View>
+          </Card>
         </View>
 
         <View style={styles.buttonBox}>
@@ -125,7 +139,6 @@ const styles = StyleSheet.create({
   },
   notiItem: {
     alignItems: 'center',
-    margin: '2%',
     backgroundColor: TERRA_COLOR.WARNING[1],
     flexDirection: 'row',
     padding: '2%',

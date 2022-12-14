@@ -32,6 +32,7 @@ export type AdminHomeNavigatorParamList = {
 
 export type AdminBillNavigatorParamList = {
   AdminBill: undefined;
+  BillDetail: undefined;
 };
 
 export type AdminStatisticNavigatorParamList = {

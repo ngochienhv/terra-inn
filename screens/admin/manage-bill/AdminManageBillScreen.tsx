@@ -1,29 +1,14 @@
 import React, { useState, useCallback } from 'react';
 import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
-import {
-  View,
-  TextField,
-  DateTimePicker,
-  Button,
-  TabController,
-  Text,
-  Card,
-} from 'react-native-ui-lib';
-import NotificationCard from '../../../components/NotiCard/NotiCard';
+import { View, DateTimePicker, TabController, Text, Card } from 'react-native-ui-lib';
+import { useNavigation } from '@react-navigation/native';
 import { TERRA_COLOR } from '../../../constants/theme/color';
-import RequestCard from '../../../components/RequestCard/RequestCard';
-import {
-  FlatList,
-  ImageBackground,
-  StyleSheet,
-  TextInput,
-  Dimensions,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
+import { StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { BILL_STATUS } from '../../../constants/billStatus';
 import { debounce } from 'lodash';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { AdminBillNavigatorParamList } from 'types/navigator';
 
 const rooms = [
   {
@@ -81,6 +66,7 @@ const getStatusColor = (status: string) => {
 function AdminManageBillComponents() {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const navigation = useNavigation<NativeStackNavigationProp<AdminBillNavigatorParamList>>();
 
   const setIndexDebounce = debounce((value) => {
     setSelectedIndex(value);
@@ -107,7 +93,7 @@ function AdminManageBillComponents() {
       />
       <View flex style={{ backgroundColor: TERRA_COLOR.PRIMARY[1] }}>
         <TabController.TabPage index={0}>
-          {renderPage(selectedDate, setSelectedDate)}
+          {renderPage(selectedDate, setSelectedDate, navigation)}
         </TabController.TabPage>
         <TabController.TabPage index={1}>
           {/* {renderPage(selectedDate, setSelectedDate)} */}
@@ -125,7 +111,8 @@ function AdminManageBillComponents() {
 
 const renderPage = (
   selectedDate: Date,
-  setSelectedDate: React.Dispatch<React.SetStateAction<Date>>
+  setSelectedDate: React.Dispatch<React.SetStateAction<Date>>,
+  navigation: NativeStackNavigationProp<AdminBillNavigatorParamList>
 ) => {
   return (
     <ScrollView>
@@ -144,7 +131,10 @@ const renderPage = (
         <Card>
           {rooms.map((room) => (
             <>
-              <TouchableOpacity style={styles.rowContainer}>
+              <TouchableOpacity
+                style={styles.rowContainer}
+                onPress={() => navigation.navigate('BillDetail')}
+              >
                 <Text>Phòng {room.number}</Text>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                   <Text color={getStatusColor(room.status)}>{room.status}</Text>

@@ -25,7 +25,10 @@ import {
   AdminRequestNavigatorParamList,
   AdminInnNavigatorParamList,
 } from 'types/navigator';
-import { selectSigninStatus, selectUserRole } from './redux/selectors/userSelectors';
+import {
+  selectSigninStatus,
+  selectUserRole,
+} from './redux/selectors/userSelectors';
 import { TERRA_COLOR } from './constants/theme';
 import ProfileScreen from './screens/profile/ProfileScreen';
 import AdminRequestScreen from './screens/request/RequestScreen';
@@ -41,6 +44,8 @@ import RequestDetailScreen from './screens/request-detail/RequestDetailScreen';
 import InnGroupScreen from './screens/admin/inn-group/InnGroupScreen';
 import AdminInnDetailScreen from './screens/admin/inn-detail/InnDetailScreen';
 import AdminRoomDetailScreen from './screens/admin/room-detail/AdminRoomDetailScreen';
+import axios from 'axios';
+axios.defaults.baseURL = 'http://127.0.0.1:3000/api';
 
 loadTypographies();
 
@@ -50,11 +55,11 @@ const HomeStackScreen = () => {
   return (
     <HomeStack.Navigator>
       <HomeStack.Screen
-        name="Home"
+        name='Home'
         component={HomeScreen}
         options={{ title: 'Trang chủ', headerShown: false }}
       />
-      <HomeStack.Screen name="Detail" component={DetailScreen} />
+      <HomeStack.Screen name='Detail' component={DetailScreen} />
     </HomeStack.Navigator>
   );
 };
@@ -64,23 +69,28 @@ const ManageStack = createNativeStackNavigator<ManageNavigatorParamList>();
 const ManageStackScreen = () => {
   return (
     <ManageStack.Navigator>
-      <ManageStack.Screen name="Manage" component={ManageScreen} options={{ title: 'Quản lý' }} />
+      <ManageStack.Screen
+        name='Manage'
+        component={ManageScreen}
+        options={{ title: 'Quản lý' }}
+      />
     </ManageStack.Navigator>
   );
 };
 
-const NotificationStack = createNativeStackNavigator<NotificationNavigatorParamList>();
+const NotificationStack =
+  createNativeStackNavigator<NotificationNavigatorParamList>();
 
 const NotificationStackScreen = () => {
   return (
     <NotificationStack.Navigator>
       <NotificationStack.Screen
-        name="Notification"
+        name='Notification'
         component={NotificationScreen}
         options={{ title: 'Thống kê' }}
       />
       <NotificationStack.Screen
-        name="NotificationDetail"
+        name='NotificationDetail'
         component={NotiDetailScreen}
         options={{ title: 'Thông báo' }}
       />
@@ -94,12 +104,12 @@ const ProfileStackScreen = () => {
   return (
     <ProfileStack.Navigator>
       <ProfileStack.Screen
-        name="Profile"
+        name='Profile'
         component={ProfileScreen}
         options={{ title: 'Tài khoản' }}
       />
       <ProfileStack.Screen
-        name="ChangePassword"
+        name='ChangePassword'
         component={ChangePasswordScreen}
         options={{ title: 'Đổi mật khẩu' }}
       />
@@ -107,18 +117,19 @@ const ProfileStackScreen = () => {
   );
 };
 
-const AdminRequestStack = createNativeStackNavigator<AdminRequestNavigatorParamList>();
+const AdminRequestStack =
+  createNativeStackNavigator<AdminRequestNavigatorParamList>();
 
 const AdminRequestStackScreen = () => {
   return (
     <AdminRequestStack.Navigator>
       <AdminRequestStack.Screen
-        name="AllRequest"
+        name='AllRequest'
         component={AdminRequestScreen}
         options={{ title: 'Yêu cầu' }}
       />
       <AdminRequestStack.Screen
-        name="Detail"
+        name='Detail'
         component={RequestDetailScreen}
         options={{ title: 'Chi tiết yêu cầu' }}
       />
@@ -132,14 +143,14 @@ const AuthenStackScreen = () => {
   return (
     <AuthenStack.Navigator>
       <AuthenStack.Screen
-        name="Signin"
+        name='Signin'
         component={SigninScreen}
         options={{
           headerShown: false,
         }}
       />
       <AuthenStack.Screen
-        name="Signup"
+        name='Signup'
         component={SignupScreen}
         options={{
           headerShown: false,
@@ -149,7 +160,8 @@ const AuthenStackScreen = () => {
   );
 };
 
-const AdminHomeStack = createNativeStackNavigator<AdminHomeNavigatorParamList>();
+const AdminHomeStack =
+  createNativeStackNavigator<AdminHomeNavigatorParamList>();
 
 const AdminInnStack = createNativeStackNavigator<AdminInnNavigatorParamList>();
 
@@ -157,17 +169,17 @@ const AdminInnStackScreen = () => {
   return (
     <AdminInnStack.Navigator>
       <AdminInnStack.Screen
-        name="InnGroup"
+        name='InnGroup'
         component={InnGroupScreen}
         options={{ title: 'Quản lý khu trọ' }}
       />
       <AdminInnStack.Screen
-        name="InnDetail"
+        name='InnDetail'
         component={AdminInnDetailScreen}
         options={{ title: 'Chi tiết' }}
       />
       <AdminInnStack.Screen
-        name="InnRoomDetail"
+        name='InnRoomDetail'
         component={AdminRoomDetailScreen}
         options={{ title: 'Phòng' }}
       />
@@ -179,17 +191,17 @@ const AdminHomeStackScreen = () => {
   return (
     <AdminHomeStack.Navigator>
       <AdminHomeStack.Screen
-        name="AdminHome"
+        name='AdminHome'
         component={AdminHomeScreen}
         options={{ title: 'Trang chủ', headerShown: false }}
       />
       <AdminHomeStack.Screen
-        name="ElectricWater"
+        name='ElectricWater'
         component={ElectricWaterScreen}
         options={{ title: 'Điện nước' }}
       />
       <AdminHomeStack.Screen
-        name="Inn"
+        name='Inn'
         component={AdminInnStackScreen}
         options={{ title: 'Quản lý khu trọ', headerShown: false }}
       />
@@ -197,18 +209,19 @@ const AdminHomeStackScreen = () => {
   );
 };
 
-const AdminBillStack = createNativeStackNavigator<AdminBillNavigatorParamList>();
+const AdminBillStack =
+  createNativeStackNavigator<AdminBillNavigatorParamList>();
 
 const AdminBillStackScreen = () => {
   return (
     <AdminBillStack.Navigator>
       <AdminBillStack.Screen
-        name="AdminBill"
+        name='AdminBill'
         component={AdminManageBillScreen}
         options={{ title: 'Hóa đơn' }}
       />
       <AdminBillStack.Screen
-        name="BillDetail"
+        name='BillDetail'
         component={BillDetailScreen}
         options={{ title: 'Chi tiết' }}
       />
@@ -216,13 +229,14 @@ const AdminBillStackScreen = () => {
   );
 };
 
-const AdminStatisticStack = createNativeStackNavigator<AdminStatisticNavigatorParamList>();
+const AdminStatisticStack =
+  createNativeStackNavigator<AdminStatisticNavigatorParamList>();
 
 const AdminStatisticStackScreen = () => {
   return (
     <AdminStatisticStack.Navigator>
       <AdminStatisticStack.Screen
-        name="AdminStatistic"
+        name='AdminStatistic'
         component={HomeScreen}
         options={{ title: 'Hóa đơn', headerShown: false }}
       />
@@ -237,7 +251,7 @@ const AdminTab = createBottomTabNavigator();
 const AdminTabNavigator = () => {
   return (
     <AdminTab.Navigator
-      initialRouteName="Home"
+      initialRouteName='Home'
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarIcon: ({ focused, color, size }) => {
@@ -254,34 +268,36 @@ const AdminTabNavigator = () => {
             iconName = focused ? 'ios-paper-plane' : 'ios-paper-plane-outline';
           }
 
-          return <Ionicons name={iconName as string} size={size} color={color} />;
+          return (
+            <Ionicons name={iconName as string} size={size} color={color} />
+          );
         },
         tabBarActiveTintColor: TERRA_COLOR.PRIMARY[3],
         tabBarInactiveTintColor: 'gray',
       })}
     >
       <AdminTab.Screen
-        name="AdminRequest"
+        name='AdminRequest'
         component={AdminRequestStackScreen}
         options={{ title: 'Yêu cầu' }}
       />
       <AdminTab.Screen
-        name="Statistic"
+        name='Statistic'
         component={AdminStatisticStackScreen}
         options={{ title: 'Thống kê' }}
       />
       <AdminTab.Screen
-        name="Home"
+        name='Home'
         component={AdminHomeStackScreen}
         options={{ title: 'Trang chủ' }}
       />
       <AdminTab.Screen
-        name="Bill"
+        name='Bill'
         component={AdminBillStackScreen}
         options={{ title: 'Hóa đơn' }}
       />
       <AdminTab.Screen
-        name="Profile"
+        name='Profile'
         component={ProfileStackScreen}
         options={{ title: 'Profile' }}
       />
@@ -292,7 +308,7 @@ const AdminTabNavigator = () => {
 const GuestTabNavigator = () => {
   return (
     <GuestTab.Navigator
-      initialRouteName="Home"
+      initialRouteName='Home'
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarIcon: ({ focused, color, size }) => {
@@ -302,33 +318,45 @@ const GuestTabNavigator = () => {
           } else if (route.name === 'Manage') {
             iconName = focused ? 'ios-grid' : 'ios-grid-outline';
           } else if (route.name === 'Notification') {
-            iconName = focused ? 'ios-notifications' : 'ios-notifications-outline';
+            iconName = focused
+              ? 'ios-notifications'
+              : 'ios-notifications-outline';
           } else if (route.name === 'Profile') {
             iconName = focused ? 'ios-person' : 'ios-person-outline';
           } else if (route.name === 'Request') {
             iconName = focused ? 'ios-paper-plane' : 'ios-paper-plane-outline';
           }
 
-          return <Ionicons name={iconName as string} size={size} color={color} />;
+          return (
+            <Ionicons name={iconName as string} size={size} color={color} />
+          );
         },
         tabBarActiveTintColor: TERRA_COLOR.PRIMARY[3],
         tabBarInactiveTintColor: 'gray',
       })}
     >
       <GuestTab.Screen
-        name="Request"
+        name='Request'
         component={AdminRequestStackScreen}
         options={{ title: 'Yêu cầu' }}
       />
       <GuestTab.Screen
-        name="Notification"
+        name='Notification'
         component={NotificationStackScreen}
         options={{ title: 'Thông báo' }}
       />
-      <GuestTab.Screen name="Home" component={HomeStackScreen} options={{ title: 'Trang chủ' }} />
-      <GuestTab.Screen name="Manage" component={ManageStackScreen} options={{ title: 'Quản lý' }} />
       <GuestTab.Screen
-        name="Profile"
+        name='Home'
+        component={HomeStackScreen}
+        options={{ title: 'Trang chủ' }}
+      />
+      <GuestTab.Screen
+        name='Manage'
+        component={ManageStackScreen}
+        options={{ title: 'Quản lý' }}
+      />
+      <GuestTab.Screen
+        name='Profile'
         component={ProfileStackScreen}
         options={{ title: 'Tài khoản' }}
       />
@@ -340,17 +368,20 @@ function AppComponents() {
   const isSignedIn = useSelector(selectSigninStatus);
   const isAdmin = useSelector(selectUserRole) === 'admin';
 
-  const renderTabs = () => (!isAdmin ? <GuestTabNavigator /> : <AdminTabNavigator />);
+  const renderTabs = () =>
+    !isAdmin ? <GuestTabNavigator /> : <AdminTabNavigator />;
 
   return (
-    <NavigationContainer>{isSignedIn ? renderTabs() : <AuthenStackScreen />}</NavigationContainer>
+    <NavigationContainer>
+      {isSignedIn ? renderTabs() : <AuthenStackScreen />}
+    </NavigationContainer>
   );
 }
 
 export default function App() {
   return (
     <Provider store={store}>
-      <StatusBar style="auto" />
+      <StatusBar style='auto' />
       <AppComponents />
     </Provider>
   );

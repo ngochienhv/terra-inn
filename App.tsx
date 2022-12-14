@@ -23,6 +23,7 @@ import {
   AdminBillNavigatorParamList,
   AdminStatisticNavigatorParamList,
   AdminRequestNavigatorParamList,
+  AdminInnNavigatorParamList,
 } from 'types/navigator';
 import { selectSigninStatus, selectUserRole } from './redux/selectors/userSelectors';
 import { TERRA_COLOR } from './constants/theme';
@@ -37,6 +38,9 @@ import AdminManageBillScreen from './screens/admin/manage-bill/AdminManageBillSc
 import BillDetailScreen from './screens/bill-detail/BillDetailScreen';
 import ElectricWaterScreen from './screens/admin/electric-water/ElectricWaterScreen';
 import RequestDetailScreen from './screens/request-detail/RequestDetailScreen';
+import InnGroupScreen from './screens/admin/inn-group/InnGroupScreen';
+import AdminInnDetailScreen from './screens/admin/inn-detail/InnDetailScreen';
+import AdminRoomDetailScreen from './screens/admin/room-detail/AdminRoomDetailScreen';
 
 loadTypographies();
 
@@ -147,6 +151,30 @@ const AuthenStackScreen = () => {
 
 const AdminHomeStack = createNativeStackNavigator<AdminHomeNavigatorParamList>();
 
+const AdminInnStack = createNativeStackNavigator<AdminInnNavigatorParamList>();
+
+const AdminInnStackScreen = () => {
+  return (
+    <AdminInnStack.Navigator>
+      <AdminInnStack.Screen
+        name="InnGroup"
+        component={InnGroupScreen}
+        options={{ title: 'Quản lý khu trọ' }}
+      />
+      <AdminInnStack.Screen
+        name="InnDetail"
+        component={AdminInnDetailScreen}
+        options={{ title: 'Chi tiết' }}
+      />
+      <AdminInnStack.Screen
+        name="InnRoomDetail"
+        component={AdminRoomDetailScreen}
+        options={{ title: 'Phòng' }}
+      />
+    </AdminInnStack.Navigator>
+  );
+};
+
 const AdminHomeStackScreen = () => {
   return (
     <AdminHomeStack.Navigator>
@@ -159,6 +187,11 @@ const AdminHomeStackScreen = () => {
         name="ElectricWater"
         component={ElectricWaterScreen}
         options={{ title: 'Điện nước' }}
+      />
+      <AdminHomeStack.Screen
+        name="Inn"
+        component={AdminInnStackScreen}
+        options={{ title: 'Quản lý khu trọ', headerShown: false }}
       />
     </AdminHomeStack.Navigator>
   );

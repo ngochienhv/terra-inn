@@ -30,6 +30,7 @@ export type AdminRequestNavigatorParamList = {
 export type AdminHomeNavigatorParamList = {
   AdminHome: undefined;
   ElectricWater: undefined;
+  Inn: undefined;
 };
 
 export type AdminBillNavigatorParamList = {
@@ -39,4 +40,10 @@ export type AdminBillNavigatorParamList = {
 
 export type AdminStatisticNavigatorParamList = {
   AdminStatistic: undefined;
+};
+
+export type AdminInnNavigatorParamList = {
+  InnGroup: undefined;
+  InnDetail: undefined;
+  InnRoomDetail: undefined;
 };

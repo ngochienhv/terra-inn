@@ -6,9 +6,9 @@ import { TERRA_COLOR } from '../../constants/theme';
 import { REQUEST_STATUS } from '../../constants/status';
 
 const getStatusColor = (status: number) => {
-  if (status === 0) {
+  if (status === 1) {
     return TERRA_COLOR.ERROR[3];
-  } else if (status === 1) {
+  } else if (status === 2) {
     return TERRA_COLOR.SUCCESS[3];
   }
 };

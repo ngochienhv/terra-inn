@@ -115,38 +115,43 @@ const renderPage = (
   navigation: NativeStackNavigationProp<AdminBillNavigatorParamList>
 ) => {
   return (
-    <ScrollView>
-      <View margin-20>
-        <Text marginB-10 text70>
-          Chọn ngày tháng
-        </Text>
-        <DateTimePicker
-          migrate
-          label="Time"
-          placeholder={'Select time'}
-          value={selectedDate}
-          onChange={(date: Date) => setSelectedDate(date)}
-          style={styles.datePicker}
-        />
-        <Card>
-          {rooms.map((room) => (
-            <>
-              <TouchableOpacity
-                style={styles.rowContainer}
-                onPress={() => navigation.navigate('BillDetail')}
-              >
-                <Text>Phòng {room.number}</Text>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                  <Text color={getStatusColor(room.status)}>{room.status}</Text>
-                  <Ionicons name={'ios-chevron-forward-outline'} size={20} />
-                </View>
-              </TouchableOpacity>
-              <View height={1} backgroundColor={TERRA_COLOR.GRAY[0]} marginL-15 marginR-15 />
-            </>
-          ))}
-        </Card>
-      </View>
-    </ScrollView>
+    <>
+      <ScrollView>
+        <View margin-20>
+          <Text marginB-10 text70>
+            Chọn ngày tháng
+          </Text>
+          <DateTimePicker
+            migrate
+            label="Time"
+            placeholder={'Select time'}
+            value={selectedDate}
+            onChange={(date: Date) => setSelectedDate(date)}
+            style={styles.datePicker}
+          />
+          <Card>
+            {rooms.map((room) => (
+              <>
+                <TouchableOpacity
+                  style={styles.rowContainer}
+                  onPress={() => navigation.navigate('BillDetail')}
+                >
+                  <Text>Phòng {room.number}</Text>
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <Text color={getStatusColor(room.status)}>{room.status}</Text>
+                    <Ionicons name={'ios-chevron-forward-outline'} size={20} />
+                  </View>
+                </TouchableOpacity>
+                <View height={1} backgroundColor={TERRA_COLOR.GRAY[0]} marginL-15 marginR-15 />
+              </>
+            ))}
+          </Card>
+        </View>
+      </ScrollView>
+      <TouchableOpacity onPress={() => navigation.navigate('BillForm')} style={styles.affixButton}>
+        <Text style={{ fontSize: 40, color: 'white' }}>+</Text>
+      </TouchableOpacity>
+    </>
   );
 };
 const AdminManageBillScreen = gestureHandlerRootHOC(AdminManageBillComponents);
@@ -171,6 +176,18 @@ const styles = StyleSheet.create({
     height: 100,
     backgroundColor: '#fff',
     borderRadius: 50,
+  },
+  affixButton: {
+    position: 'absolute',
+    width: 60,
+    height: 60,
+    alignItems: 'center',
+    justifyContent: 'center',
+    right: 20,
+    bottom: 20,
+    backgroundColor: TERRA_COLOR.DEFAULT[3],
+    borderRadius: 30,
+    elevation: 8,
   },
   rowContainer: {
     flexDirection: 'row',

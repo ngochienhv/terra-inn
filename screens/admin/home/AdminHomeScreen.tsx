@@ -78,22 +78,6 @@ export default function AdminHomeScreen({
               </Text>
             </View>
           </Card>
-          <Card margin-8>
-            <View style={styles.notiItem}>
-              <Ionicons name={'build'} size={30} color={TERRA_COLOR.ERROR[4]} />
-              <Text text70 marginL-10>
-                Phòng 771 có 1 yêu cầu sửa chữa
-              </Text>
-            </View>
-          </Card>
-          <Card margin-8>
-            <View style={styles.notiItem}>
-              <Ionicons name={'build'} size={30} color={TERRA_COLOR.ERROR[4]} />
-              <Text text70 marginL-10>
-                Phòng 771 có 1 yêu cầu sửa chữa
-              </Text>
-            </View>
-          </Card>
         </View>
 
         <View style={styles.buttonBox}>
@@ -101,6 +85,7 @@ export default function AdminHomeScreen({
             label="Tạo thông báo"
             backgroundColor={TERRA_COLOR.PRIMARY[3]}
             style={styles.button}
+            onPress={() => navigation.navigate('Notifications')}
           />
         </View>
       </View>

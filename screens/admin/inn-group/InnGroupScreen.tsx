@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Dimensions, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { Button, Card, Text, TouchableOpacity, View } from 'react-native-ui-lib';
+import { Button, Card, Modal, Text, TextField, TouchableOpacity, View } from 'react-native-ui-lib';
 import { TERRA_COLOR } from '../../../constants/theme';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { FlatList } from 'react-native-gesture-handler';
@@ -57,6 +57,15 @@ const InnButton = ({ name, address }: { name: string; address: string }) => {
 };
 
 export default function InnGroupScreen() {
+  const [visible, setVisible] = useState<boolean>(false);
+  const textFieldProps = {
+    floatingPlaceholder: false,
+    fieldStyle: styles.withUnderline,
+    migrate: true,
+    labelColor: TERRA_COLOR.PRIMARY[3],
+    containerStyle: styles.inputContainer,
+  };
+
   return (
     <View style={{ alignItems: 'center' }}>
       <FlatList
@@ -65,8 +74,27 @@ export default function InnGroupScreen() {
         numColumns={2}
         showsVerticalScrollIndicator={false}
       />
-
-      <TouchableOpacity onPress={() => alert('FAB clicked')} style={styles.affixButton}>
+      <Modal visible={visible} onBackgroundPress={() => console.log('background pressed')}>
+        <Modal.TopBar
+          title={'Tạo khu trọ mới'}
+          onCancel={() => setVisible(false)}
+          onDone={() => console.log('done')}
+          doneLabel="Tạo"
+          titleStyle={{ fontSize: 20 }}
+        />
+        <TextField {...textFieldProps} label="Tên" placeholder="Tên khu trọ" />
+        <TextField {...textFieldProps} label="Địa chỉ" placeholder="Địa chỉ khu trọ" />
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }} margin-15>
+          <Button
+            label="Hủy"
+            backgroundColor={TERRA_COLOR.GRAY[0]}
+            color="black"
+            onPress={() => setVisible(false)}
+          />
+          <Button label="Tạo" backgroundColor={TERRA_COLOR.PRIMARY[3]} />
+        </View>
+      </Modal>
+      <TouchableOpacity onPress={() => setVisible(true)} style={styles.affixButton}>
         <Text style={{ fontSize: 40, color: 'white' }}>+</Text>
       </TouchableOpacity>
     </View>
@@ -95,5 +123,13 @@ const styles = StyleSheet.create({
     backgroundColor: TERRA_COLOR.DEFAULT[3],
     borderRadius: 30,
     elevation: 8,
+  },
+  withUnderline: {
+    borderBottomWidth: 1,
+    borderColor: TERRA_COLOR.PRIMARY[3],
+    paddingBottom: 4,
+  },
+  inputContainer: {
+    margin: '5%',
   },
 });

@@ -4,6 +4,7 @@ import { StyleSheet } from 'react-native';
 
 import { TERRA_COLOR } from '../../constants/theme';
 import { REQUEST_STATUS } from '../../constants/status';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const getStatusColor = (status: number) => {
   if (status === 1) {
@@ -44,30 +45,34 @@ const Row = ({ title, content }: { title: string; content: string | number }) =>
 
 export default function RequestDetailScreen() {
   return (
-    <View flex style={{ backgroundColor: TERRA_COLOR.PRIMARY[1] }}>
-      <Card margin-20 padding-20>
-        <Text text40L margin-10>
-          {data.title}
-        </Text>
-        <Row title="Phòng" content={data.room_name} />
-        <Row title="Nguời yêu cầu" content={data.creator_name} />
-        <Row title="Loại yêu cầu" content={data.type} />
-        <Row title="Ngày yêu cầu" content={new Date(data.create_at).toDateString()} />
-        <Row title="Ngày cần hoàn thành" content={data.due_date} />
-        <Row title="Tình trạng" content={data.status} />
-        <View style={{ ...styles.rowContainer, flexDirection: 'column', alignItems: 'flex-start' }}>
-          <Text color={TERRA_COLOR.GRAY[3]}>Nội dung</Text>
-          <Text marginT-10>{data.content}</Text>
-        </View>
-        <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-          <Button
-            label={data.status === 0 ? 'Hoàn thành yêu cầu' : 'Bỏ hoàn thành'}
-            backgroundColor={TERRA_COLOR.PRIMARY[4]}
-            style={{ alignSelf: 'baseline', margin: '5%' }}
-          />
-        </View>
-      </Card>
-    </View>
+    <ScrollView>
+      <View flex style={{ backgroundColor: TERRA_COLOR.PRIMARY[1] }}>
+        <Card margin-20 padding-20>
+          <Text text40L margin-10>
+            {data.title}
+          </Text>
+          <Row title="Phòng" content={data.room_name} />
+          <Row title="Nguời yêu cầu" content={data.creator_name} />
+          <Row title="Loại yêu cầu" content={data.type} />
+          <Row title="Ngày yêu cầu" content={new Date(data.create_at).toDateString()} />
+          <Row title="Ngày cần hoàn thành" content={data.due_date} />
+          <Row title="Tình trạng" content={data.status} />
+          <View
+            style={{ ...styles.rowContainer, flexDirection: 'column', alignItems: 'flex-start' }}
+          >
+            <Text color={TERRA_COLOR.GRAY[3]}>Nội dung</Text>
+            <Text marginT-10>{data.content}</Text>
+          </View>
+          <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+            <Button
+              label={data.status === 0 ? 'Hoàn thành yêu cầu' : 'Bỏ hoàn thành'}
+              backgroundColor={TERRA_COLOR.PRIMARY[4]}
+              style={{ alignSelf: 'baseline', margin: '5%' }}
+            />
+          </View>
+        </Card>
+      </View>
+    </ScrollView>
   );
 }
 

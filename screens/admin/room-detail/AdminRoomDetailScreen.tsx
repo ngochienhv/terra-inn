@@ -52,9 +52,6 @@ export default function AdminRoomDetailScreen() {
   //@ts-ignore
   const { action } = route.params;
 
-  useEffect(() => {
-    console.log(action);
-  });
   const textFieldProps = {
     floatingPlaceholder: false,
     fieldStyle: styles.withUnderline,

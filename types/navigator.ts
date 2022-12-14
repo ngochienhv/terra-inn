@@ -31,11 +31,13 @@ export type AdminHomeNavigatorParamList = {
   AdminHome: undefined;
   ElectricWater: undefined;
   Inn: undefined;
+  Notifications: undefined;
 };
 
 export type AdminBillNavigatorParamList = {
   AdminBill: undefined;
   BillDetail: undefined;
+  BillForm: undefined;
 };
 
 export type AdminStatisticNavigatorParamList = {

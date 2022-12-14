@@ -27,7 +27,7 @@ export default function AdminHomeScreen({
         </View>
         <View style={{ justifyContent: 'center' }}>
           <View style={styles.utilityBox}>
-            <Card style={styles.utilityItem}>
+            <Card style={styles.utilityItem} onPress={() => navigation.navigate('Inn')}>
               <Ionicons name={'ios-home'} size={30} />
               <Text text70>Quản lý</Text>
               <Text text60 color={TERRA_COLOR.GRAY[4]}>

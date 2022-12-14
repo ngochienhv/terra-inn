@@ -14,6 +14,7 @@ export type ManageNavigatorParamList = {
 
 export type NotificationNavigatorParamList = {
   Notification: undefined;
+  NotificationDetail: undefined;
 };
 
 export type ProfileNavigatorParamList = {
@@ -21,6 +22,21 @@ export type ProfileNavigatorParamList = {
   ChangePassword: undefined;
 };
 
-export type RequestNavigatorParamList = {
-  Request: undefined;
+export type AdminRequestNavigatorParamList = {
+  AllRequest: undefined;
+  Detail: undefined;
+};
+
+export type AdminHomeNavigatorParamList = {
+  AdminHome: undefined;
+  ElectricWater: undefined;
+};
+
+export type AdminBillNavigatorParamList = {
+  AdminBill: undefined;
+  BillDetail: undefined;
+};
+
+export type AdminStatisticNavigatorParamList = {
+  AdminStatistic: undefined;
 };

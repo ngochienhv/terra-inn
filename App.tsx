@@ -45,7 +45,7 @@ import InnGroupScreen from './screens/admin/inn-group/InnGroupScreen';
 import AdminInnDetailScreen from './screens/admin/inn-detail/InnDetailScreen';
 import AdminRoomDetailScreen from './screens/admin/room-detail/AdminRoomDetailScreen';
 import axios from 'axios';
-axios.defaults.baseURL = 'http://127.0.0.1:3000/api';
+axios.defaults.baseURL = 'http://192.168.137.1:3000/api';
 
 loadTypographies();
 

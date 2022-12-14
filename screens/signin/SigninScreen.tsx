@@ -14,6 +14,7 @@ import { AuthenNavigatorParamList } from 'types/navigator';
 import { useAppDispatch } from '../../redux/store';
 import { signIn } from '../../redux/slices/userSlice';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function SigninScreen({
   navigation,
@@ -39,23 +40,15 @@ export default function SigninScreen({
   };
 
   const handleSignin = async () => {
-    const res = await fetch('http://127.0.0.1:3000/login', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ phone, password }),
-    });
-    // const res = await axios.post('http://127.0.0.1:3000/login', {
-    //   phone,
-    //   password,
-    // });
-    console.log(res);
-    if (phone === '0000000000' && password === '12345678') {
-      dispatch(signIn('admin'));
-    } else if (phone == '1000000000' && password === '12345678') {
-      dispatch(signIn('guest'));
+    try {
+      const res = await axios.post('/login', {
+        phone,
+        password,
+      });
+      dispatch(signIn(res.data.is_admin ? 'admin' : 'guest'));
+      await AsyncStorage.setItem('token', res.data.token);
+    } catch (err) {
+      console.log(err);
     }
   };
 

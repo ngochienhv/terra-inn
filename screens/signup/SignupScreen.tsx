@@ -36,13 +36,17 @@ export default function SignupScreen({
   };
 
   const handleSignUp = async () => {
-    const res = await axios.post('http://127.0.0.1:3000/api/register', {
-      email: phone,
-      password,
-      is_admin: false,
-    });
-    console.log({ res });
-    navigation.navigate('Signin');
+    try {
+      console.log({ phone, password });
+      await axios.post('/register', {
+        phone,
+        password,
+        is_admin: false,
+      });
+      navigation.navigate('Signin');
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (

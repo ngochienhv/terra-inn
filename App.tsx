@@ -36,6 +36,7 @@ import AdminHomeScreen from './screens/admin/home/AdminHomeScreen';
 import AdminManageBillScreen from './screens/admin/manage-bill/AdminManageBillScreen';
 import BillDetailScreen from './screens/bill-detail/BillDetailScreen';
 import ElectricWaterScreen from './screens/admin/electric-water/ElectricWaterScreen';
+import RequestDetailScreen from './screens/request-detail/RequestDetailScreen';
 
 loadTypographies();
 
@@ -111,6 +112,11 @@ const AdminRequestStackScreen = () => {
         name="AllRequest"
         component={AdminRequestScreen}
         options={{ title: 'Yêu cầu' }}
+      />
+      <AdminRequestStack.Screen
+        name="Detail"
+        component={RequestDetailScreen}
+        options={{ title: 'Chi tiết yêu cầu' }}
       />
     </AdminRequestStack.Navigator>
   );

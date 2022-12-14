@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { TERRA_COLOR } from '../../../constants/theme/color';
 import { StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { BILL_STATUS } from '../../../constants/billStatus';
+import { BILL_STATUS } from '../../../constants/status';
 import { debounce } from 'lodash';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { AdminBillNavigatorParamList } from 'types/navigator';

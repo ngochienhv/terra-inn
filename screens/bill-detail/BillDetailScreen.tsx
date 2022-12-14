@@ -4,7 +4,7 @@ import { Button, Card, Text, View } from 'react-native-ui-lib';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { TERRA_COLOR } from '../../constants/theme/color';
-import { BILL_STATUS } from '../../constants/billStatus';
+import { BILL_STATUS } from '../../constants/status';
 
 const data = {
   id: 1,

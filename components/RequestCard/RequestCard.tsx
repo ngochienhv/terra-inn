@@ -1,13 +1,18 @@
 import React from 'react';
 import { ImageBackground, StyleSheet, TextInput, Dimensions } from 'react-native';
-import { View, TextField, Text, Button, Modal, Image } from 'react-native-ui-lib';
+import { View, TextField, Text, Button, Modal, Image, TouchableOpacity } from 'react-native-ui-lib';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { AdminRequestNavigatorParamList } from 'types/navigator';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
 export default function RequestCard(props: any) {
+  const navigation = useNavigation<NativeStackNavigationProp<AdminRequestNavigatorParamList>>();
+
   return (
-    <View>
+    <TouchableOpacity onPress={() => navigation.navigate('Detail')}>
       <View style={styles.modalView}>
         <View flex center>
           <Image style={styles.profileImage} source={props.image} />
@@ -43,7 +48,7 @@ export default function RequestCard(props: any) {
           </Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 

@@ -24,6 +24,7 @@ export type ProfileNavigatorParamList = {
 
 export type AdminRequestNavigatorParamList = {
   AllRequest: undefined;
+  Detail: undefined;
 };
 
 export type AdminHomeNavigatorParamList = {

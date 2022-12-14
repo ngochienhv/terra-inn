@@ -31,11 +31,12 @@ export default function SigninScreen({
   };
 
   const handleSignin = () => {
-    if (phone === '0000000000' && password === '12345678') {
-      dispatch(signIn('admin'));
-    } else if (phone == '1000000000' && password === '12345678') {
-      dispatch(signIn('guest'));
-    }
+    // if (phone === '0000000000' && password === '12345678') {
+    //   dispatch(signIn('admin'));
+    // } else if (phone == '1000000000' && password === '12345678') {
+    //   dispatch(signIn('guest'));
+    // }
+    dispatch(signIn('guest'));
   };
 
   return (

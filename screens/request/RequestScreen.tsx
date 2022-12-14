@@ -1,6 +1,6 @@
 import React from 'react';
 import { ImageBackground, StyleSheet, TextInput, Dimensions, ScrollView } from 'react-native';
-import { View, TextField, Text, Button, Modal, Image } from 'react-native-ui-lib';
+import { View, TextField, Text, Button, Modal, Image, TabController } from 'react-native-ui-lib';
 import RequestCard from '../../components/RequestCard/RequestCard';
 
 const screenWidth = Dimensions.get('window').width;
@@ -153,10 +153,10 @@ const users = [
   },
 ];
 
-export default function AdminRequestScreen() {
+export default function RequestScreen() {
   return (
     <ScrollView>
-      <View style={styles.container}>
+      <View>
         {users.map((user, index) => (
           <RequestCard
             key={user.id}
@@ -171,8 +171,8 @@ export default function AdminRequestScreen() {
           />
         ))}
       </View>
-      {/* <View style={{padding: 50 }} /> */}
     </ScrollView>
+   
   );
 }
 

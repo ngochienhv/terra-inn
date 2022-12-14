@@ -4,40 +4,49 @@ import { View, TextField, Text, Button, Modal, Image, TouchableOpacity } from 'r
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { AdminRequestNavigatorParamList } from 'types/navigator';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { TERRA_COLOR } from '../../constants/theme';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
-export default function RequestCard(props: any) {
+export default function RequestCardAdmin(props: any) {
   const navigation = useNavigation<NativeStackNavigationProp<AdminRequestNavigatorParamList>>();
 
   return (
     <TouchableOpacity onPress={() => navigation.navigate('Detail')}>
-      <View style={styles.modalViewDonent} flex left>
-          <View> 
-            <Text style={styles.headerText}>
-              <Text>Lê A • 4 Feb 2022</Text>
-            </Text>
+      <View style={styles.modalView}>
+        <View flex center>
+          <Image style={styles.profileImage} source={props.image} />
+        </View>
+
+        <View style={styles.textView} flex left>
+          <Text style={styles.headerText}>
+            <Text style={{ fontWeight: 'bold' }}>{props.request}</Text> • {props.time}
+          </Text>
+
+          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-end', marginRight: 10 }}>
+            <View style={{ width: '80%' }}>
+              <Text style={styles.nameText} numberOfLines={1}>
+                {props.name}
+              </Text>
+            </View>
+            <View style={{ width: '20%' }}>
+              <Text
+                style={
+                  props.status == 'Đã hoàn thành'
+                    ? styles.statusDone
+                    : props.status == 'Chờ thanh toán'
+                    ? styles.statusPending
+                    : styles.statusDonent
+                }
+              >
+                {props.status}
+              </Text>
+            </View>
           </View>
-          <View>
-            <Text style={styles.mainText}>
-              <Ionicons name={'ios-construct-outline'} size={25} /><Text style={{ fontWeight: 'bold' }}>  Sửa chữa điều hòa</Text>
-            </Text>
-          </View>
-          <View>
-            <Text style={styles.subText}>
-              <Text>Điều hòa bị hỏng không khởi động được</Text>
-            </Text>
-          </View>
-          <View>
-            <Text style={styles.subText}>
-              <Text><Text style={{ fontWeight: 'bold' }}>Trạng thái: </Text> Chưa hoàn thành  </Text>
-              <Ionicons name={'ios-warning-outline'} size={16} color={TERRA_COLOR.ERROR[3]}/>
-            </Text>
-          </View>
-          
+          <Text style={styles.footerText}>
+            <Text style={{ fontWeight: 'bold' }}>Nhà trọ {props.inn}</Text> • Phòng {props.room}
+          </Text>
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -49,18 +58,16 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
   },
-  modalViewDone: {
-    flex: 0,
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    backgroundColor: '#D3EFED',
+  modalView: {
+    flexDirection: 'row',
+    backgroundColor: 'white',
     margin: 0.5,
     borderRadius: 20,
     borderBottomColor: 'gray',
     borderBottomWidth: 0.2,
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
-    padding: 20,
+    padding: 10,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -70,38 +77,31 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     marginTop: 5,
   },
-  modalViewDonent: {
-    flex: 0,
+  profileImage: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 40,
+    height: 40,
+    borderRadius: 64,
+  },
+  textView: {
+    flex: 5,
     flexDirection: 'column',
-    justifyContent: 'flex-start',
-    backgroundColor: 'rgba(255, 167, 38, 0.2)',
-    margin: 0.5,
-    borderRadius: 20,
-    padding: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    marginTop: 5,
+    justifyContent: 'center',
   },
   headerText: {
-    fontSize: 15,
-    textAlign: 'left',
-    color: 'gray',
-    marginBottom: 2,
+    textAlign: 'center',
+    fontSize: 12,
   },
-  mainText: {
-    fontSize: 20,
+  nameText: {
+    flex: 3,
+    fontSize: 18,
     textAlign: 'left',
-    marginBottom: 2,
+    overflow: 'hidden',
   },
-  subText: {
-    fontSize: 15,
-    textAlign: 'left',
-    color: 'gray',
+  footerText: {
+    fontSize: 12,
+    textAlign: 'center',
   },
   statusDone: {
     flex: 1,

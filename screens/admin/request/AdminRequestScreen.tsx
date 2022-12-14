@@ -3,7 +3,7 @@ import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
 import { View, TextField, Text, Button, TabController } from 'react-native-ui-lib';
 import NotificationCard from '../../../components/NotiCard/NotiCard';
 import { TERRA_COLOR } from '../../../constants/theme/color';
-import RequestCard from '../../../components/RequestCard/RequestCard'
+import RequestCard from '../../../components/RequestCardAdmin/RequestCardAdmin'
 import {FlatList, ImageBackground, StyleSheet, TextInput, Dimensions, ScrollView } from 'react-native';
 
 const users = [

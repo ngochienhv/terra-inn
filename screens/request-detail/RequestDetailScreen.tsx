@@ -1,6 +1,8 @@
 import React from 'react';
 import { Button, Card, Text, View } from 'react-native-ui-lib';
 import { StyleSheet } from 'react-native';
+import { useSelector } from 'react-redux';
+import { selectUserRole } from '../../redux/selectors/userSelectors';
 
 import { TERRA_COLOR } from '../../constants/theme';
 import { REQUEST_STATUS } from '../../constants/status';
@@ -59,11 +61,12 @@ export default function RequestDetailScreen() {
           <Text color={TERRA_COLOR.GRAY[3]}>Nội dung</Text>
           <Text marginT-10>{data.content}</Text>
         </View>
-        <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'flex-end' , display: useSelector(selectUserRole) === 'admin' ? "flex" : "none"}}>
           <Button
             label={data.status === 0 ? 'Hoàn thành yêu cầu' : 'Bỏ hoàn thành'}
             backgroundColor={TERRA_COLOR.PRIMARY[4]}
             style={{ alignSelf: 'baseline', margin: '5%' }}
+
           />
         </View>
       </Card>

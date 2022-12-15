@@ -1,5 +1,6 @@
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import React from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { ImageBackground, StyleSheet, TextInput } from 'react-native';
 import { Avatar, Carousel, Text, TextField, View } from 'react-native-ui-lib';
 import { HomeNavigatorParamList } from 'types/navigator';
@@ -11,14 +12,27 @@ export default function HomeScreen({
 }: {
   navigation: NativeStackNavigationProp<HomeNavigatorParamList>;
 }) {
+  const [motels, setMotels] = useState([]);
+  useEffect(() => {
+    const fetchMotelList = async () => {
+      try {
+        const res = await axios.get('/motel?guest=true');
+        setMotels(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchMotelList();
+  }, []);
+  console.log(motels);
   return (
     <ImageBackground
       source={require('../../assets/home-background.png')}
-      resizeMode="cover"
+      resizeMode='cover'
       style={styles.image}
     >
       <View flex padding-20>
-        <TextInput style={styles.input} placeholder="Tìm kiếm" />
+        <TextInput style={styles.input} placeholder='Tìm kiếm' />
         <View margin-20 style={styles.title}>
           <View>
             <Text text50 color={TERRA_COLOR.GRAY[4]}>
@@ -33,9 +47,13 @@ export default function HomeScreen({
         <Text marginB-10 text7>
           Khám phá trọ gần bạn
         </Text>
-        <Carousel onChangePage={() => console.log('page changed')} loop pageControlPosition="under">
-          {[1, 2, 3, 4, 5].map(() => (
-            <InnCard navigation={navigation} />
+        <Carousel
+          onChangePage={() => console.log('page changed')}
+          loop
+          pageControlPosition='under'
+        >
+          {motels.map((motel) => (
+            <InnCard navigation={navigation} motel={motel} />
           ))}
         </Carousel>
       </View>

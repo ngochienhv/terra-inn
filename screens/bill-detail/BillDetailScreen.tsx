@@ -5,6 +5,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { TERRA_COLOR } from '../../constants/theme/color';
 import { BILL_STATUS } from '../../constants/status';
+import { useSelector } from 'react-redux';
+import { selectUserRole } from '../../redux/selectors/userSelectors';
 
 const data = {
   id: 1,
@@ -64,6 +66,8 @@ const Row = ({ title, content }: { title: string; content: string | number }) =>
 export default function BillDetailScreen({ isPreviewing }: { isPreviewing?: boolean }) {
   const totalElec = (data.elec_index_after - data.elec_index_before) * data.elec_rate;
   const totalWater = (data.water_index_after - data.water_index_before) * data.water_rate;
+  const isAdmin = useSelector(selectUserRole) === 'admin';
+
   return (
     <View flex style={{ backgroundColor: TERRA_COLOR.PRIMARY[1] }}>
       <ScrollView>
@@ -101,11 +105,13 @@ export default function BillDetailScreen({ isPreviewing }: { isPreviewing?: bool
             <>
               <Row title="Tình trạng thanh toán" content={data.pay_status} />
               <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-                <Button
-                  label={getButtonLabel(data.pay_status)}
-                  backgroundColor={TERRA_COLOR.PRIMARY[4]}
-                  style={{ alignSelf: 'baseline', margin: '5%' }}
-                />
+                {isAdmin ? (
+                  <Button
+                    label={getButtonLabel(data.pay_status)}
+                    backgroundColor={TERRA_COLOR.PRIMARY[4]}
+                    style={{ alignSelf: 'baseline', margin: '5%' }}
+                  />
+                ) : null}
               </View>
             </>
           ) : null}

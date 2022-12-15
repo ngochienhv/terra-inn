@@ -1,23 +1,44 @@
+import axios from 'axios';
 import React from 'react';
 import { Dimensions, ScrollView, StyleSheet } from 'react-native';
-import { View, Carousel, Image, Text, Button, GridList } from 'react-native-ui-lib';
+import {
+  View,
+  Carousel,
+  Image,
+  Text,
+  Button,
+  GridList,
+} from 'react-native-ui-lib';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { TERRA_COLOR } from '../../constants/theme/color';
 
+import { Toast } from 'react-native-toast-message/lib/src/Toast';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const innImages = [
   'https://bandon.vn/uploads/posts/thiet-ke-nha-tro-dep-2020-bandon-0.jpg',
   'https://angcovat.vn/imagesdata/KN208117/thiet-ke-phong-tro-khep-kin-co-gac-lung.jpg',
   'https://www.hancorp.com.vn/wp-content/uploads/2020/08/phong-tro-2.jpg',
 ];
 
-const description = ['Thoáng mát', 'Có bảo vệ', 'Không chung chủ', 'Giờ giấc thoải mái', 'Sạch sẽ'];
+const description = [
+  'Thoáng mát',
+  'Có bảo vệ',
+  'Không chung chủ',
+  'Giờ giấc thoải mái',
+  'Sạch sẽ',
+];
 
-function DetailComponent() {
+function DetailComponent({ data }) {
+  const motel = data.motel;
   return (
     <View flex>
       <ScrollView>
-        <Carousel onChangePage={() => console.log('page changed')} loop pageControlPosition="under">
+        <Carousel
+          onChangePage={() => console.log('page changed')}
+          loop
+          pageControlPosition='under'
+        >
           {innImages.map((image) => (
             <Image source={{ uri: image }} style={{ height: 200 }} />
           ))}
@@ -25,7 +46,7 @@ function DetailComponent() {
         <View padding-15>
           <View style={styles.headerBox}>
             <Text text50 color={TERRA_COLOR.PRIMARY[3]}>
-              Phòng trọ An Khang
+              {motel.name}
             </Text>
             <Text text50 color={TERRA_COLOR.PRIMARY[3]}>
               P101
@@ -33,11 +54,18 @@ function DetailComponent() {
           </View>
           <View style={styles.headerBox} marginT-10>
             <Text text60>
-              Giá: <Text color={TERRA_COLOR.ERROR[4]}>1,500,000đ/tháng</Text>
+              Giá:{' '}
+              <Text color={TERRA_COLOR.ERROR[4]}>
+                {motel.rental_price} đ/tháng
+              </Text>
             </Text>
             <Text text70 color={TERRA_COLOR.PRIMARY[3]}>
               {[1, 2, 3].map((x) => (
-                <Ionicons name={'ios-person'} size={20} color={TERRA_COLOR.PRIMARY[3]} />
+                <Ionicons
+                  name={'ios-person'}
+                  size={20}
+                  color={TERRA_COLOR.PRIMARY[3]}
+                />
               ))}
             </Text>
           </View>
@@ -58,14 +86,22 @@ function DetailComponent() {
             </View>
           </View>
           <Text text70 marginT-10>
-            Lorem ipsum dolor, sit amet conse adipisicing elit. Officiis odit animi error quis
-            temporibus! Reprehenderit ipsum accusantium sequi nemo esse?
+            {motel.description}
           </Text>
           <View style={styles.headerBox} marginT-10>
             <Text text70>Mô tả:</Text>
             <View style={styles.headerBox}>
-              <Button text70 label="Vị trí" link color={TERRA_COLOR.PRIMARY[3]} />
-              <Ionicons name={'ios-home'} size={20} color={TERRA_COLOR.PRIMARY[3]} />
+              <Button
+                text70
+                label='Vị trí'
+                link
+                color={TERRA_COLOR.PRIMARY[3]}
+              />
+              <Ionicons
+                name={'ios-home'}
+                size={20}
+                color={TERRA_COLOR.PRIMARY[3]}
+              />
             </View>
           </View>
         </View>
@@ -77,7 +113,11 @@ function DetailComponent() {
 const renderDescription = (description: string) => {
   return (
     <View style={styles.descriptionBox}>
-      <Ionicons name="ios-arrow-redo-circle" size={14} color={TERRA_COLOR.PRIMARY[4]} />
+      <Ionicons
+        name='ios-arrow-redo-circle'
+        size={14}
+        color={TERRA_COLOR.PRIMARY[4]}
+      />
       <Text key={description} style={styles.descriptionText}>
         {description}
       </Text>
@@ -85,12 +125,47 @@ const renderDescription = (description: string) => {
   );
 };
 
-export default function DetailScreen() {
+export default function DetailScreen(props) {
   const { width } = Dimensions.get('window');
   const itemWidth = width / 2;
+  const motel = props.route.params;
+
+  const handleRequest = async () => {
+    Toast.show({
+      type: 'info',
+      text1: 'Đang gửi yêu cầu',
+    });
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const res = await axios.post(
+        '/request',
+        {
+          is_from_admin: false,
+          motel_id: motel.id,
+          type: 1,
+          status: 0,
+          title: 'Yêu cầu thuê phòng',
+          due_date: '2022-12-15',
+          content: `Yêu cầu thuê phòng cho ${motel.name}`,
+        },
+        { headers: { token } }
+      );
+
+      Toast.show({
+        type: 'success',
+        text1: 'Đã gửi yêu cầu',
+      });
+    } catch (err) {
+      console.log(err);
+      Toast.show({
+        type: 'error',
+        text1: 'Có lỗi xảy ra:(',
+      });
+    }
+  };
   return (
     <GridList
-      ListHeaderComponent={<DetailComponent />}
+      ListHeaderComponent={<DetailComponent data={motel} />}
       data={description}
       maxItemWidth={itemWidth}
       numColumns={2}
@@ -98,9 +173,10 @@ export default function DetailScreen() {
       ListFooterComponent={
         <View style={styles.buttonBox}>
           <Button
-            label="Yêu cầu thuê phòng"
+            label='Yêu cầu thuê phòng'
             backgroundColor={TERRA_COLOR.PRIMARY[3]}
             style={styles.button}
+            onPress={handleRequest}
           />
         </View>
       }

@@ -33,12 +33,11 @@ export default function SigninScreen({
   };
 
   // const handleSignin = () => {
-  //   // if (phone === '0000000000' && password === '12345678') {
-  //   //   dispatch(signIn('admin'));
-  //   // } else if (phone == '1000000000' && password === '12345678') {
-  //   //   dispatch(signIn('guest'));
-  //   // }
-  //   dispatch(signIn('guest'));
+  //   if (phone === '0000000000' && password === '12345678') {
+  //     dispatch(signIn('admin'));
+  //   } else if (phone == '1000000000' && password === '12345678') {
+  //     dispatch(signIn('guest'));
+  //   }
   // };
 
   const handleSignin = async () => {
@@ -49,6 +48,7 @@ export default function SigninScreen({
       });
       dispatch(signIn(res.data.is_admin ? 'admin' : 'guest'));
       await AsyncStorage.setItem('token', res.data.token);
+      await AsyncStorage.setItem('role', res.data.is_admin ? 'admin' : 'guest');
     } catch (err) {
       console.log(err);
     }

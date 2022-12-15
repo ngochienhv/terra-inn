@@ -12,7 +12,7 @@ import ManageScreen from './screens/manage/ManageScreen';
 import NotificationScreen from './screens/notification/NotificationScreen';
 
 import { Provider, useSelector } from 'react-redux';
-import { store } from './redux/store';
+import { store, useAppDispatch } from './redux/store';
 import {
   HomeNavigatorParamList,
   AuthenNavigatorParamList,
@@ -43,10 +43,17 @@ import RequestDetailScreen from './screens/request-detail/RequestDetailScreen';
 import InnGroupScreen from './screens/admin/inn-group/InnGroupScreen';
 import AdminInnDetailScreen from './screens/admin/inn-detail/InnDetailScreen';
 import AdminRoomDetailScreen from './screens/admin/room-detail/AdminRoomDetailScreen';
-import axios from 'axios'; 
+import axios from 'axios';
 axios.defaults.baseURL = 'https://terrainn-api.fly.dev/api';
 import NotiFormScreen from './screens/admin/noti-form/NotiFormScreen';
 import BillFormScreen from './screens/admin/bill-form/BillFormScreen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { signIn } from './redux/slices/userSlice';
+axios.defaults.baseURL = 'https://terrainn-api.fly.dev/api';
+import Toast from 'react-native-toast-message';
+import { getAllInns } from './redux/actions/innGroupActions';
+import HomeRentScreen from './screens/home-rent/HomeRentScreen';
+import GuestBillListScreen from './screens/guest-bill-list/GuestBillListScreen';
 
 loadTypographies();
 
@@ -57,7 +64,7 @@ const HomeStackScreen = () => {
     <HomeStack.Navigator>
       <HomeStack.Screen
         name="Home"
-        component={HomeScreen}
+        component={HomeRentScreen}
         options={{ title: 'Trang chủ', headerShown: false }}
       />
       <HomeStack.Screen name="Detail" component={DetailScreen} />
@@ -71,6 +78,16 @@ const ManageStackScreen = () => {
   return (
     <ManageStack.Navigator>
       <ManageStack.Screen name="Manage" component={ManageScreen} options={{ title: 'Quản lý' }} />
+      <ManageStack.Screen
+        name="BillList"
+        component={GuestBillListScreen}
+        options={{ title: 'Hóa đơn' }}
+      />
+      <ManageStack.Screen
+        name="BillDetailGuest"
+        component={BillDetailScreen}
+        options={{ title: 'Hóa đơn' }}
+      />
     </ManageStack.Navigator>
   );
 };
@@ -196,6 +213,11 @@ const AdminInnStackScreen = () => {
         component={AdminRoomDetailScreen}
         options={{ title: 'Phòng' }}
       />
+      <AdminInnStack.Screen
+        name="InnRoomDetailOccupied"
+        component={ManageScreen}
+        options={{ title: 'Phòng' }}
+      />
     </AdminInnStack.Navigator>
   );
 };
@@ -220,7 +242,7 @@ const AdminHomeStackScreen = () => {
       />
       <AdminHomeStack.Screen
         name="Notifications"
-        component={NotiFormScreen}
+        component={HomeRentScreen}
         options={{ title: 'Tạo thông báo' }}
       />
     </AdminHomeStack.Navigator>
@@ -360,6 +382,25 @@ const GuestTabNavigator = () => {
 function AppComponents() {
   const isSignedIn = useSelector(selectSigninStatus);
   const isAdmin = useSelector(selectUserRole) === 'admin';
+  const dispatch = useAppDispatch();
+
+  React.useEffect(() => {
+    const checkLoggedin = async () => {
+      let token = await AsyncStorage.getItem('token');
+      if (token) {
+        let role = await AsyncStorage.getItem('role');
+        dispatch(signIn(role));
+      }
+    };
+
+    checkLoggedin();
+
+    try {
+      dispatch(getAllInns());
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
 
   const renderTabs = () => (!isAdmin ? <GuestTabNavigator /> : <AdminTabNavigator />);
 
@@ -373,6 +414,7 @@ export default function App() {
     <Provider store={store}>
       <StatusBar style="auto" />
       <AppComponents />
+      <Toast />
     </Provider>
   );
 }

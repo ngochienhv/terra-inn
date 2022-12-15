@@ -1,12 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Dimensions, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { Button, Card, Modal, Text, TextField, TouchableOpacity, View } from 'react-native-ui-lib';
+import {
+  Button,
+  Card,
+  LoaderScreen,
+  Modal,
+  Text,
+  TextField,
+  TouchableOpacity,
+  View,
+} from 'react-native-ui-lib';
 import { TERRA_COLOR } from '../../../constants/theme';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { FlatList } from 'react-native-gesture-handler';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { AdminInnNavigatorParamList } from 'types/navigator';
+import { useAppDispatch } from '../../../redux/store';
+import { getAllInns } from '../../../redux/actions/innGroupActions';
+import { useSelector } from 'react-redux';
+import { selectAddInnForms, selectInnGroups } from '../../../redux/selectors/innGroupSelector';
+import { setInnForm } from '../../../redux/slices/innGroupSlice';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -41,10 +57,14 @@ const data = [
   },
 ];
 
-const InnButton = ({ name, address }: { name: string; address: string }) => {
+const InnButton = ({ name, address, id }: { name: string; address: string; id: string }) => {
   const navigation = useNavigation<NativeStackNavigationProp<AdminInnNavigatorParamList>>();
   return (
-    <Card style={styles.utilityItem} onPress={() => navigation.navigate('InnDetail')}>
+    <Card
+      style={styles.utilityItem}
+      //@ts-ignore
+      onPress={() => navigation.navigate('InnDetail', { innId: id })}
+    >
       <Ionicons name={'ios-home'} size={30} />
       <Text text60 marginB-5 style={{ textAlign: 'center' }}>
         {name}
@@ -58,6 +78,11 @@ const InnButton = ({ name, address }: { name: string; address: string }) => {
 
 export default function InnGroupScreen() {
   const [visible, setVisible] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
+  const dispatch = useAppDispatch();
+  const inns = useSelector(selectInnGroups);
+  const form = useSelector(selectAddInnForms);
+
   const textFieldProps = {
     floatingPlaceholder: false,
     fieldStyle: styles.withUnderline,
@@ -66,14 +91,42 @@ export default function InnGroupScreen() {
     containerStyle: styles.inputContainer,
   };
 
+  const handleCreateInn = async () => {
+    let token = await AsyncStorage.getItem('token');
+    await axios
+      .post(
+        'motel-group',
+        {
+          ...form,
+        },
+        {
+          headers: {
+            token: token,
+          },
+        }
+      )
+      .then(() => {
+        dispatch(getAllInns());
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
-    <View style={{ alignItems: 'center' }}>
-      <FlatList
-        data={data}
-        renderItem={({ item }) => <InnButton name={item.name} address={item.address} />}
-        numColumns={2}
-        showsVerticalScrollIndicator={false}
-      />
+    <View flex style={{ alignItems: 'center' }}>
+      {inns.length > 0 ? (
+        <FlatList
+          data={inns}
+          renderItem={({ item }) => (
+            <InnButton name={item.group_name} address={item.address} id={item.id} />
+          )}
+          numColumns={2}
+          showsVerticalScrollIndicator={false}
+        />
+      ) : (
+        <Text text50>Hiện tại chưa có khu trọ, vui lòng tạo khu trọ mới</Text>
+      )}
       <Modal visible={visible} onBackgroundPress={() => console.log('background pressed')}>
         <Modal.TopBar
           title={'Tạo khu trọ mới'}
@@ -82,8 +135,20 @@ export default function InnGroupScreen() {
           doneLabel="Tạo"
           titleStyle={{ fontSize: 20 }}
         />
-        <TextField {...textFieldProps} label="Tên" placeholder="Tên khu trọ" />
-        <TextField {...textFieldProps} label="Địa chỉ" placeholder="Địa chỉ khu trọ" />
+        <TextField
+          {...textFieldProps}
+          label="Tên"
+          placeholder="Tên khu trọ"
+          value={form.group_name}
+          onChangeText={(value: string) => dispatch(setInnForm({ ...form, group_name: value }))}
+        />
+        <TextField
+          {...textFieldProps}
+          label="Địa chỉ"
+          placeholder="Địa chỉ khu trọ"
+          value={form.address}
+          onChangeText={(value: string) => dispatch(setInnForm({ ...form, address: value }))}
+        />
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }} margin-15>
           <Button
             label="Hủy"
@@ -91,7 +156,14 @@ export default function InnGroupScreen() {
             color="black"
             onPress={() => setVisible(false)}
           />
-          <Button label="Tạo" backgroundColor={TERRA_COLOR.PRIMARY[3]} />
+          <Button
+            label="Tạo"
+            backgroundColor={TERRA_COLOR.PRIMARY[3]}
+            onPress={() => {
+              handleCreateInn();
+              setVisible(false);
+            }}
+          />
         </View>
       </Modal>
       <TouchableOpacity onPress={() => setVisible(true)} style={styles.affixButton}>

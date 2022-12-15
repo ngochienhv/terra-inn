@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
-import { DateTimePicker, Text, View } from 'react-native-ui-lib';
+import { DateTimePicker, Picker, Text, View } from 'react-native-ui-lib';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useSelector } from 'react-redux';
 
+import { selectInnGroups } from '../../../redux/selectors/innGroupSelector';
 import { TERRA_COLOR } from '../../../constants/theme/color';
 
 const data = [
@@ -72,11 +74,25 @@ const Row = ({ room, electric, water }: { room: string; electric: number; water:
 
 export default function ElectricWaterScreen() {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [selectedInn, setSelectedInn] = useState<string>();
+  const innsList = useSelector(selectInnGroups);
 
   return (
     <View flex style={{ backgroundColor: 'white' }}>
       <ScrollView>
         <View marginL-20 marginR-20 marginT-20>
+          <Text marginB-5>Khu trọ</Text>
+          {/* @ts-ignore */}
+          <Picker
+            placeholder={'Chọn khu trọ'}
+            onChange={setSelectedInn}
+            value={selectedInn}
+            style={{ backgroundColor: 'white', padding: '2%' }}
+          >
+            {innsList.map((inn) => (
+              <Picker.Item key={inn.id} value={inn.id} label={inn.group_name} />
+            ))}
+          </Picker>
           <Text marginB-10 text70 color={TERRA_COLOR.PRIMARY[3]}>
             Chọn ngày tháng
           </Text>

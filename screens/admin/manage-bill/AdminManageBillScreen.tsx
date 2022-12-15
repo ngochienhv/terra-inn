@@ -1,6 +1,6 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
-import { View, DateTimePicker, TabController, Text, Card } from 'react-native-ui-lib';
+import { View, DateTimePicker, TabController, Text, Card, Picker } from 'react-native-ui-lib';
 import { useNavigation } from '@react-navigation/native';
 import { TERRA_COLOR } from '../../../constants/theme/color';
 import { StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
@@ -9,6 +9,9 @@ import { BILL_STATUS } from '../../../constants/status';
 import { debounce } from 'lodash';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { AdminBillNavigatorParamList } from 'types/navigator';
+import { useSelector } from 'react-redux';
+import { selectInnGroups } from '../../../redux/selectors/innGroupSelector';
+import { Inn } from 'types/innType';
 
 const rooms = [
   {
@@ -66,6 +69,7 @@ const getStatusColor = (status: string) => {
 function AdminManageBillComponents() {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const innsList = useSelector(selectInnGroups);
   const navigation = useNavigation<NativeStackNavigationProp<AdminBillNavigatorParamList>>();
 
   const setIndexDebounce = debounce((value) => {
@@ -93,7 +97,7 @@ function AdminManageBillComponents() {
       />
       <View flex style={{ backgroundColor: TERRA_COLOR.PRIMARY[1] }}>
         <TabController.TabPage index={0}>
-          {renderPage(selectedDate, setSelectedDate, navigation)}
+          {renderPage(innsList, selectedDate, setSelectedDate, navigation)}
         </TabController.TabPage>
         <TabController.TabPage index={1}>
           {/* {renderPage(selectedDate, setSelectedDate)} */}
@@ -110,6 +114,7 @@ function AdminManageBillComponents() {
 }
 
 const renderPage = (
+  innsList: Inn[],
   selectedDate: Date,
   setSelectedDate: React.Dispatch<React.SetStateAction<Date>>,
   navigation: NativeStackNavigationProp<AdminBillNavigatorParamList>
@@ -118,6 +123,17 @@ const renderPage = (
     <>
       <ScrollView>
         <View margin-20>
+          <Text marginB-5>Khu trọ</Text>
+          {/* @ts-ignore */}
+          <Picker
+            placeholder={'Chọn khu trọ'}
+            onChange={() => console.log('changed')}
+            style={{ backgroundColor: 'white', padding: '2%' }}
+          >
+            {innsList.map((inn) => (
+              <Picker.Item key={inn.id} value={inn.id} label={inn.group_name} />
+            ))}
+          </Picker>
           <Text marginB-10 text70>
             Chọn ngày tháng
           </Text>

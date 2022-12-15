@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createSlice } from '@reduxjs/toolkit';
 
 const userSlice = createSlice({
@@ -14,6 +15,7 @@ const userSlice = createSlice({
       return { ...state, isSignedIn: true, role: action.payload };
     },
     signOut(state) {
+      AsyncStorage.clear();
       return { ...state, isSignedIn: false, role: '' };
     },
   },

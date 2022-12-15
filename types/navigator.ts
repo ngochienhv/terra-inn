@@ -10,6 +10,8 @@ export type AuthenNavigatorParamList = {
 
 export type ManageNavigatorParamList = {
   Manage: undefined;
+  BillList: undefined;
+  BillDetailGuest: undefined;
 };
 
 export type NotificationNavigatorParamList = {
@@ -53,4 +55,5 @@ export type AdminInnNavigatorParamList = {
   InnGroup: undefined;
   InnDetail: undefined;
   InnRoomDetail: undefined;
+  InnRoomDetailOccupied: undefined;
 };

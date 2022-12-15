@@ -5,8 +5,6 @@ const selectSigninStatus = (state: RootState) => {
 };
 
 const selectUserRole = (state: RootState) => {
-  console.log(state);
-
   return state.user.role;
 };
 

@@ -1,7 +1,7 @@
 import { RootState } from '../rootReducer';
 
-const selectAddRoomForm = (state: RootState) => {
-  return state.form.addRoomForm;
+const selectRoomForm = (state: RootState) => {
+  return state.room.roomForm;
 };
 
-export { selectAddRoomForm };
+export { selectRoomForm };

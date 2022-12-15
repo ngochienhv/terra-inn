@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
 import { View, TabController, Text, Card } from 'react-native-ui-lib';
 import { useNavigation } from '@react-navigation/native';
@@ -9,54 +9,14 @@ import { INN_STATUS } from '../../../constants/status';
 import { debounce } from 'lodash';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { AdminInnNavigatorParamList } from 'types/navigator';
+import { useRoute } from '@react-navigation/native';
+import { IRoom } from 'types/roomType';
+import axios from 'axios';
 
-const rooms = [
-  {
-    number: 101,
-    status: INN_STATUS[2],
-  },
-  {
-    number: 102,
-    status: INN_STATUS[1],
-  },
-  {
-    number: 103,
-    status: INN_STATUS[2],
-  },
-  {
-    number: 104,
-    status: INN_STATUS[2],
-  },
-  {
-    number: 105,
-    status: INN_STATUS[1],
-  },
-  {
-    number: 106,
-    status: INN_STATUS[1],
-  },
-  {
-    number: 107,
-    status: INN_STATUS[2],
-  },
-  {
-    number: 108,
-    status: INN_STATUS[1],
-  },
-  {
-    number: 109,
-    status: INN_STATUS[2],
-  },
-  {
-    number: 110,
-    status: INN_STATUS[2],
-  },
-];
-
-const getStatusColor = (status: string) => {
-  if (status === INN_STATUS[1]) {
+const getStatusColor = (status: number) => {
+  if (status === 1) {
     return TERRA_COLOR.ERROR[3];
-  } else if (status === INN_STATUS[2]) {
+  } else if (status === 2) {
     return TERRA_COLOR.SECONDARY[3];
   }
 };
@@ -64,6 +24,10 @@ const getStatusColor = (status: string) => {
 function AddminInnDetailComponent() {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [rooms, setRooms] = useState<IRoom[]>([]);
+  const route = useRoute();
+  //@ts-ignore
+  const { innId } = route.params;
   const navigation = useNavigation<NativeStackNavigationProp<AdminInnNavigatorParamList>>();
 
   const setIndexDebounce = debounce((value) => {
@@ -71,6 +35,21 @@ function AddminInnDetailComponent() {
   }, 500);
 
   const onChangeDebounce = useCallback((value: number) => setIndexDebounce(value), []);
+
+  useEffect(() => {
+    const getAllRooms = async () => {
+      await axios
+        .get('motel', { params: { 'group-id': innId } })
+        .then((response) => {
+          setRooms(response.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+
+    getAllRooms();
+  }, []);
 
   return (
     <TabController
@@ -86,7 +65,7 @@ function AddminInnDetailComponent() {
       />
       <View flex style={{ backgroundColor: TERRA_COLOR.PRIMARY[1] }}>
         <TabController.TabPage index={0}>
-          {renderPage(selectedDate, setSelectedDate, navigation)}
+          {renderPage(rooms, innId, selectedDate, setSelectedDate, navigation)}
         </TabController.TabPage>
         <TabController.TabPage index={1}>
           {/* {renderPage(selectedDate, setSelectedDate)} */}
@@ -103,37 +82,52 @@ function AddminInnDetailComponent() {
 }
 
 const renderPage = (
+  rooms: IRoom[],
+  innId: string,
   selectedDate: Date,
   setSelectedDate: React.Dispatch<React.SetStateAction<Date>>,
   navigation: NativeStackNavigationProp<AdminInnNavigatorParamList>
 ) => {
   return (
-    <View>
+    <View flex>
       <ScrollView>
         <View margin-20>
           <Card>
-            {rooms.map((room) => (
-              <>
-                <TouchableOpacity
-                  style={styles.rowContainer}
-                  //@ts-ignore
-                  onPress={() => navigation.navigate('InnRoomDetail', { action: 'update' })}
-                >
-                  <Text>Phòng {room.number}</Text>
-                  <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Text color={getStatusColor(room.status)}>{room.status}</Text>
-                    <Ionicons name={'ios-chevron-forward-outline'} size={20} />
-                  </View>
-                </TouchableOpacity>
-                <View height={1} backgroundColor={TERRA_COLOR.GRAY[0]} marginL-15 marginR-15 />
-              </>
-            ))}
+            {rooms.length > 0 ? (
+              rooms.map((room) => (
+                <>
+                  <TouchableOpacity
+                    style={styles.rowContainer}
+                    onPress={() =>
+                      //@ts-ignore
+                      navigation.navigate('InnRoomDetail', {
+                        action: 'update',
+                        roomId: room.id,
+                        innId: innId,
+                      })
+                    }
+                  >
+                    <Text>Phòng {room.name}</Text>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                      {/* @ts-ignore */}
+                      <Text color={getStatusColor(room.status)}>{INN_STATUS[room.status]}</Text>
+                      <Ionicons name={'ios-chevron-forward-outline'} size={20} />
+                    </View>
+                  </TouchableOpacity>
+                  <View height={1} backgroundColor={TERRA_COLOR.GRAY[0]} marginL-15 marginR-15 />
+                </>
+              ))
+            ) : (
+              <Text text50 margin-20>
+                Hiện tại khu trọ chưa có phòng nào, vui lòng tạo phòng
+              </Text>
+            )}
           </Card>
         </View>
       </ScrollView>
       <TouchableOpacity
         //@ts-ignore
-        onPress={() => navigation.navigate('InnRoomDetail', { action: 'add' })}
+        onPress={() => navigation.navigate('InnRoomDetail', { action: 'add', innId: innId })}
         style={styles.affixButton}
       >
         <Text style={{ fontSize: 40, color: 'white' }}>+</Text>

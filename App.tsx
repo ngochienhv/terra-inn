@@ -415,17 +415,6 @@ function AppComponents() {
   const dispatch = useAppDispatch();
 
   React.useEffect(() => {
-    const checkLoggedin = async () => {
-      let token = await AsyncStorage.getItem('token');
-      if (token) {
-        let role = await AsyncStorage.getItem('role');
-        dispatch(signIn(role));
-        dispatch(getUserProfile(token));
-      }
-    };
-
-    checkLoggedin();
-
     try {
       dispatch(getAllInns());
     } catch (err) {

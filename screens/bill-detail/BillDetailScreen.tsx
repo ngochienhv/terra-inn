@@ -69,11 +69,9 @@ const Row = ({ title, content }: { title: string; content: string | number }) =>
 export default function BillDetailScreen({
   isPreviewing,
   route,
-  data,
 }: {
   isPreviewing?: boolean;
   route?: any;
-  data?: any;
 }) {
   const bill = !isPreviewing ? route.params.room : '';
   const [billData, setBillData] = useState({});

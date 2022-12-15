@@ -16,6 +16,9 @@ const innGroupSlice = createSlice({
     setInnForm(state, action: PayloadAction<{ group_name: string; address: string }>) {
       state.newInnForm = action.payload;
     },
+    resetInnGroup(state) {
+      state.allInns = [];
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getAllInns.fulfilled, (state, action) => {
@@ -27,4 +30,4 @@ const innGroupSlice = createSlice({
 
 export default innGroupSlice;
 
-export const { setInnForm } = innGroupSlice.actions;
+export const { setInnForm, resetInnGroup } = innGroupSlice.actions;

@@ -36,7 +36,7 @@ export default function HomeRentScreen({ navigation }) {
             style={{ flexDirection: 'row', justifyContent: 'space-between', width: '90%' }}
             padding-15
           >
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Request', { screen: 'Request' })}>
               <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                 <Ionicons name={'ios-paper-plane'} size={30} color={TERRA_COLOR.SECONDARY[4]} />
                 <Text text65 color={TERRA_COLOR.SECONDARY[4]}>
@@ -54,7 +54,7 @@ export default function HomeRentScreen({ navigation }) {
               </View>
             </TouchableOpacity>
             <View style={{ borderLeftWidth: 1, borderColor: TERRA_COLOR.GRAY[0] }} />
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Profile', { screen: 'Profile' })}>
               <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                 <Ionicons name={'ios-person-circle'} size={30} color={TERRA_COLOR.SECONDARY[4]} />
                 <Text text65 color={TERRA_COLOR.SECONDARY[4]}>
@@ -78,6 +78,7 @@ export default function HomeRentScreen({ navigation }) {
             backgroundColor: TERRA_COLOR.PRIMARY[4],
           }}
           text70
+          onPress={() => navigation.navigate('Manage', { screen: 'Manage' })}
         />
       </View>
     </View>

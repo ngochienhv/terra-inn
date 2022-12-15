@@ -19,7 +19,6 @@ const userSlice = createSlice({
       return { ...state, isSignedIn: true, role: action.payload };
     },
     signOut(state) {
-      AsyncStorage.clear();
       return { ...state, isSignedIn: false, role: '' };
     },
   },

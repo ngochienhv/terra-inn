@@ -45,7 +45,6 @@ function ManageComponents() {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
   const route = useRoute();
   //@ts-ignore
-  const { roomId, innId } = route.params;
 
   return (
     <TabController

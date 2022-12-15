@@ -441,25 +441,6 @@ function AppComponents() {
   const isAdmin = useSelector(selectUserRole) === ROLES.ADMIN;
   const dispatch = useAppDispatch();
 
-  React.useEffect(() => {
-    const checkLoggedin = async () => {
-      let token = await AsyncStorage.getItem('token');
-      if (token) {
-        let role = await AsyncStorage.getItem('role');
-        dispatch(signIn(role));
-        dispatch(getUserProfile(token));
-      }
-    };
-
-    checkLoggedin();
-
-    try {
-      dispatch(getAllInns());
-    } catch (err) {
-      console.log(err);
-    }
-  }, []);
-
   const renderTabs = () => (!isAdmin ? <GuestTabNavigator /> : <AdminTabNavigator />);
 
   return (

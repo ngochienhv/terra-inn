@@ -43,7 +43,7 @@ export default function BillCard({
   const { text, color } = getProps(status);
   const navigation = useNavigation<NativeStackNavigationProp<ManageNavigatorParamList>>();
   return (
-    <Card margin-10 onPress={() => navigation.navigate('BillDetailGuest')}>
+    <Card margin-10>
       <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }} padding-10>
         <View
           style={{

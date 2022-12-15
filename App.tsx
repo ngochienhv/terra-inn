@@ -24,6 +24,7 @@ import {
   AdminStatisticNavigatorParamList,
   AdminRequestNavigatorParamList,
   AdminInnNavigatorParamList,
+  RenterHomeNavigatorParamList,
 } from 'types/navigator';
 import { selectSigninStatus, selectUserRole } from './redux/selectors/userSelectors';
 import { TERRA_COLOR } from './constants/theme';
@@ -47,26 +48,41 @@ import NotiFormScreen from './screens/admin/noti-form/NotiFormScreen';
 import BillFormScreen from './screens/admin/bill-form/BillFormScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { signIn } from './redux/slices/userSlice';
-axios.defaults.baseURL = 'https://terrainn-api.fly.dev/api';
 import Toast from 'react-native-toast-message';
 import { getAllInns } from './redux/actions/innGroupActions';
 import HomeRentScreen from './screens/home-rent/HomeRentScreen';
 import GuestBillListScreen from './screens/guest-bill-list/GuestBillListScreen';
+import { getUserProfile } from './redux/actions/userActions';
+import { ROLES } from './constants/role';
 
 loadTypographies();
 
 const HomeStack = createNativeStackNavigator<HomeNavigatorParamList>();
 
-const HomeStackScreen = () => {
+const GuestHomeStackScreen = () => {
   return (
     <HomeStack.Navigator>
       <HomeStack.Screen
         name="Home"
-        component={HomeRentScreen}
+        component={HomeScreen}
         options={{ title: 'Trang chủ', headerShown: false }}
       />
       <HomeStack.Screen name="Detail" component={DetailScreen} />
     </HomeStack.Navigator>
+  );
+};
+
+const RenterHomeStack = createNativeStackNavigator<RenterHomeNavigatorParamList>();
+
+const RenterHomeStackScreen = () => {
+  return (
+    <RenterHomeStack.Navigator>
+      <RenterHomeStack.Screen
+        name="RenterHome"
+        component={HomeRentScreen}
+        options={{ title: 'Trang chủ', headerShown: false }}
+      />
+    </RenterHomeStack.Navigator>
   );
 };
 
@@ -312,6 +328,8 @@ const AdminTabNavigator = () => {
 };
 
 const GuestTabNavigator = () => {
+  const isRenter = useSelector(selectUserRole) === ROLES.RENTER;
+
   return (
     <GuestTab.Navigator
       initialRouteName="Home"
@@ -331,7 +349,17 @@ const GuestTabNavigator = () => {
             iconName = focused ? 'ios-paper-plane' : 'ios-paper-plane-outline';
           }
 
-          return <Ionicons name={iconName as string} size={size} color={color} />;
+          return (
+            <Ionicons
+              name={iconName as string}
+              size={size}
+              color={
+                isRenter || route.name === 'Profile' || route.name === 'Home' || focused
+                  ? color
+                  : TERRA_COLOR.GRAY[2]
+              }
+            />
+          );
         },
         tabBarActiveTintColor: TERRA_COLOR.PRIMARY[3],
         tabBarInactiveTintColor: 'gray',
@@ -341,14 +369,37 @@ const GuestTabNavigator = () => {
         name="Request"
         component={AdminRequestStackScreen}
         options={{ title: 'Yêu cầu' }}
+        listeners={{
+          tabPress: (e) => {
+            !isRenter && e.preventDefault();
+          },
+        }}
       />
       <GuestTab.Screen
         name="Notification"
         component={NotificationStackScreen}
         options={{ title: 'Thông báo' }}
+        listeners={{
+          tabPress: (e) => {
+            !isRenter && e.preventDefault();
+          },
+        }}
       />
-      <GuestTab.Screen name="Home" component={HomeStackScreen} options={{ title: 'Trang chủ' }} />
-      <GuestTab.Screen name="Manage" component={ManageStackScreen} options={{ title: 'Quản lý' }} />
+      <GuestTab.Screen
+        name="Home"
+        component={isRenter ? RenterHomeStackScreen : GuestHomeStackScreen}
+        options={{ title: 'Trang chủ' }}
+      />
+      <GuestTab.Screen
+        name="Manage"
+        component={ManageStackScreen}
+        options={{ title: 'Quản lý' }}
+        listeners={{
+          tabPress: (e) => {
+            !isRenter && e.preventDefault();
+          },
+        }}
+      />
       <GuestTab.Screen
         name="Profile"
         component={ProfileStackScreen}
@@ -360,7 +411,7 @@ const GuestTabNavigator = () => {
 
 function AppComponents() {
   const isSignedIn = useSelector(selectSigninStatus);
-  const isAdmin = useSelector(selectUserRole) === 'admin';
+  const isAdmin = useSelector(selectUserRole) === ROLES.ADMIN;
   const dispatch = useAppDispatch();
 
   React.useEffect(() => {

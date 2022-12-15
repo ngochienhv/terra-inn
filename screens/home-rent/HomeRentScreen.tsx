@@ -3,6 +3,8 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Avatar, Button, Card, Text, View } from 'react-native-ui-lib';
 import { TERRA_COLOR } from '../../constants/theme';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useSelector } from 'react-redux';
+import { selectUserProfile } from '../../redux/selectors/userSelectors';
 
 const Row = ({ title, content }: { title: string; content: string | number }) => (
   <View style={styles.rowContainer}>
@@ -13,6 +15,8 @@ const Row = ({ title, content }: { title: string; content: string | number }) =>
 
 //@ts-ignore
 export default function HomeRentScreen({ navigation }) {
+  const userProfile = useSelector(selectUserProfile);
+
   return (
     <View>
       <View padding-20 style={{ backgroundColor: TERRA_COLOR.PRIMARY[0] }}>
@@ -23,7 +27,7 @@ export default function HomeRentScreen({ navigation }) {
           <View margin-20 marginT-40 style={styles.title}>
             <Avatar source={require('../../assets/terra-logo.png')} size={60} />
             <Text text50 marginL-10>
-              Lương Đức Dũng
+              {userProfile.full_name.length > 0 ? userProfile.full_name : 'Người dùng'}
             </Text>
           </View>
         </View>

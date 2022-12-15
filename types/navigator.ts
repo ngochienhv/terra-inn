@@ -11,6 +11,7 @@ export type AuthenNavigatorParamList = {
 export type ManageNavigatorParamList = {
   Manage: undefined;
   BillList: undefined;
+  BillDetailGuest: undefined;
 };
 
 export type NotificationNavigatorParamList = {

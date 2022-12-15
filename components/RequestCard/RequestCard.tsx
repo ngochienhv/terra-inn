@@ -4,49 +4,67 @@ import { View, TextField, Text, Button, Modal, Image, TouchableOpacity } from 'r
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { AdminRequestNavigatorParamList } from 'types/navigator';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { TERRA_COLOR } from '../../constants/theme';
+import { REQUEST_STATUS } from '../../constants/status';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
-export default function RequestCard(props: any) {
+const getStatus = (status: number) => {
+  if (status === 0) {
+    return ['rgba(255, 167, 38, 0.2)', 'ios-warning', 'Chưa hoàn thành  '];
+  } else if (status === 1) {
+    return ['#D3EFED', 'ios-checkmark-circle', 'Đã hoàn thành  '];
+  }
+  return 'undefined'
+};
+
+export default function RequestCard({
+  title,
+  content,
+  creator,
+  create_at,
+  status,
+  roomId,
+}: {
+  title: string;
+  content: string;
+  creator: string;
+  create_at: string;
+  status: number;
+  roomId: number;
+}) {
   const navigation = useNavigation<NativeStackNavigationProp<AdminRequestNavigatorParamList>>();
-
+  const statusProps = getStatus(status);
+  const colorStyles = {
+    backgroundColor: statusProps[0]
+};
   return (
-    <TouchableOpacity onPress={() => navigation.navigate('Detail')}>
-      <View style={styles.modalView}>
-        <View flex center>
-          <Image style={styles.profileImage} source={props.image} />
-        </View>
-
-        <View style={styles.textView} flex left>
-          <Text style={styles.headerText}>
-            <Text style={{ fontWeight: 'bold' }}>{props.request}</Text> • {props.time}
-          </Text>
-
-          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-end', marginRight: 10 }}>
-            <View style={{ width: '80%' }}>
-              <Text style={styles.nameText} numberOfLines={1}>
-                {props.name}
-              </Text>
-            </View>
-            <View style={{ width: '20%' }}>
-              <Text
-                style={
-                  props.status == 'Đã hoàn thành'
-                    ? styles.statusDone
-                    : props.status == 'Chờ thanh toán'
-                    ? styles.statusPending
-                    : styles.statusDonent
-                }
-              >
-                {props.status}
-              </Text>
-            </View>
+    <TouchableOpacity onPress={() => navigation.navigate('Detail', {roomId})}>
+      <View style={[styles.modalViewDone, colorStyles]} flex left>
+          <View> 
+            <Text style={styles.headerText}>
+              {creator} • {new Date(create_at).toDateString()}
+            </Text>
           </View>
-          <Text style={styles.footerText}>
-            <Text style={{ fontWeight: 'bold' }}>Nhà trọ {props.inn}</Text> • Phòng {props.room}
-          </Text>
-        </View>
+          <View>
+            <Text style={styles.mainText}>
+              {title}
+            </Text>
+          </View>
+          <View>
+            <Text style={styles.subText}>
+              {content}
+            </Text>
+          </View>
+          <View>
+            <Text style={styles.subText}>
+              <Text style={{ fontWeight: 'bold' }}>Trạng thái: </Text> {statusProps[2]}  
+              <Ionicons name={statusProps[1]} size={16} color={status === 0 ? TERRA_COLOR.ERROR[3] : TERRA_COLOR.PRIMARY[4]}/>
+            </Text>
+          </View>
+          
       </View>
     </TouchableOpacity>
   );
@@ -58,16 +76,13 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
   },
-  modalView: {
-    flexDirection: 'row',
-    backgroundColor: 'white',
+  modalViewDone: {
+    flex: 0,
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
     margin: 0.5,
     borderRadius: 20,
-    borderBottomColor: 'gray',
-    borderBottomWidth: 0.2,
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
-    padding: 10,
+    padding: 20,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -77,31 +92,40 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     marginTop: 5,
   },
-  profileImage: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 40,
-    height: 40,
-    borderRadius: 64,
-  },
-  textView: {
-    flex: 5,
+  modalViewDonent: {
+    flex: 0,
     flexDirection: 'column',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
+    backgroundColor: 'rgba(255, 167, 38, 0.2)',
+    margin: 0.5,
+    borderRadius: 20,
+    padding: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    marginTop: 5,
   },
   headerText: {
-    textAlign: 'center',
-    fontSize: 12,
-  },
-  nameText: {
-    flex: 3,
-    fontSize: 18,
+    fontSize: 15,
     textAlign: 'left',
-    overflow: 'hidden',
+    color: TERRA_COLOR.GRAY[4],
+    marginBottom: 2,
   },
-  footerText: {
-    fontSize: 12,
-    textAlign: 'center',
+  mainText: {
+    fontSize: 20,
+    textAlign: 'left',
+    marginBottom: 2,
+    fontWeight: 'bold',
+  },
+  subText: {
+    fontSize: 15,
+    textAlign: 'left',
+    color: TERRA_COLOR.GRAY[4],
+    marginBottom: 2,
   },
   statusDone: {
     flex: 1,

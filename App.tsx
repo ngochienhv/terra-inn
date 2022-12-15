@@ -23,13 +23,16 @@ import {
   AdminBillNavigatorParamList,
   AdminStatisticNavigatorParamList,
   AdminRequestNavigatorParamList,
+  RequestNavigatorParamList,
   AdminInnNavigatorParamList,
   RenterHomeNavigatorParamList,
 } from 'types/navigator';
 import { selectSigninStatus, selectUserRole } from './redux/selectors/userSelectors';
 import { TERRA_COLOR } from './constants/theme';
 import ProfileScreen from './screens/profile/ProfileScreen';
-import AdminRequestScreen from './screens/request/RequestScreen';
+import AdminRequestScreen from './screens/admin/request/AdminRequestScreen';
+import RequestScreen from './screens/request/RequestScreen';
+import RequestFormScreen from './screens/request-form/RequestFormScreen';
 import DetailScreen from './screens/detail/DetailScreen';
 import { loadTypographies } from './constants/theme/typography';
 import ChangePasswordScreen from './screens/changePassword/ChangePasswordScreen';
@@ -122,6 +125,30 @@ const NotificationStackScreen = () => {
         options={{ title: 'Thông báo' }}
       />
     </NotificationStack.Navigator>
+  );
+};
+
+const RequestStack = createNativeStackNavigator<RequestNavigatorParamList>();
+
+const RequestStackScreen = () => {
+  return (
+    <RequestStack.Navigator>
+      <RequestStack.Screen
+        name="AllRequest"
+        component={RequestScreen}
+        options={{ title: 'Yêu cầu' }}
+      />
+      <RequestStack.Screen
+        name="Detail"
+        component={RequestDetailScreen}
+        options={{ title: 'Chi tiết yêu cầu' }}
+      />
+      <RequestStack.Screen
+        name="Add"
+        component={RequestFormScreen}
+        options={{ title: 'Thêm yêu cầu' }}
+      />
+    </RequestStack.Navigator>
   );
 };
 
@@ -367,7 +394,7 @@ const GuestTabNavigator = () => {
     >
       <GuestTab.Screen
         name="Request"
-        component={AdminRequestStackScreen}
+        component={RequestStackScreen}
         options={{ title: 'Yêu cầu' }}
         listeners={{
           tabPress: (e) => {

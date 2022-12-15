@@ -12,9 +12,9 @@ const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
 const getStatus = (status: number) => {
-  if (status === 1) {
+  if (status === 0) {
     return ['rgba(255, 167, 38, 0.2)', 'ios-warning', 'Chưa hoàn thành  '];
-  } else if (status === 2) {
+  } else if (status === 1) {
     return ['#D3EFED', 'ios-checkmark-circle', 'Đã hoàn thành  '];
   }
   return 'undefined'
@@ -59,7 +59,7 @@ export default function RequestCard({
           <View>
             <Text style={styles.subText}>
               <Text style={{ fontWeight: 'bold' }}>Trạng thái: </Text> {statusProps[2]}  
-              <Ionicons name={statusProps[1]} size={16} color={status === 1 ? TERRA_COLOR.ERROR[3] : TERRA_COLOR.PRIMARY[4]}/>
+              <Ionicons name={statusProps[1]} size={16} color={status === 0 ? TERRA_COLOR.ERROR[3] : TERRA_COLOR.PRIMARY[4]}/>
             </Text>
           </View>
           

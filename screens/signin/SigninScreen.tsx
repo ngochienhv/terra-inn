@@ -32,27 +32,27 @@ export default function SigninScreen({
     migrate: true,
   };
 
-  const handleSignin = () => {
-    // if (phone === '0000000000' && password === '12345678') {
-    //   dispatch(signIn('admin'));
-    // } else if (phone == '1000000000' && password === '12345678') {
-    //   dispatch(signIn('guest'));
-    // }
-    dispatch(signIn('guest'));
-  };
-
-  // const handleSignin = async () => {
-  //   try {
-  //     const res = await axios.post('/login', {
-  //       phone,
-  //       password,
-  //     });
-  //     dispatch(signIn(res.data.is_admin ? 'admin' : 'guest'));
-  //     await AsyncStorage.setItem('token', res.data.token);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
+  // const handleSignin = () => {
+  //   // if (phone === '0000000000' && password === '12345678') {
+  //   //   dispatch(signIn('admin'));
+  //   // } else if (phone == '1000000000' && password === '12345678') {
+  //   //   dispatch(signIn('guest'));
+  //   // }
+  //   dispatch(signIn('guest'));
   // };
+
+  const handleSignin = async () => {
+    try {
+      const res = await axios.post('/login', {
+        phone,
+        password,
+      });
+      dispatch(signIn(res.data.is_admin ? 'admin' : 'guest'));
+      await AsyncStorage.setItem('token', res.data.token);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <View style={styles.container}>

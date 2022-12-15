@@ -1,10 +1,12 @@
-import React, { useState }  from 'react';
+import React, { useState, useCallback, useEffect }  from 'react';
 import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
-import { ImageBackground, StyleSheet, TextInput, Dimensions, ScrollView } from 'react-native';
+import { ImageBackground, StyleSheet, TextInput, Dimensions, ScrollView, TouchableOpacity } from 'react-native';
 import { View, TextField, Text, Button, Modal, Image, TabController } from 'react-native-ui-lib';
 import RequestCard from '../../components/RequestCard/RequestCard';
 import { TERRA_COLOR } from '../../constants/theme';
+import { debounce } from 'lodash';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -16,7 +18,7 @@ const users = [
     "is_from_admin": false,
     "motel_id": 1,
     "type": 2,
-    "status": 1,
+    "status": 0,
     "title": "Đăng kí dịch vụ wifi",
     "due_date": "",
     "content": "Lorem isume",
@@ -28,7 +30,7 @@ const users = [
     "is_from_admin": true,
     "motel_id": 1,
     "type": 0,
-    "status": 2,
+    "status": 1,
     "title": "Thông báo thay đổi phương thức thanh toán",
     "due_date": "",
     "content": "Lorem isume",
@@ -36,20 +38,36 @@ const users = [
 }
 ];
 
-const getRequest = async () => {
-  try {
-    await axios.post('/request?room-id=1').then(res => {console.log(res)})
-  } catch (err) {
-    console.log(err);
-  }
-};
-
 const pageContent = (index: number) => {
-  users.sort
+  const [request, setRequest] = useState<any[]>([]);
+  const getRequest = async () => {
+    const token = await AsyncStorage.getItem('token')
+    try {
+      const user = await axios.get('/user', {
+        headers: {
+          token: token
+        }
+      })
+      const motel_id = user.data.motel_id;
+      const requests = await axios({
+        method: 'get',
+        url: `/request?room-id=${motel_id}`,
+        headers: {
+          token: token
+        }
+      })
+      setRequest(requests.data)
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  useEffect(() => {
+    getRequest()
+  }, [])
   return (
     <ScrollView>
       <View>
-        {users.filter(user => (index === 0) ? (user.status === 1 || user.status === 2) : (user.status === index))
+        {request.filter(user => (index === 2) ? (user.status === 0 || user.status === 1) : (user.status === index))
         .sort((a, b) => a.create_at > b.create_at ? 1 : -1)
         .map((user) => (
           <RequestCard
@@ -66,15 +84,20 @@ const pageContent = (index: number) => {
   )
 }
 
-getRequest()
-
 function RequestComponents() {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
+  const [visible, setVisible] = useState<boolean>(false);
+
+  const setIndexDebounce = debounce((value) => {
+    setSelectedIndex(value);
+  }, 500);
+
+  const onChangeDebounce = useCallback((value: number) => setIndexDebounce(value), []);
   return (
     <TabController
       items={[{ label: 'Tất cả' }, { label: 'Đã hoàn thành' }, { label: 'Chưa hoàn thành' }]}
       initialIndex={selectedIndex}
-      onChangeIndex={(index: number) => setSelectedIndex(index)}
+      onChangeIndex={onChangeDebounce}
     >
       <TabController.TabBar
         enableShadows
@@ -83,10 +106,14 @@ function RequestComponents() {
         uppercase
       />
       <View flex>
-        <TabController.TabPage index={0}>{pageContent(0)}</TabController.TabPage>
-        <TabController.TabPage index={1}>{pageContent(2)}</TabController.TabPage>
-        <TabController.TabPage index={2}>{pageContent(1)}</TabController.TabPage>
+        <TabController.TabPage index={0}>{pageContent(2)}</TabController.TabPage>
+        <TabController.TabPage index={1}>{pageContent(1)}</TabController.TabPage>
+        <TabController.TabPage index={2}>{pageContent(0)}</TabController.TabPage>
       </View>
+      
+      <TouchableOpacity onPress={() => setVisible(true)} style={styles.affixButton}>
+        <Text style={{ fontSize: 40, color: 'white' }}>+</Text>
+      </TouchableOpacity>
     </TabController>
   );
 }
@@ -103,5 +130,18 @@ const styles = StyleSheet.create({
     margin: 10,
     borderRadius: 20,
     backgroundColor: 'white',
+  },
+  affixButton: {
+    position: 'absolute',
+    width: 60,
+    height: 60,
+    alignItems: 'center',
+    justifyContent: 'center',
+    right: 20,
+    bottom: 20,
+    backgroundColor: TERRA_COLOR.DEFAULT[3],
+    borderRadius: 30,
+    elevation: 8,
+    zIndex: 999
   },
 });

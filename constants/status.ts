@@ -5,8 +5,8 @@ export const BILL_STATUS = {
 };
 
 export const REQUEST_STATUS = {
-  1: 'Chưa hoàn thành',
-  2: 'Đã hoàn thành',
+  0: 'Chưa hoàn thành',
+  1: 'Đã hoàn thành',
 };
 
 export const INN_STATUS = {

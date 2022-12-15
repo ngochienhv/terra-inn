@@ -43,8 +43,8 @@ import RequestDetailScreen from './screens/request-detail/RequestDetailScreen';
 import InnGroupScreen from './screens/admin/inn-group/InnGroupScreen';
 import AdminInnDetailScreen from './screens/admin/inn-detail/InnDetailScreen';
 import AdminRoomDetailScreen from './screens/admin/room-detail/AdminRoomDetailScreen';
-import axios from 'axios';
-axios.defaults.baseURL = 'http://192.168.137.1:3000/api';
+import axios from 'axios'; 
+axios.defaults.baseURL = 'https://terrainn-api.fly.dev/api';
 import NotiFormScreen from './screens/admin/noti-form/NotiFormScreen';
 import BillFormScreen from './screens/admin/bill-form/BillFormScreen';
 

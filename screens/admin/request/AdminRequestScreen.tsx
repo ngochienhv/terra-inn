@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback }  from 'react';
 import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
 import { View, TextField, Text, Button, TabController } from 'react-native-ui-lib';
 import NotificationCard from '../../../components/NotiCard/NotiCard';
 import { TERRA_COLOR } from '../../../constants/theme/color';
 import AdminRequestCard from '../../../components/RequestCardAdmin/RequestCardAdmin'
 import {FlatList, ImageBackground, StyleSheet, TextInput, Dimensions, ScrollView } from 'react-native';
+import { debounce } from 'lodash';
 
 const users = [
   {
@@ -131,6 +132,12 @@ const users = [
 
 function AdminRequestComponents() {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
+
+  const setIndexDebounce = debounce((value) => {
+    setSelectedIndex(value);
+  }, 500);
+
+  const onChangeDebounce = useCallback((value: number) => setIndexDebounce(value), []);
 
   return (
     <TabController

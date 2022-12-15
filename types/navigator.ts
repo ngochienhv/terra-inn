@@ -10,6 +10,7 @@ export type AuthenNavigatorParamList = {
 
 export type ManageNavigatorParamList = {
   Manage: undefined;
+  BillList: undefined;
 };
 
 export type NotificationNavigatorParamList = {

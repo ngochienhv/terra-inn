@@ -8,6 +8,8 @@ import {
   Colors,
   Typography,
   Button,
+  RadioGroup,
+  RadioButton,
 } from 'react-native-ui-lib';
 import { TERRA_COLOR } from '../../constants/theme/color';
 import { AuthenNavigatorParamList } from 'types/navigator';
@@ -20,6 +22,7 @@ export default function SignupScreen({
 }) {
   const [phone, setPhone] = useState<string>();
   const [password, setPassword] = useState<string>();
+  const [isAdmin, setIsAdmin] = useState<number>(0);
 
   const textFieldProps = {
     floatingPlaceholder: true,
@@ -41,7 +44,7 @@ export default function SignupScreen({
       await axios.post('/register', {
         phone,
         password,
-        is_admin: false,
+        is_admin: isAdmin === 0 ? false : true,
       });
       navigation.navigate('Signin');
     } catch (err) {
@@ -53,40 +56,61 @@ export default function SignupScreen({
     <View style={styles.container}>
       <ImageBackground
         source={require('../../assets/register-background.png')}
-        resizeMode='cover'
+        resizeMode="cover"
         style={styles.image}
       >
-        <View center>
-          <Text color='white' text40>
-            Đăng Ký
-          </Text>
-          <Text color='white' text50>
-            TerraInn
-          </Text>
-        </View>
         <View center style={styles.box}>
+          <View center>
+            <Text color={TERRA_COLOR.PRIMARY[4]} text40>
+              Đăng Ký
+            </Text>
+            <Text color={TERRA_COLOR.PRIMARY[4]} text50>
+              TerraInn
+            </Text>
+          </View>
           <TextField
-            placeholder='Số điện thoại'
+            placeholder="Số điện thoại"
             {...textFieldProps}
             value={phone}
             onChangeText={setPhone}
           />
           <TextField
-            placeholder='Mật khẩu'
+            placeholder="Mật khẩu"
             {...textFieldProps}
             value={password}
             onChangeText={setPassword}
             secureTextEntry={true}
           />
+          <View style={{ alignItems: 'flex-start', width: '100%' }}>
+            <Text marginT-20 marginL-20 color={TERRA_COLOR.PRIMARY[4]} text70>
+              Bạn là
+            </Text>
+            <RadioGroup initialValue={isAdmin} onValueChange={setIsAdmin}>
+              <RadioButton
+                value={0}
+                label={'Người thuê trọ'}
+                marginT-15
+                marginL-15
+                color={TERRA_COLOR.PRIMARY[4]}
+              />
+              <RadioButton
+                value={1}
+                label={'Chủ trọ'}
+                marginT-15
+                marginL-15
+                color={TERRA_COLOR.PRIMARY[4]}
+              />
+            </RadioGroup>
+          </View>
           <Button
-            label='Đăng Ký'
+            label="Đăng Ký"
             backgroundColor={TERRA_COLOR.PRIMARY[3]}
             style={styles.button}
             onPress={() => handleSignUp()}
             text60
           />
           <Button
-            label='Đã có tài khoản? Đăng nhập ngay'
+            label="Đã có tài khoản? Đăng nhập ngay"
             color={TERRA_COLOR.PRIMARY[3]}
             style={styles.hyperLink}
             link
@@ -120,7 +144,7 @@ const styles = StyleSheet.create({
     paddingBottom: 4,
   },
   button: {
-    marginTop: 50,
+    marginTop: 30,
     paddingLeft: 90,
     paddingRight: 90,
   },

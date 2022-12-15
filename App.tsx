@@ -50,6 +50,8 @@ import { signIn } from './redux/slices/userSlice';
 axios.defaults.baseURL = 'https://terrainn-api.fly.dev/api';
 import Toast from 'react-native-toast-message';
 import { getAllInns } from './redux/actions/innGroupActions';
+import HomeRentScreen from './screens/home-rent/HomeRentScreen';
+import GuestBillListScreen from './screens/guest-bill-list/GuestBillListScreen';
 
 loadTypographies();
 
@@ -60,7 +62,7 @@ const HomeStackScreen = () => {
     <HomeStack.Navigator>
       <HomeStack.Screen
         name="Home"
-        component={HomeScreen}
+        component={HomeRentScreen}
         options={{ title: 'Trang chủ', headerShown: false }}
       />
       <HomeStack.Screen name="Detail" component={DetailScreen} />
@@ -74,6 +76,11 @@ const ManageStackScreen = () => {
   return (
     <ManageStack.Navigator>
       <ManageStack.Screen name="Manage" component={ManageScreen} options={{ title: 'Quản lý' }} />
+      <ManageStack.Screen
+        name="BillList"
+        component={GuestBillListScreen}
+        options={{ title: 'Hóa đơn' }}
+      />
     </ManageStack.Navigator>
   );
 };
@@ -209,7 +216,7 @@ const AdminHomeStackScreen = () => {
       />
       <AdminHomeStack.Screen
         name="Notifications"
-        component={NotiFormScreen}
+        component={HomeRentScreen}
         options={{ title: 'Tạo thông báo' }}
       />
     </AdminHomeStack.Navigator>

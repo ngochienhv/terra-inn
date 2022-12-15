@@ -1,4 +1,5 @@
 export interface IRoom {
+  id: string;
   name: string;
   group_id: number;
   max_slot: number;
@@ -11,4 +12,5 @@ export interface IRoom {
   service_fee: number;
   garbage_fee: number;
   parking_fee: number;
+  status: number;
 }

@@ -134,6 +134,7 @@ const styles = StyleSheet.create({
   title: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
   },
   buttonBox: { flexDirection: 'row', justifyContent: 'flex-end', margin: '6%' },
   button: { alignSelf: 'baseline' },

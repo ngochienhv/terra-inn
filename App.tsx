@@ -12,7 +12,7 @@ import ManageScreen from './screens/manage/ManageScreen';
 import NotificationScreen from './screens/notification/NotificationScreen';
 
 import { Provider, useSelector } from 'react-redux';
-import { store } from './redux/store';
+import { store, useAppDispatch } from './redux/store';
 import {
   HomeNavigatorParamList,
   AuthenNavigatorParamList,
@@ -42,9 +42,11 @@ import InnGroupScreen from './screens/admin/inn-group/InnGroupScreen';
 import AdminInnDetailScreen from './screens/admin/inn-detail/InnDetailScreen';
 import AdminRoomDetailScreen from './screens/admin/room-detail/AdminRoomDetailScreen';
 import axios from 'axios';
-axios.defaults.baseURL = 'http://192.168.137.1:3000/api';
+axios.defaults.baseURL = 'https://terrainn-api.fly.dev/api';
 import NotiFormScreen from './screens/admin/noti-form/NotiFormScreen';
 import BillFormScreen from './screens/admin/bill-form/BillFormScreen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { signIn } from './redux/slices/userSlice';
 
 loadTypographies();
 
@@ -339,6 +341,19 @@ const GuestTabNavigator = () => {
 function AppComponents() {
   const isSignedIn = useSelector(selectSigninStatus);
   const isAdmin = useSelector(selectUserRole) === 'admin';
+  const dispatch = useAppDispatch();
+
+  React.useEffect(() => {
+    const checkLoggedin = async () => {
+      let token = await AsyncStorage.getItem('token');
+      if (token) {
+        let role = await AsyncStorage.getItem('role');
+        dispatch(signIn(role));
+      }
+    };
+
+    checkLoggedin();
+  }, []);
 
   const renderTabs = () => (!isAdmin ? <GuestTabNavigator /> : <AdminTabNavigator />);
 

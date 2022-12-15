@@ -216,7 +216,7 @@ const AdminHomeStackScreen = () => {
       />
       <AdminHomeStack.Screen
         name="Notifications"
-        component={HomeRentScreen}
+        component={NotiFormScreen}
         options={{ title: 'Tạo thông báo' }}
       />
     </AdminHomeStack.Navigator>

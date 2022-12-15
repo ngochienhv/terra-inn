@@ -48,4 +48,5 @@ export type AdminInnNavigatorParamList = {
   InnGroup: undefined;
   InnDetail: undefined;
   InnRoomDetail: undefined;
+  InnRoomDetailOccupied: undefined;
 };

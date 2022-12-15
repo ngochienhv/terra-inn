@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
+import { useRoute } from '@react-navigation/native';
 import { View, TextField, Text, Button, TabController, Checkbox } from 'react-native-ui-lib';
 import NotificationCard from '../../components/NotiCard/NotiCard';
 import { TERRA_COLOR } from '../../constants/theme/color';
@@ -42,6 +43,9 @@ const users = [
 
 function ManageComponents() {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
+  const route = useRoute();
+  //@ts-ignore
+  const { roomId, innId } = route.params;
 
   return (
     <TabController

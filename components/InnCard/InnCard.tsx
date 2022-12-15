@@ -29,12 +29,12 @@ export default function InnCard({
           <Text text60 color={TERRA_COLOR.PRIMARY[4]}>
             {motel.name}
           </Text>
-          <Text text80 color='red' marginT-2>
+          <Text text80 color="red" marginT-2>
             {motel.rental_price} đ/tháng
           </Text>
         </View>
 
-        <Text text70 $textDefault marginT-5 numberOfLines={9}>
+        <Text text70 $textDefault marginT-5 numberOfLines={5}>
           {motel.description}
         </Text>
 

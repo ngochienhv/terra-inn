@@ -3,7 +3,7 @@ import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
 import { View, TextField, Text, Button, TabController } from 'react-native-ui-lib';
 import NotificationCard from '../../../components/NotiCard/NotiCard';
 import { TERRA_COLOR } from '../../../constants/theme/color';
-import RequestCard from '../../../components/RequestCardAdmin/RequestCardAdmin'
+import AdminRequestCard from '../../../components/RequestCardAdmin/RequestCardAdmin'
 import {FlatList, ImageBackground, StyleSheet, TextInput, Dimensions, ScrollView } from 'react-native';
 
 const users = [
@@ -158,7 +158,7 @@ const renderFirstPage = () => {
     <ScrollView>
       <View style={styles.container}>
         {users.map((user) => (
-          <RequestCard 
+          <AdminRequestCard 
             key = {user.id}
             name = {user.name}
             request = {user.request}

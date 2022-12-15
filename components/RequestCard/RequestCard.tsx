@@ -6,35 +6,60 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { AdminRequestNavigatorParamList } from 'types/navigator';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { TERRA_COLOR } from '../../constants/theme';
+import { REQUEST_STATUS } from '../../constants/status';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
-export default function RequestCard(props: any) {
-  const navigation = useNavigation<NativeStackNavigationProp<AdminRequestNavigatorParamList>>();
+const getStatus = (status: number) => {
+  if (status === 1) {
+    return ['rgba(255, 167, 38, 0.2)', 'ios-warning', 'Chưa hoàn thành  '];
+  } else if (status === 2) {
+    return ['#D3EFED', 'ios-checkmark-circle', 'Đã hoàn thành  '];
+  }
+  return 'undefined'
+};
 
+export default function RequestCard({
+  title,
+  content,
+  creator,
+  create_at,
+  status,
+}: {
+  title: string;
+  content: string;
+  creator: string;
+  create_at: string;
+  status: number;
+}) {
+  const navigation = useNavigation<NativeStackNavigationProp<AdminRequestNavigatorParamList>>();
+  const statusProps = getStatus(status);
+  const colorStyles = {
+    backgroundColor: statusProps[0]
+};
   return (
     <TouchableOpacity onPress={() => navigation.navigate('Detail')}>
-      <View style={styles.modalViewDonent} flex left>
+      <View style={[styles.modalViewDone, colorStyles]} flex left>
           <View> 
             <Text style={styles.headerText}>
-              <Text>Lê A • 4 Feb 2022</Text>
+              {creator} • {new Date(create_at).toDateString()}
             </Text>
           </View>
           <View>
             <Text style={styles.mainText}>
-              <Ionicons name={'ios-construct-outline'} size={25} /><Text style={{ fontWeight: 'bold' }}>  Sửa chữa điều hòa</Text>
+              {title}
             </Text>
           </View>
           <View>
             <Text style={styles.subText}>
-              <Text>Điều hòa bị hỏng không khởi động được</Text>
+              {content}
             </Text>
           </View>
           <View>
             <Text style={styles.subText}>
-              <Text><Text style={{ fontWeight: 'bold' }}>Trạng thái: </Text> Chưa hoàn thành  </Text>
-              <Ionicons name={'ios-warning-outline'} size={16} color={TERRA_COLOR.ERROR[3]}/>
+              <Text style={{ fontWeight: 'bold' }}>Trạng thái: </Text> {statusProps[2]}  
+              <Ionicons name={statusProps[1]} size={16} color={status === 1 ? TERRA_COLOR.ERROR[3] : TERRA_COLOR.PRIMARY[4]}/>
             </Text>
           </View>
           
@@ -53,13 +78,8 @@ const styles = StyleSheet.create({
     flex: 0,
     flexDirection: 'column',
     justifyContent: 'flex-start',
-    backgroundColor: '#D3EFED',
     margin: 0.5,
     borderRadius: 20,
-    borderBottomColor: 'gray',
-    borderBottomWidth: 0.2,
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
     padding: 20,
     shadowColor: '#000',
     shadowOffset: {
@@ -90,18 +110,20 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 15,
     textAlign: 'left',
-    color: 'gray',
+    color: TERRA_COLOR.GRAY[4],
     marginBottom: 2,
   },
   mainText: {
     fontSize: 20,
     textAlign: 'left',
     marginBottom: 2,
+    fontWeight: 'bold',
   },
   subText: {
     fontSize: 15,
     textAlign: 'left',
-    color: 'gray',
+    color: TERRA_COLOR.GRAY[4],
+    marginBottom: 2,
   },
   statusDone: {
     flex: 1,

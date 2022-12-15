@@ -25,7 +25,7 @@ const data = {
   is_from_admin: false,
   motel_id: 1,
   type: 2,
-  status: 0,
+  status: 1,
   title: 'Đăng kí dịch vụ wifi',
   due_date: '',
   content: 'Lorem isume',
@@ -65,7 +65,7 @@ export default function RequestDetailScreen() {
             <Text color={TERRA_COLOR.GRAY[3]}>Nội dung</Text>
             <Text marginT-10>{data.content}</Text>
           </View>
-          <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'flex-end', display: useSelector(selectUserRole) === 'admin' ? "flex" : "none" }}>
             <Button
               label={data.status === 0 ? 'Hoàn thành yêu cầu' : 'Bỏ hoàn thành'}
               backgroundColor={TERRA_COLOR.PRIMARY[4]}

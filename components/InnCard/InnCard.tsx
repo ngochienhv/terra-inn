@@ -6,30 +6,35 @@ import { HomeNavigatorParamList } from 'types/navigator';
 
 export default function InnCard({
   navigation,
+  motel,
 }: {
   navigation: NativeStackNavigationProp<HomeNavigatorParamList>;
+  motel: any;
 }) {
   return (
-    <Card containerStyle={{ marginBottom: 15 }} onPress={() => navigation.navigate('Detail')}>
+    <Card
+      containerStyle={{ marginBottom: 15 }}
+      // @ts-ignore
+      onPress={() => navigation.navigate('Detail', { motel })}
+    >
       <Card.Image
         style={{ height: 200 }}
         source={{
-          uri: 'https://xaydungthuanphuoc.com/wp-content/uploads/2022/09/mau-phong-tro-co-gac-lung-dep2022-5.jpg',
+          uri: 'https://terrainn-api.fly.dev/assets/no-image.png',
         }}
       />
       <View padding-20>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <Text text60 color={TERRA_COLOR.PRIMARY[4]}>
-            Nhà trọ An Khang
+            {motel.name}
           </Text>
-          <Text text80 color="red" marginT-2>
-            1.500.000đ/tháng
+          <Text text80 color='red' marginT-2>
+            {motel.rental_price} đ/tháng
           </Text>
         </View>
 
-        <Text text70 $textDefault marginT-5>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatem iste porro modi
-          nobis.
+        <Text text70 $textDefault marginT-5 numberOfLines={9}>
+          {motel.description}
         </Text>
 
         <View marginT-10>

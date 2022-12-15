@@ -26,12 +26,14 @@ export default function RequestCard({
   creator,
   create_at,
   status,
+  roomId,
 }: {
   title: string;
   content: string;
   creator: string;
   create_at: string;
   status: number;
+  roomId: number;
 }) {
   const navigation = useNavigation<NativeStackNavigationProp<AdminRequestNavigatorParamList>>();
   const statusProps = getStatus(status);
@@ -39,7 +41,7 @@ export default function RequestCard({
     backgroundColor: statusProps[0]
 };
   return (
-    <TouchableOpacity onPress={() => navigation.navigate('Detail')}>
+    <TouchableOpacity onPress={() => navigation.navigate('Detail', {roomId})}>
       <View style={[styles.modalViewDone, colorStyles]} flex left>
           <View> 
             <Text style={styles.headerText}>

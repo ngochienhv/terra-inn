@@ -40,6 +40,7 @@ const users = [
 
 const pageContent = (index: number) => {
   const [request, setRequest] = useState<any[]>([]);
+  const [roomID, setroomID] = useState<number>();
   const getRequest = async () => {
     const token = await AsyncStorage.getItem('token')
     try {
@@ -49,6 +50,7 @@ const pageContent = (index: number) => {
         }
       })
       const motel_id = user.data.motel_id;
+      setroomID(motel_id);
       const requests = await axios({
         method: 'get',
         url: `/request?room-id=${motel_id}`,
@@ -77,6 +79,7 @@ const pageContent = (index: number) => {
             creator={user.creator}
             create_at={user.create_at}
             status={user.status}
+            roomId = {roomID}
           />
         ))}
       </View>

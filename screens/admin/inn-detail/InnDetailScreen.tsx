@@ -100,11 +100,18 @@ const renderPage = (
                     style={styles.rowContainer}
                     onPress={() =>
                       //@ts-ignore
-                      navigation.navigate('InnRoomDetail', {
-                        action: 'update',
-                        roomId: room.id,
-                        innId: innId,
-                      })
+                      room.status === 1
+                        ? //@ts-ignore
+                          navigation.navigate('InnRoomDetail', {
+                            action: 'update',
+                            roomId: room.id,
+                            innId: innId,
+                          })
+                        : //@ts-ignore
+                          navigation.navigate('InnRoomDetailOccupied', {
+                            roomId: room.id,
+                            innId: innId,
+                          })
                     }
                   >
                     <Text>Phòng {room.name}</Text>

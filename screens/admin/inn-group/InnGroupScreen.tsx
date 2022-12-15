@@ -113,18 +113,8 @@ export default function InnGroupScreen() {
       });
   };
 
-  useEffect(() => {
-    try {
-      dispatch(getAllInns());
-    } catch (err) {
-      console.log(err);
-    }
-    setLoading(false);
-  }, []);
-
   return (
     <View flex style={{ alignItems: 'center' }}>
-      {loading ? <LoaderScreen message={'Message goes here'} color={TERRA_COLOR.GRAY[0]} /> : null}
       {inns.length > 0 ? (
         <FlatList
           data={inns}

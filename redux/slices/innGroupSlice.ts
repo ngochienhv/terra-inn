@@ -1,13 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Inn } from 'types/innType';
 import { IRoom } from 'types/roomType';
 import { getAllInns } from '../actions/innGroupActions';
-
-type Inn = {
-  id: string;
-  owner_id: string;
-  group_name: string;
-  address: string;
-};
 
 const innGroupSlice = createSlice({
   name: 'inn',

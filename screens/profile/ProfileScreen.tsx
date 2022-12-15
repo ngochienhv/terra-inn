@@ -11,6 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import { useSelector } from 'react-redux';
 import { selectUserProfile } from '../../redux/selectors/userSelectors';
+import { resetInnGroup } from '../../redux/slices/innGroupSlice';
 
 const testData = {
   avatar:
@@ -107,7 +108,11 @@ export default function ProfileScreen({
           label="Đăng xuất"
           backgroundColor={TERRA_COLOR.ERROR[2]}
           marginB-20
-          onPress={() => dispatch(signOut())}
+          onPress={async () => {
+            dispatch(signOut());
+            dispatch(resetInnGroup);
+            await AsyncStorage.clear();
+          }}
         />
         <View style={styles.avatarContainer}>
           <Avatar

@@ -441,14 +441,6 @@ function AppComponents() {
   const isAdmin = useSelector(selectUserRole) === ROLES.ADMIN;
   const dispatch = useAppDispatch();
 
-  React.useEffect(() => {
-    try {
-      dispatch(getAllInns());
-    } catch (err) {
-      console.log(err);
-    }
-  }, []);
-
   const renderTabs = () => (!isAdmin ? <GuestTabNavigator /> : <AdminTabNavigator />);
 
   return (

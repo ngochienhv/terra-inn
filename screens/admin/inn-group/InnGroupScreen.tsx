@@ -65,11 +65,11 @@ const InnButton = ({ name, address, id }: { name: string; address: string; id: s
       //@ts-ignore
       onPress={() => navigation.navigate('InnDetail', { innId: id })}
     >
-      <Ionicons name={'ios-home'} size={30} />
-      <Text text60 marginB-5 style={{ textAlign: 'center' }}>
+      <Ionicons name={'ios-home'} size={25} />
+      <Text text65 marginB-5 style={{ textAlign: 'center' }}>
         {name}
       </Text>
-      <Text text80 color={TERRA_COLOR.GRAY[4]} style={{ textAlign: 'center' }} numberOfLines={2}>
+      <Text text85 color={TERRA_COLOR.GRAY[4]} style={{ textAlign: 'center' }} numberOfLines={2}>
         {address}
       </Text>
     </Card>
@@ -106,7 +106,7 @@ export default function InnGroupScreen() {
         }
       )
       .then(() => {
-        dispatch(getAllInns());
+        dispatch(getAllInns(token as string));
       })
       .catch((err) => {
         console.log(err);

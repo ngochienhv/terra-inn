@@ -68,7 +68,7 @@ function AdminManageBillComponents() {
       />
       <View flex style={{ backgroundColor: TERRA_COLOR.PRIMARY[1] }}>
         <TabController.TabPage index={0}>
-          {renderPage(innsList, selectedDate, setSelectedDate, navigation)}
+          {renderPage(innsList, selectedDate, setSelectedDate, navigation, -1)}
         </TabController.TabPage>
         <TabController.TabPage index={1}>
           {renderPage(innsList, selectedDate, setSelectedDate, navigation, 0)}
@@ -89,7 +89,7 @@ const renderPage = (
   selectedDate: Date,
   setSelectedDate: React.Dispatch<React.SetStateAction<Date>>,
   navigation: NativeStackNavigationProp<AdminBillNavigatorParamList>,
-  filter?: number
+  index: number
 ) => {
   const [rooms, setRooms] = useState([]);
   const [group, setGroup] = useState({});
@@ -104,18 +104,14 @@ const renderPage = (
       const res = await axios.get('/invoice?group-id=1&month=2022-12', {
         headers: { token },
       });
-      console.log(res.data);
-      let filtered = res.data;
-      if (filter) {
-        filtered = filtered.filter((bill) => bill.status === filter);
-      }
       setRooms(
-        filtered.map((room) => ({
+        res.data.map((room) => ({
           id: room.id,
           name: room.room_name,
           status: BILL_STATUS[room.pay_status],
           electric: room.elec_used,
           water: room.water_used,
+          tabs: room.pay_status,
         }))
       );
       Toast.show({
@@ -135,7 +131,6 @@ const renderPage = (
     fetchData();
   }, [selectedDate, group]);
 
-  console.log(rooms);
   return (
     <>
       <ScrollView>
@@ -164,33 +159,40 @@ const renderPage = (
             style={styles.datePicker}
           />
           <Card>
-            {rooms.map((room) => (
-              <>
-                <TouchableOpacity
-                  style={styles.rowContainer}
-                  onPress={() => navigation.navigate('BillDetail', { room })}
-                >
-                  <Text>Phòng {room.name}</Text>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                    }}
+            {rooms
+              .filter((room) => {
+                return index == -1 || room.tabs == index;
+              })
+              .map((room) => (
+                <>
+                  <TouchableOpacity
+                    style={styles.rowContainer}
+                    onPress={() => navigation.navigate('BillDetail', { room })}
                   >
-                    <Text color={getStatusColor(room.status)}>
-                      {room.status}
-                    </Text>
-                    <Ionicons name={'ios-chevron-forward-outline'} size={20} />
-                  </View>
-                </TouchableOpacity>
-                <View
-                  height={1}
-                  backgroundColor={TERRA_COLOR.GRAY[0]}
-                  marginL-15
-                  marginR-15
-                />
-              </>
-            ))}
+                    <Text>Phòng {room.name}</Text>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                      }}
+                    >
+                      <Text color={getStatusColor(room.status)}>
+                        {room.status}
+                      </Text>
+                      <Ionicons
+                        name={'ios-chevron-forward-outline'}
+                        size={20}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                  <View
+                    height={1}
+                    backgroundColor={TERRA_COLOR.GRAY[0]}
+                    marginL-15
+                    marginR-15
+                  />
+                </>
+              ))}
           </Card>
         </View>
       </ScrollView>

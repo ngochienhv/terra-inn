@@ -43,14 +43,15 @@ function AddminInnDetailComponent() {
         .get('motel', { params: { 'group-id': innId } })
         .then((response) => {
           setRooms(response.data);
+          setLoading(false);
         })
         .catch((err) => {
           console.log(err);
+          setLoading(false);
         });
     };
 
     getAllRooms();
-    setLoading(false);
   }, []);
 
   return (

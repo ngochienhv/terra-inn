@@ -1,13 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
-import {
-  View,
-  DateTimePicker,
-  TabController,
-  Text,
-  Card,
-  Picker,
-} from 'react-native-ui-lib';
+import { View, DateTimePicker, TabController, Text, Card, Picker } from 'react-native-ui-lib';
 import { useNavigation } from '@react-navigation/native';
 import { TERRA_COLOR } from '../../../constants/theme/color';
 import { StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
@@ -37,17 +30,13 @@ function AdminManageBillComponents() {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const innsList = useSelector(selectInnGroups);
-  const navigation =
-    useNavigation<NativeStackNavigationProp<AdminBillNavigatorParamList>>();
+  const navigation = useNavigation<NativeStackNavigationProp<AdminBillNavigatorParamList>>();
 
   const setIndexDebounce = debounce((value) => {
     setSelectedIndex(value);
   }, 500);
 
-  const onChangeDebounce = useCallback(
-    (value: number) => setIndexDebounce(value),
-    []
-  );
+  const onChangeDebounce = useCallback((value: number) => setIndexDebounce(value), []);
 
   return (
     <TabController
@@ -92,7 +81,7 @@ const renderPage = (
   index: number
 ) => {
   const [rooms, setRooms] = useState([]);
-  const [group, setGroup] = useState({});
+  const [inn, setInn] = useState<{ label: string; value: string }>();
 
   const fetchData = async () => {
     Toast.show({
@@ -100,8 +89,12 @@ const renderPage = (
       text1: 'Đang tải dữ liệu',
     });
     try {
+      const month = selectedDate.getMonth() + 1;
+      const year = selectedDate.getFullYear();
+      const monthQuery = year + '-' + month;
+
       const token = await AsyncStorage.getItem('token');
-      const res = await axios.get('/invoice?group-id=1&month=2022-12', {
+      const res = await axios.get(`/invoice?group-id=${inn?.value}&month=${monthQuery}`, {
         headers: { token },
       });
       setRooms(
@@ -128,8 +121,10 @@ const renderPage = (
   };
 
   useEffect(() => {
-    fetchData();
-  }, [selectedDate, group]);
+    if (selectedDate && inn) {
+      fetchData();
+    }
+  }, [selectedDate, inn]);
 
   return (
     <>
@@ -139,8 +134,8 @@ const renderPage = (
           {/* @ts-ignore */}
           <Picker
             placeholder={'Chọn khu trọ'}
-            value={group}
-            onChange={(value) => setGroup(value)}
+            value={inn}
+            onChange={setInn}
             style={{ backgroundColor: 'white', padding: '2%' }}
           >
             {innsList.map((inn) => (
@@ -152,7 +147,7 @@ const renderPage = (
           </Text>
           <DateTimePicker
             migrate
-            label='Time'
+            label="Time"
             placeholder={'Select time'}
             value={selectedDate}
             onChange={(date: Date) => setSelectedDate(date)}
@@ -176,30 +171,17 @@ const renderPage = (
                         justifyContent: 'space-between',
                       }}
                     >
-                      <Text color={getStatusColor(room.status)}>
-                        {room.status}
-                      </Text>
-                      <Ionicons
-                        name={'ios-chevron-forward-outline'}
-                        size={20}
-                      />
+                      <Text color={getStatusColor(room.status)}>{room.status}</Text>
+                      <Ionicons name={'ios-chevron-forward-outline'} size={20} />
                     </View>
                   </TouchableOpacity>
-                  <View
-                    height={1}
-                    backgroundColor={TERRA_COLOR.GRAY[0]}
-                    marginL-15
-                    marginR-15
-                  />
+                  <View height={1} backgroundColor={TERRA_COLOR.GRAY[0]} marginL-15 marginR-15 />
                 </>
               ))}
           </Card>
         </View>
       </ScrollView>
-      <TouchableOpacity
-        onPress={() => navigation.navigate('BillForm')}
-        style={styles.affixButton}
-      >
+      <TouchableOpacity onPress={() => navigation.navigate('BillForm')} style={styles.affixButton}>
         <Text style={{ fontSize: 40, color: 'white' }}>+</Text>
       </TouchableOpacity>
     </>

@@ -1,13 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
-import {
-  View,
-  TextField,
-  Text,
-  Button,
-  Colors,
-  Avatar,
-} from 'react-native-ui-lib';
+import { View, TextField, Text, Button, Colors, Avatar } from 'react-native-ui-lib';
 import { TERRA_COLOR } from '../../constants/theme/color';
 import { useAppDispatch } from '../../redux/store';
 import { signOut } from '../../redux/slices/userSlice';
@@ -111,7 +104,7 @@ export default function ProfileScreen({
     <ScrollView>
       <View flex padding-20>
         <Button
-          label='Đăng xuất'
+          label="Đăng xuất"
           backgroundColor={TERRA_COLOR.ERROR[2]}
           marginB-20
           onPress={() => dispatch(signOut())}
@@ -126,7 +119,7 @@ export default function ProfileScreen({
         </View>
         <TextField
           {...textFieldProps}
-          label='Tên đầy đủ'
+          label="Tên đầy đủ"
           value={data.name}
           onChangeText={(name: string) => {
             setData({
@@ -137,7 +130,7 @@ export default function ProfileScreen({
         />
         <TextField
           {...textFieldProps}
-          label='Email'
+          label="Email"
           value={data.email}
           onChangeText={(email: string) => {
             setData({
@@ -146,14 +139,10 @@ export default function ProfileScreen({
             });
           }}
         />
+        <TextField {...textFieldProps} label="Số điện thoại" value={data.phone} />
         <TextField
           {...textFieldProps}
-          label='Số điện thoại'
-          value={data.phone}
-        />
-        <TextField
-          {...textFieldProps}
-          label='Năm sinh'
+          label="Năm sinh"
           value={data.year}
           onChangeText={(year: string) => {
             setData((data) => ({
@@ -164,7 +153,7 @@ export default function ProfileScreen({
         />
         <TextField
           {...textFieldProps}
-          label='Số CCCD'
+          label="Số CCCD"
           value={data.cccd}
           onChangeText={(cccd: string) => {
             setData((data) => ({
@@ -173,25 +162,19 @@ export default function ProfileScreen({
             }));
           }}
         />
-        <View
-          marginT-20
-          style={{ flexDirection: 'row', justifyContent: 'flex-end' }}
-        >
+        <View marginT-20 style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
           <Button
-            label='Thay đổi mật khẩu'
+            label="Thay đổi mật khẩu"
             link
             color={TERRA_COLOR.PRIMARY[3]}
             text80
             onPress={() => navigation.navigate('ChangePassword')}
           />
         </View>
-        <View
-          style={{ flexDirection: 'row', justifyContent: 'space-between' }}
-          marginT-15
-        >
-          <Button label='Hủy' backgroundColor='white' color='black' />
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }} marginT-15>
+          <Button label="Hủy" backgroundColor="white" color="black" />
           <Button
-            label='Lưu thay đổi'
+            label="Lưu thay đổi"
             backgroundColor={TERRA_COLOR.PRIMARY[3]}
             onPress={handleSaveChange}
           />

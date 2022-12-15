@@ -38,7 +38,7 @@ const rooms = [
 export default function BillFormScreen() {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [completedStepIndex, setCompletedStepIndex] = useState<number>(-1);
-
+  const [billData, setBillData] = useState({});
   const getStepState = (index: number) => {
     let state: string = Wizard.States.DISABLED;
 
@@ -104,49 +104,97 @@ export default function BillFormScreen() {
               <Text marginB-5 color={TERRA_COLOR.GRAY[2]}>
                 Tiền phòng (VND)
               </Text>
-              <TextInput style={styles.textInput} />
+              <TextInput
+                style={styles.textInput}
+                value={billData.rental_price}
+                onChange={(value: string) =>
+                  setBillData({ ...billData, rental_price: parseInt(value) })
+                }
+              />
             </View>
             <View marginB-10>
               <Text marginB-5 color={TERRA_COLOR.GRAY[2]}>
                 Chỉ số điện cũ (KwH)
               </Text>
-              <TextInput style={styles.textInput} />
+              <TextInput
+                style={styles.textInput}
+                value={billData.elec_index_before}
+                onChange={(value: string) =>
+                  setBillData({ ...billData, elec_index_before: parseInt(value) })
+                }
+              />
             </View>
             <View marginB-10>
               <Text marginB-5 color={TERRA_COLOR.GRAY[2]}>
                 Chỉ số điện mới (KwH)
               </Text>
-              <TextInput style={styles.textInput} />
+              <TextInput
+                style={styles.textInput}
+                value={billData.elec_index_after}
+                onChange={(value: string) =>
+                  setBillData({ ...billData, elec_index_after: parseInt(value) })
+                }
+              />
             </View>
             <View marginB-10>
               <Text marginB-5 color={TERRA_COLOR.GRAY[2]}>
                 Chỉ số nước cũ (m3)
               </Text>
-              <TextInput style={styles.textInput} />
+              <TextInput
+                style={styles.textInput}
+                value={billData.water_index_before}
+                onChange={(value: string) =>
+                  setBillData({ ...billData, water_index_before: parseInt(value) })
+                }
+              />
             </View>
             <View marginB-10>
               <Text marginB-5 color={TERRA_COLOR.GRAY[2]}>
                 Chỉ số nước mới (m3)
               </Text>
-              <TextInput style={styles.textInput} />
+              <TextInput
+                style={styles.textInput}
+                value={billData.water_index_after}
+                onChange={(value: string) =>
+                  setBillData({ ...billData, water_index_after: parseInt(value) })
+                }
+              />
             </View>
             <View marginB-10>
               <Text marginB-5 color={TERRA_COLOR.GRAY[2]}>
                 Tiền rác (VND)
               </Text>
-              <TextInput style={styles.textInput} />
+              <TextInput
+                style={styles.textInput}
+                value={billData.garbage_fee}
+                onChange={(value: string) =>
+                  setBillData({ ...billData, garbage_fee: parseInt(value) })
+                }
+              />
             </View>
             <View marginB-10>
               <Text marginB-5 color={TERRA_COLOR.GRAY[2]}>
                 Tiền wifi (VND)
               </Text>
-              <TextInput style={styles.textInput} />
+              <TextInput
+                style={styles.textInput}
+                value={billData.service_fee}
+                onChange={(value: string) =>
+                  setBillData({ ...billData, service_fee: parseInt(value) })
+                }
+              />
             </View>
             <View marginB-10>
               <Text marginB-5 color={TERRA_COLOR.GRAY[2]}>
                 Tiền giữ xe (VND)
               </Text>
-              <TextInput style={styles.textInput} />
+              <TextInput
+                style={styles.textInput}
+                value={billData.parking_fee}
+                onChange={(value: string) =>
+                  setBillData({ ...billData, parking_fee: parseInt(value) })
+                }
+              />
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }} margin-30>
               <Button label="Hủy" backgroundColor={TERRA_COLOR.GRAY[0]} color="black" />
@@ -160,7 +208,7 @@ export default function BillFormScreen() {
         </View>
       ) : (
         <>
-          <BillDetailScreen isPreviewing />
+          <BillDetailScreen isPreviewing data={billData} />
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }} margin-30>
             <Button
               label="Quay lại"

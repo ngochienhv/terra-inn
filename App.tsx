@@ -81,6 +81,11 @@ const ManageStackScreen = () => {
         component={GuestBillListScreen}
         options={{ title: 'Hóa đơn' }}
       />
+      <ManageStack.Screen
+        name="BillDetailGuest"
+        component={BillDetailScreen}
+        options={{ title: 'Hóa đơn' }}
+      />
     </ManageStack.Navigator>
   );
 };

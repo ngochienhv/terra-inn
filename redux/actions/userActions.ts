@@ -2,8 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-export const getUserProfile = createAsyncThunk('user/getUserProfile', async () => {
-  const token = await AsyncStorage.getItem('token');
+export const getUserProfile = createAsyncThunk('user/getUserProfile', async (token: string) => {
   try {
     const response = await axios.get('user', {
       headers: { token: token },

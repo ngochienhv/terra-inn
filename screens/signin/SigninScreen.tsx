@@ -48,7 +48,7 @@ export default function SigninScreen({
         password,
       });
       dispatch(signIn(res.data.is_admin ? 'admin' : 'guest'));
-      dispatch(getUserProfile());
+      dispatch(getUserProfile(res.data.token));
       await AsyncStorage.setItem('token', res.data.token);
       await AsyncStorage.setItem('role', res.data.is_admin ? 'admin' : 'guest');
     } catch (err) {

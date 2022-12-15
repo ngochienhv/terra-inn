@@ -8,6 +8,7 @@ import { useAppDispatch } from '../../redux/store';
 import { signIn } from '../../redux/slices/userSlice';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getUserProfile } from '../../redux/actions/userActions';
 
 export default function SigninScreen({
   navigation,
@@ -47,6 +48,7 @@ export default function SigninScreen({
         password,
       });
       dispatch(signIn(res.data.is_admin ? 'admin' : 'guest'));
+      dispatch(getUserProfile());
       await AsyncStorage.setItem('token', res.data.token);
       await AsyncStorage.setItem('role', res.data.is_admin ? 'admin' : 'guest');
     } catch (err) {

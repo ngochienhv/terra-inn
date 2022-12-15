@@ -1,13 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
-import {
-  View,
-  TextField,
-  Text,
-  Button,
-  Colors,
-  Avatar,
-} from 'react-native-ui-lib';
+import { View, TextField, Text, Button, Colors, Avatar } from 'react-native-ui-lib';
 import { TERRA_COLOR } from '../../constants/theme/color';
 import { useAppDispatch } from '../../redux/store';
 import { signOut } from '../../redux/slices/userSlice';
@@ -16,6 +9,8 @@ import { ProfileNavigatorParamList } from 'types/navigator';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
+import { useSelector } from 'react-redux';
+import { selectUserProfile } from '../../redux/selectors/userSelectors';
 
 const testData = {
   avatar:
@@ -42,6 +37,7 @@ export default function ProfileScreen({
   navigation: NativeStackNavigationProp<ProfileNavigatorParamList>;
 }) {
   const [data, setData] = useState<IProfileData>(testData);
+  const userProfile = useSelector(selectUserProfile);
   const dispatch = useAppDispatch();
   const textFieldProps = {
     floatingPlaceholder: false,
@@ -52,26 +48,17 @@ export default function ProfileScreen({
   };
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      const token = await AsyncStorage.getItem('token');
-      try {
-        const res = await axios.get('/user', {
-          headers: {
-            token,
-          },
-        });
-        setData({
-          name: res.data.full_name,
-          email: res.data.email,
-          phone: res.data.phone,
-          year: res.data.date_of_birth,
-          avatar: res.data.avatar_url,
-          cccd: res.data.cid_number,
-        });
-      } catch (err) {}
-    };
-    fetchProfile();
-  }, []);
+    if (userProfile) {
+      setData({
+        name: userProfile.full_name,
+        email: userProfile.email,
+        phone: userProfile.phone,
+        year: userProfile.date_of_birth,
+        avatar: userProfile.avatar_url,
+        cccd: userProfile.cid_number,
+      });
+    }
+  }, [userProfile]);
 
   const handleSaveChange = async () => {
     try {
@@ -113,7 +100,7 @@ export default function ProfileScreen({
     <ScrollView>
       <View flex padding-20>
         <Button
-          label='Đăng xuất'
+          label="Đăng xuất"
           backgroundColor={TERRA_COLOR.ERROR[2]}
           marginB-20
           onPress={() => dispatch(signOut())}
@@ -128,7 +115,7 @@ export default function ProfileScreen({
         </View>
         <TextField
           {...textFieldProps}
-          label='Tên đầy đủ'
+          label="Tên đầy đủ"
           value={data.name}
           onChangeText={(name: string) => {
             setData({
@@ -139,7 +126,7 @@ export default function ProfileScreen({
         />
         <TextField
           {...textFieldProps}
-          label='Email'
+          label="Email"
           value={data.email}
           onChangeText={(email: string) => {
             setData({
@@ -148,14 +135,10 @@ export default function ProfileScreen({
             });
           }}
         />
+        <TextField {...textFieldProps} label="Số điện thoại" value={data.phone} />
         <TextField
           {...textFieldProps}
-          label='Số điện thoại'
-          value={data.phone}
-        />
-        <TextField
-          {...textFieldProps}
-          label='Năm sinh'
+          label="Năm sinh"
           value={data.year}
           onChangeText={(year: string) => {
             setData((data) => ({
@@ -166,7 +149,7 @@ export default function ProfileScreen({
         />
         <TextField
           {...textFieldProps}
-          label='Số CCCD'
+          label="Số CCCD"
           value={data.cccd}
           onChangeText={(cccd: string) => {
             setData((data) => ({
@@ -175,25 +158,19 @@ export default function ProfileScreen({
             }));
           }}
         />
-        <View
-          marginT-20
-          style={{ flexDirection: 'row', justifyContent: 'flex-end' }}
-        >
+        <View marginT-20 style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
           <Button
-            label='Thay đổi mật khẩu'
+            label="Thay đổi mật khẩu"
             link
             color={TERRA_COLOR.PRIMARY[3]}
             text80
             onPress={() => navigation.navigate('ChangePassword')}
           />
         </View>
-        <View
-          style={{ flexDirection: 'row', justifyContent: 'space-between' }}
-          marginT-15
-        >
-          <Button label='Hủy' backgroundColor='white' color='black' />
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }} marginT-15>
+          <Button label="Hủy" backgroundColor="white" color="black" />
           <Button
-            label='Lưu thay đổi'
+            label="Lưu thay đổi"
             backgroundColor={TERRA_COLOR.PRIMARY[3]}
             onPress={handleSaveChange}
           />

@@ -14,6 +14,7 @@ import {
 import { TERRA_COLOR } from '../../constants/theme/color';
 import { AuthenNavigatorParamList } from 'types/navigator';
 import axios from 'axios';
+import { Toast } from 'react-native-toast-message/lib/src/Toast';
 
 export default function SignupScreen({
   navigation,
@@ -39,6 +40,10 @@ export default function SignupScreen({
   };
 
   const handleSignUp = async () => {
+    Toast.show({
+      type: 'info',
+      text1: 'Đang chờ',
+    });
     try {
       console.log({ phone, password });
       await axios.post('/register', {
@@ -47,8 +52,16 @@ export default function SignupScreen({
         is_admin: isAdmin === 0 ? false : true,
       });
       navigation.navigate('Signin');
+      Toast.show({
+        type: 'success',
+        text1: 'Thành công',
+      });
     } catch (err) {
       console.log(err);
+      Toast.show({
+        type: 'error',
+        text1: 'Có lỗi xảy ra',
+      });
     }
   };
 
@@ -56,7 +69,7 @@ export default function SignupScreen({
     <View style={styles.container}>
       <ImageBackground
         source={require('../../assets/register-background.png')}
-        resizeMode="cover"
+        resizeMode='cover'
         style={styles.image}
       >
         <View center style={styles.box}>
@@ -69,13 +82,13 @@ export default function SignupScreen({
             </Text>
           </View>
           <TextField
-            placeholder="Số điện thoại"
+            placeholder='Số điện thoại'
             {...textFieldProps}
             value={phone}
             onChangeText={setPhone}
           />
           <TextField
-            placeholder="Mật khẩu"
+            placeholder='Mật khẩu'
             {...textFieldProps}
             value={password}
             onChangeText={setPassword}
@@ -103,14 +116,14 @@ export default function SignupScreen({
             </RadioGroup>
           </View>
           <Button
-            label="Đăng Ký"
+            label='Đăng Ký'
             backgroundColor={TERRA_COLOR.PRIMARY[3]}
             style={styles.button}
             onPress={() => handleSignUp()}
             text60
           />
           <Button
-            label="Đã có tài khoản? Đăng nhập ngay"
+            label='Đã có tài khoản? Đăng nhập ngay'
             color={TERRA_COLOR.PRIMARY[3]}
             style={styles.hyperLink}
             link

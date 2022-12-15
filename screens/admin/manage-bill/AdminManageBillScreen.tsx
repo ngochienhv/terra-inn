@@ -1,6 +1,13 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
-import { View, DateTimePicker, TabController, Text, Card, Picker } from 'react-native-ui-lib';
+import {
+  View,
+  DateTimePicker,
+  TabController,
+  Text,
+  Card,
+  Picker,
+} from 'react-native-ui-lib';
 import { useNavigation } from '@react-navigation/native';
 import { TERRA_COLOR } from '../../../constants/theme/color';
 import { StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
@@ -12,54 +19,14 @@ import { AdminBillNavigatorParamList } from 'types/navigator';
 import { useSelector } from 'react-redux';
 import { selectInnGroups } from '../../../redux/selectors/innGroupSelector';
 import { Inn } from 'types/innType';
-
-const rooms = [
-  {
-    number: 101,
-    status: BILL_STATUS[0],
-  },
-  {
-    number: 102,
-    status: BILL_STATUS[1],
-  },
-  {
-    number: 103,
-    status: BILL_STATUS[2],
-  },
-  {
-    number: 104,
-    status: BILL_STATUS[2],
-  },
-  {
-    number: 105,
-    status: BILL_STATUS[0],
-  },
-  {
-    number: 106,
-    status: BILL_STATUS[1],
-  },
-  {
-    number: 107,
-    status: BILL_STATUS[0],
-  },
-  {
-    number: 108,
-    status: BILL_STATUS[2],
-  },
-  {
-    number: 109,
-    status: BILL_STATUS[2],
-  },
-  {
-    number: 110,
-    status: BILL_STATUS[2],
-  },
-];
+import { Toast } from 'react-native-toast-message/lib/src/Toast';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const getStatusColor = (status: string) => {
-  if (status === BILL_STATUS[0]) {
+  if (status === BILL_STATUS[1]) {
     return TERRA_COLOR.SUCCESS[3];
-  } else if (status === BILL_STATUS[1]) {
+  } else if (status === BILL_STATUS[0]) {
     return TERRA_COLOR.WARNING[3];
   } else if (status === BILL_STATUS[2]) {
     return TERRA_COLOR.ERROR[3];
@@ -70,13 +37,17 @@ function AdminManageBillComponents() {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const innsList = useSelector(selectInnGroups);
-  const navigation = useNavigation<NativeStackNavigationProp<AdminBillNavigatorParamList>>();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<AdminBillNavigatorParamList>>();
 
   const setIndexDebounce = debounce((value) => {
     setSelectedIndex(value);
   }, 500);
 
-  const onChangeDebounce = useCallback((value: number) => setIndexDebounce(value), []);
+  const onChangeDebounce = useCallback(
+    (value: number) => setIndexDebounce(value),
+    []
+  );
 
   return (
     <TabController
@@ -100,13 +71,13 @@ function AdminManageBillComponents() {
           {renderPage(innsList, selectedDate, setSelectedDate, navigation)}
         </TabController.TabPage>
         <TabController.TabPage index={1}>
-          {/* {renderPage(selectedDate, setSelectedDate)} */}
+          {renderPage(innsList, selectedDate, setSelectedDate, navigation, 0)}
         </TabController.TabPage>
         <TabController.TabPage index={2}>
-          {/* {renderPage(selectedDate, setSelectedDate)} */}
+          {renderPage(innsList, selectedDate, setSelectedDate, navigation, 1)}
         </TabController.TabPage>
         <TabController.TabPage index={3}>
-          {/* {renderPage(selectedDate, setSelectedDate)} */}
+          {renderPage(innsList, selectedDate, setSelectedDate, navigation, 2)}
         </TabController.TabPage>
       </View>
     </TabController>
@@ -117,8 +88,54 @@ const renderPage = (
   innsList: Inn[],
   selectedDate: Date,
   setSelectedDate: React.Dispatch<React.SetStateAction<Date>>,
-  navigation: NativeStackNavigationProp<AdminBillNavigatorParamList>
+  navigation: NativeStackNavigationProp<AdminBillNavigatorParamList>,
+  filter?: number
 ) => {
+  const [rooms, setRooms] = useState([]);
+  const [group, setGroup] = useState({});
+
+  const fetchData = async () => {
+    Toast.show({
+      type: 'info',
+      text1: 'Đang tải dữ liệu',
+    });
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const res = await axios.get('/invoice?group-id=1&month=2022-12', {
+        headers: { token },
+      });
+      console.log(res.data);
+      let filtered = res.data;
+      if (filter) {
+        filtered = filtered.filter((bill) => bill.status === filter);
+      }
+      setRooms(
+        filtered.map((room) => ({
+          id: room.id,
+          name: room.room_name,
+          status: BILL_STATUS[room.pay_status],
+          electric: room.elec_used,
+          water: room.water_used,
+        }))
+      );
+      Toast.show({
+        type: 'success',
+        text1: 'Thành công',
+      });
+    } catch (err) {
+      console.log(err);
+      Toast.show({
+        type: 'error',
+        text1: 'Có lỗi xảy ra',
+      });
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [selectedDate, group]);
+
+  console.log(rooms);
   return (
     <>
       <ScrollView>
@@ -127,7 +144,8 @@ const renderPage = (
           {/* @ts-ignore */}
           <Picker
             placeholder={'Chọn khu trọ'}
-            onChange={() => console.log('changed')}
+            value={group}
+            onChange={(value) => setGroup(value)}
             style={{ backgroundColor: 'white', padding: '2%' }}
           >
             {innsList.map((inn) => (
@@ -139,7 +157,7 @@ const renderPage = (
           </Text>
           <DateTimePicker
             migrate
-            label="Time"
+            label='Time'
             placeholder={'Select time'}
             value={selectedDate}
             onChange={(date: Date) => setSelectedDate(date)}
@@ -150,21 +168,36 @@ const renderPage = (
               <>
                 <TouchableOpacity
                   style={styles.rowContainer}
-                  onPress={() => navigation.navigate('BillDetail')}
+                  onPress={() => navigation.navigate('BillDetail', { room })}
                 >
-                  <Text>Phòng {room.number}</Text>
-                  <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Text color={getStatusColor(room.status)}>{room.status}</Text>
+                  <Text>Phòng {room.name}</Text>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}
+                  >
+                    <Text color={getStatusColor(room.status)}>
+                      {room.status}
+                    </Text>
                     <Ionicons name={'ios-chevron-forward-outline'} size={20} />
                   </View>
                 </TouchableOpacity>
-                <View height={1} backgroundColor={TERRA_COLOR.GRAY[0]} marginL-15 marginR-15 />
+                <View
+                  height={1}
+                  backgroundColor={TERRA_COLOR.GRAY[0]}
+                  marginL-15
+                  marginR-15
+                />
               </>
             ))}
           </Card>
         </View>
       </ScrollView>
-      <TouchableOpacity onPress={() => navigation.navigate('BillForm')} style={styles.affixButton}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('BillForm')}
+        style={styles.affixButton}
+      >
         <Text style={{ fontSize: 40, color: 'white' }}>+</Text>
       </TouchableOpacity>
     </>

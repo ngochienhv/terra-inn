@@ -24,7 +24,6 @@ export default function HomeScreen({
     };
     fetchMotelList();
   }, []);
-  console.log(motels);
   return (
     <ImageBackground
       source={require('../../assets/home-background.png')}

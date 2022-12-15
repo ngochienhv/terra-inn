@@ -31,6 +31,7 @@ import { TERRA_COLOR } from './constants/theme';
 import ProfileScreen from './screens/profile/ProfileScreen';
 import AdminRequestScreen from './screens/admin/request/AdminRequestScreen';
 import RequestScreen from './screens/request/RequestScreen';
+import RequestFormScreen from './screens/request-form/RequestFormScreen';
 import DetailScreen from './screens/detail/DetailScreen';
 import { loadTypographies } from './constants/theme/typography';
 import ChangePasswordScreen from './screens/changePassword/ChangePasswordScreen';
@@ -125,6 +126,11 @@ const RequestStackScreen = () => {
         name="Detail"
         component={RequestDetailScreen}
         options={{ title: 'Chi tiết yêu cầu' }}
+      />
+      <RequestStack.Screen
+        name="Add"
+        component={RequestFormScreen}
+        options={{ title: 'Thêm yêu cầu' }}
       />
     </RequestStack.Navigator>
   );

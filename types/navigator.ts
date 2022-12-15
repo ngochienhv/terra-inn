@@ -22,6 +22,7 @@ export type NotificationNavigatorParamList = {
 export type RequestNavigatorParamList = {
   AllRequest: undefined;
   Detail: undefined;
+  Add: undefined;
 };
 
 export type ProfileNavigatorParamList = {

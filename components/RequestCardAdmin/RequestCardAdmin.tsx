@@ -8,43 +8,57 @@ import { AdminRequestNavigatorParamList } from 'types/navigator';
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
-export default function RequestCardAdmin(props: any) {
+export default function RequestCardAdmin({
+  title,
+  content,
+  creator,
+  create_at,
+  status,
+  roomId,
+}: {
+  title: string;
+  content: string;
+  creator: string;
+  create_at: string;
+  status: number;
+  roomId: number;
+}) {
   const navigation = useNavigation<NativeStackNavigationProp<AdminRequestNavigatorParamList>>();
 
   return (
     <TouchableOpacity onPress={() => navigation.navigate('Detail')}>
       <View style={styles.modalView}>
         <View flex center>
-          <Image style={styles.profileImage} source={props.image} />
+          <Image style={styles.profileImage} source={'https://scontent.fsgn13-4.fna.fbcdn.net/v/t1.6435-9/31369162_885771468275939_4964628091302313984_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=8bfeb9&_nc_ohc=sT04S8RQvJ4AX-RVAEm&tn=AGlP9pozc-tpxuWV&_nc_ht=scontent.fsgn13-4.fna&oh=00_AfCjWbf3nsSYp6vLlt3YNxQ8IWym9BYw6kGaGk8HsVEhFw&oe=63C2BADE'} />
         </View>
 
         <View style={styles.textView} flex left>
           <Text style={styles.headerText}>
-            <Text style={{ fontWeight: 'bold' }}>{props.request}</Text> • {props.time}
+            <Text style={{ fontWeight: 'bold' }}>{title}</Text> • {create_at}
           </Text>
 
           <View style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-end', marginRight: 10 }}>
             <View style={{ width: '80%' }}>
               <Text style={styles.nameText} numberOfLines={1}>
-                {props.name}
+                {name}
               </Text>
             </View>
             <View style={{ width: '20%' }}>
               <Text
                 style={
-                  props.status == 'Đã hoàn thành'
+                  status == 0
                     ? styles.statusDone
-                    : props.status == 'Chờ thanh toán'
+                    : status == 1
                     ? styles.statusPending
                     : styles.statusDonent
                 }
               >
-                {props.status}
+                {status}
               </Text>
             </View>
           </View>
           <Text style={styles.footerText}>
-            <Text style={{ fontWeight: 'bold' }}>Nhà trọ {props.inn}</Text> • Phòng {props.room}
+            <Text style={{ fontWeight: 'bold' }}>Nhà trọ {roomId}</Text> • Phòng {roomId}
           </Text>
         </View>
       </View>

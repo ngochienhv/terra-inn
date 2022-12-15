@@ -7,6 +7,9 @@ import { TERRA_COLOR } from '../../constants/theme';
 import { debounce } from 'lodash';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RequestNavigatorParamList } from 'types/navigator';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -40,7 +43,8 @@ const users = [
 
 const pageContent = (index: number) => {
   const [request, setRequest] = useState<any[]>([]);
-  const [roomID, setroomID] = useState<number>();
+  const [roomID, setroomID] = useState<number>(0);
+  const [isRented, setisRented] = useState<boolean>();
   const getRequest = async () => {
     const token = await AsyncStorage.getItem('token')
     try {
@@ -50,6 +54,7 @@ const pageContent = (index: number) => {
         }
       })
       const motel_id = user.data.motel_id;
+      setisRented(user.data.is_rented)
       setroomID(motel_id);
       const requests = await axios({
         method: 'get',
@@ -83,6 +88,7 @@ const pageContent = (index: number) => {
           />
         ))}
       </View>
+      <View style={{padding: 5 }} />
     </ScrollView>
   )
 }
@@ -94,7 +100,7 @@ function RequestComponents() {
   const setIndexDebounce = debounce((value) => {
     setSelectedIndex(value);
   }, 500);
-
+  const navigation = useNavigation<NativeStackNavigationProp<RequestNavigatorParamList>>();
   const onChangeDebounce = useCallback((value: number) => setIndexDebounce(value), []);
   return (
     <TabController
@@ -114,7 +120,7 @@ function RequestComponents() {
         <TabController.TabPage index={2}>{pageContent(0)}</TabController.TabPage>
       </View>
       
-      <TouchableOpacity onPress={() => setVisible(true)} style={styles.affixButton}>
+      <TouchableOpacity onPress={() => navigation.navigate('Add')} style={styles.affixButton}>
         <Text style={{ fontSize: 40, color: 'white' }}>+</Text>
       </TouchableOpacity>
     </TabController>

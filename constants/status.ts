@@ -13,3 +13,9 @@ export const INN_STATUS = {
   1: 'Phòng trống',
   2: 'Đang cho thuê',
 };
+
+export const ADMIN_REQUEST_STATUS = {
+  0: 'Đã hoàn thành',
+  1: 'Chờ thanh toán',
+  2: 'Chưa hoàn thành',
+};

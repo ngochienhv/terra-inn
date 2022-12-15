@@ -24,6 +24,7 @@ import {
   AdminStatisticNavigatorParamList,
   AdminRequestNavigatorParamList,
   RequestNavigatorParamList,
+  AdminInnNavigatorParamList,
 } from 'types/navigator';
 import { selectSigninStatus, selectUserRole } from './redux/selectors/userSelectors';
 import { TERRA_COLOR } from './constants/theme';
@@ -39,6 +40,13 @@ import AdminManageBillScreen from './screens/admin/manage-bill/AdminManageBillSc
 import BillDetailScreen from './screens/bill-detail/BillDetailScreen';
 import ElectricWaterScreen from './screens/admin/electric-water/ElectricWaterScreen';
 import RequestDetailScreen from './screens/request-detail/RequestDetailScreen';
+import InnGroupScreen from './screens/admin/inn-group/InnGroupScreen';
+import AdminInnDetailScreen from './screens/admin/inn-detail/InnDetailScreen';
+import AdminRoomDetailScreen from './screens/admin/room-detail/AdminRoomDetailScreen';
+import axios from 'axios';
+axios.defaults.baseURL = 'http://192.168.137.1:3000/api';
+import NotiFormScreen from './screens/admin/noti-form/NotiFormScreen';
+import BillFormScreen from './screens/admin/bill-form/BillFormScreen';
 
 loadTypographies();
 
@@ -168,6 +176,30 @@ const AuthenStackScreen = () => {
 
 const AdminHomeStack = createNativeStackNavigator<AdminHomeNavigatorParamList>();
 
+const AdminInnStack = createNativeStackNavigator<AdminInnNavigatorParamList>();
+
+const AdminInnStackScreen = () => {
+  return (
+    <AdminInnStack.Navigator>
+      <AdminInnStack.Screen
+        name="InnGroup"
+        component={InnGroupScreen}
+        options={{ title: 'Quản lý khu trọ' }}
+      />
+      <AdminInnStack.Screen
+        name="InnDetail"
+        component={AdminInnDetailScreen}
+        options={{ title: 'Chi tiết' }}
+      />
+      <AdminInnStack.Screen
+        name="InnRoomDetail"
+        component={AdminRoomDetailScreen}
+        options={{ title: 'Phòng' }}
+      />
+    </AdminInnStack.Navigator>
+  );
+};
+
 const AdminHomeStackScreen = () => {
   return (
     <AdminHomeStack.Navigator>
@@ -180,6 +212,16 @@ const AdminHomeStackScreen = () => {
         name="ElectricWater"
         component={ElectricWaterScreen}
         options={{ title: 'Điện nước' }}
+      />
+      <AdminHomeStack.Screen
+        name="Inn"
+        component={AdminInnStackScreen}
+        options={{ title: 'Quản lý khu trọ', headerShown: false }}
+      />
+      <AdminHomeStack.Screen
+        name="Notifications"
+        component={NotiFormScreen}
+        options={{ title: 'Tạo thông báo' }}
       />
     </AdminHomeStack.Navigator>
   );
@@ -200,21 +242,12 @@ const AdminBillStackScreen = () => {
         component={BillDetailScreen}
         options={{ title: 'Chi tiết' }}
       />
-    </AdminBillStack.Navigator>
-  );
-};
-
-const AdminStatisticStack = createNativeStackNavigator<AdminStatisticNavigatorParamList>();
-
-const AdminStatisticStackScreen = () => {
-  return (
-    <AdminStatisticStack.Navigator>
-      <AdminStatisticStack.Screen
-        name="AdminStatistic"
-        component={HomeScreen}
-        options={{ title: 'Hóa đơn', headerShown: false }}
+      <AdminBillStack.Screen
+        name="BillForm"
+        component={BillFormScreen}
+        options={{ title: 'Tạo hóa đơn' }}
       />
-    </AdminStatisticStack.Navigator>
+    </AdminBillStack.Navigator>
   );
 };
 
@@ -234,8 +267,8 @@ const AdminTabNavigator = () => {
             iconName = focused ? 'ios-home' : 'ios-home-outline';
           } else if (route.name === 'Bill') {
             iconName = focused ? 'ios-cash' : 'ios-cash-outline';
-          } else if (route.name === 'Statistic') {
-            iconName = focused ? 'ios-bar-chart' : 'ios-bar-chart-outline';
+          } else if (route.name === 'AdminInn') {
+            iconName = focused ? 'ios-business' : 'ios-business-outline';
           } else if (route.name === 'Profile') {
             iconName = focused ? 'ios-person' : 'ios-person-outline';
           } else if (route.name === 'Request' || 'AdminRequest') {
@@ -254,9 +287,9 @@ const AdminTabNavigator = () => {
         options={{ title: 'Yêu cầu' }}
       />
       <AdminTab.Screen
-        name="Statistic"
-        component={AdminStatisticStackScreen}
-        options={{ title: 'Thống kê' }}
+        name="AdminInn"
+        component={AdminInnStackScreen}
+        options={{ title: 'Khu trọ' }}
       />
       <AdminTab.Screen
         name="Home"

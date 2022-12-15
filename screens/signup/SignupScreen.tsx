@@ -1,9 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { ImageBackground, StyleSheet } from 'react-native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { View, TextField, Text, Colors, Typography, Button } from 'react-native-ui-lib';
+import {
+  View,
+  TextField,
+  Text,
+  Colors,
+  Typography,
+  Button,
+} from 'react-native-ui-lib';
 import { TERRA_COLOR } from '../../constants/theme/color';
 import { AuthenNavigatorParamList } from 'types/navigator';
+import axios from 'axios';
 
 export default function SignupScreen({
   navigation,
@@ -27,48 +35,58 @@ export default function SignupScreen({
     migrate: true,
   };
 
-  const handleSignin = () => {
-    navigation.navigate('Signin');
+  const handleSignUp = async () => {
+    try {
+      console.log({ phone, password });
+      await axios.post('/register', {
+        phone,
+        password,
+        is_admin: false,
+      });
+      navigation.navigate('Signin');
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
     <View style={styles.container}>
       <ImageBackground
         source={require('../../assets/register-background.png')}
-        resizeMode="cover"
+        resizeMode='cover'
         style={styles.image}
       >
         <View center>
-          <Text color="white" text40>
+          <Text color='white' text40>
             Đăng Ký
           </Text>
-          <Text color="white" text50>
+          <Text color='white' text50>
             TerraInn
           </Text>
         </View>
         <View center style={styles.box}>
           <TextField
-            placeholder="Số điện thoại"
+            placeholder='Số điện thoại'
             {...textFieldProps}
             value={phone}
             onChangeText={setPhone}
           />
           <TextField
-            placeholder="Mật khẩu"
+            placeholder='Mật khẩu'
             {...textFieldProps}
             value={password}
             onChangeText={setPassword}
             secureTextEntry={true}
           />
           <Button
-            label="Đăng Ký"
+            label='Đăng Ký'
             backgroundColor={TERRA_COLOR.PRIMARY[3]}
             style={styles.button}
-            onPress={() => handleSignin()}
+            onPress={() => handleSignUp()}
             text60
           />
           <Button
-            label="Đã có tài khoản? Đăng nhập ngay"
+            label='Đã có tài khoản? Đăng nhập ngay'
             color={TERRA_COLOR.PRIMARY[3]}
             style={styles.hyperLink}
             link

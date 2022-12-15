@@ -6,6 +6,8 @@ import { TERRA_COLOR } from '../../constants/theme/color';
 import { AuthenNavigatorParamList } from 'types/navigator';
 import { useAppDispatch } from '../../redux/store';
 import { signIn } from '../../redux/slices/userSlice';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function SigninScreen({
   navigation,
@@ -38,6 +40,19 @@ export default function SigninScreen({
     // }
     dispatch(signIn('guest'));
   };
+
+  // const handleSignin = async () => {
+  //   try {
+  //     const res = await axios.post('/login', {
+  //       phone,
+  //       password,
+  //     });
+  //     dispatch(signIn(res.data.is_admin ? 'admin' : 'guest'));
+  //     await AsyncStorage.setItem('token', res.data.token);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
   return (
     <View style={styles.container}>

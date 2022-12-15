@@ -61,7 +61,7 @@ const Row = ({ title, content }: { title: string; content: string | number }) =>
   </>
 );
 
-export default function BillDetailScreen() {
+export default function BillDetailScreen({ isPreviewing }: { isPreviewing?: boolean }) {
   const totalElec = (data.elec_index_after - data.elec_index_before) * data.elec_rate;
   const totalWater = (data.water_index_after - data.water_index_before) * data.water_rate;
   return (
@@ -97,14 +97,18 @@ export default function BillDetailScreen() {
             title="Tổng tiền"
             content={totalWater + totalElec + data.rental_price + data.service_fee + ' đ'}
           />
-          <Row title="Tình trạng thanh toán" content={data.pay_status} />
-          <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-            <Button
-              label={getButtonLabel(data.pay_status)}
-              backgroundColor={TERRA_COLOR.PRIMARY[4]}
-              style={{ alignSelf: 'baseline', margin: '5%' }}
-            />
-          </View>
+          {!isPreviewing ? (
+            <>
+              <Row title="Tình trạng thanh toán" content={data.pay_status} />
+              <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+                <Button
+                  label={getButtonLabel(data.pay_status)}
+                  backgroundColor={TERRA_COLOR.PRIMARY[4]}
+                  style={{ alignSelf: 'baseline', margin: '5%' }}
+                />
+              </View>
+            </>
+          ) : null}
         </Card>
       </ScrollView>
     </View>

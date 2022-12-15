@@ -3,6 +3,10 @@ export type HomeNavigatorParamList = {
   Detail: undefined;
 };
 
+export type RenterHomeNavigatorParamList = {
+  RenterHome: undefined;
+};
+
 export type AuthenNavigatorParamList = {
   Signin: undefined;
   Signup: undefined;

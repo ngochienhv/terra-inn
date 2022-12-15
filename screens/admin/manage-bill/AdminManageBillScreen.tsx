@@ -12,54 +12,14 @@ import { AdminBillNavigatorParamList } from 'types/navigator';
 import { useSelector } from 'react-redux';
 import { selectInnGroups } from '../../../redux/selectors/innGroupSelector';
 import { Inn } from 'types/innType';
-
-const rooms = [
-  {
-    number: 101,
-    status: BILL_STATUS[0],
-  },
-  {
-    number: 102,
-    status: BILL_STATUS[1],
-  },
-  {
-    number: 103,
-    status: BILL_STATUS[2],
-  },
-  {
-    number: 104,
-    status: BILL_STATUS[2],
-  },
-  {
-    number: 105,
-    status: BILL_STATUS[0],
-  },
-  {
-    number: 106,
-    status: BILL_STATUS[1],
-  },
-  {
-    number: 107,
-    status: BILL_STATUS[0],
-  },
-  {
-    number: 108,
-    status: BILL_STATUS[2],
-  },
-  {
-    number: 109,
-    status: BILL_STATUS[2],
-  },
-  {
-    number: 110,
-    status: BILL_STATUS[2],
-  },
-];
+import { Toast } from 'react-native-toast-message/lib/src/Toast';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const getStatusColor = (status: string) => {
-  if (status === BILL_STATUS[0]) {
+  if (status === BILL_STATUS[1]) {
     return TERRA_COLOR.SUCCESS[3];
-  } else if (status === BILL_STATUS[1]) {
+  } else if (status === BILL_STATUS[0]) {
     return TERRA_COLOR.WARNING[3];
   } else if (status === BILL_STATUS[2]) {
     return TERRA_COLOR.ERROR[3];
@@ -97,16 +57,16 @@ function AdminManageBillComponents() {
       />
       <View flex style={{ backgroundColor: TERRA_COLOR.PRIMARY[1] }}>
         <TabController.TabPage index={0}>
-          {renderPage(innsList, selectedDate, setSelectedDate, navigation)}
+          {renderPage(innsList, selectedDate, setSelectedDate, navigation, -1)}
         </TabController.TabPage>
         <TabController.TabPage index={1}>
-          {/* {renderPage(selectedDate, setSelectedDate)} */}
+          {renderPage(innsList, selectedDate, setSelectedDate, navigation, 0)}
         </TabController.TabPage>
         <TabController.TabPage index={2}>
-          {/* {renderPage(selectedDate, setSelectedDate)} */}
+          {renderPage(innsList, selectedDate, setSelectedDate, navigation, 1)}
         </TabController.TabPage>
         <TabController.TabPage index={3}>
-          {/* {renderPage(selectedDate, setSelectedDate)} */}
+          {renderPage(innsList, selectedDate, setSelectedDate, navigation, 2)}
         </TabController.TabPage>
       </View>
     </TabController>
@@ -117,8 +77,55 @@ const renderPage = (
   innsList: Inn[],
   selectedDate: Date,
   setSelectedDate: React.Dispatch<React.SetStateAction<Date>>,
-  navigation: NativeStackNavigationProp<AdminBillNavigatorParamList>
+  navigation: NativeStackNavigationProp<AdminBillNavigatorParamList>,
+  index: number
 ) => {
+  const [rooms, setRooms] = useState([]);
+  const [inn, setInn] = useState<{ label: string; value: string }>();
+
+  const fetchData = async () => {
+    Toast.show({
+      type: 'info',
+      text1: 'Đang tải dữ liệu',
+    });
+    try {
+      const month = selectedDate.getMonth() + 1;
+      const year = selectedDate.getFullYear();
+      const monthQuery = year + '-' + month;
+
+      const token = await AsyncStorage.getItem('token');
+      const res = await axios.get(`/invoice?group-id=${inn?.value}&month=${monthQuery}`, {
+        headers: { token },
+      });
+      setRooms(
+        res.data.map((room) => ({
+          id: room.id,
+          name: room.room_name,
+          status: BILL_STATUS[room.pay_status],
+          electric: room.elec_used,
+          water: room.water_used,
+          tabs: room.pay_status,
+        }))
+      );
+      Toast.show({
+        type: 'success',
+        text1: 'Thành công',
+      });
+    } catch (err) {
+      console.log(err);
+      Toast.show({
+        type: 'error',
+        text1: 'Có lỗi xảy ra',
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (selectedDate && inn) {
+      fetchData();
+    }
+  }, [selectedDate, inn]);
+
   return (
     <>
       <ScrollView>
@@ -127,7 +134,8 @@ const renderPage = (
           {/* @ts-ignore */}
           <Picker
             placeholder={'Chọn khu trọ'}
-            onChange={() => console.log('changed')}
+            value={inn}
+            onChange={setInn}
             style={{ backgroundColor: 'white', padding: '2%' }}
           >
             {innsList.map((inn) => (
@@ -146,21 +154,30 @@ const renderPage = (
             style={styles.datePicker}
           />
           <Card>
-            {rooms.map((room) => (
-              <>
-                <TouchableOpacity
-                  style={styles.rowContainer}
-                  onPress={() => navigation.navigate('BillDetail')}
-                >
-                  <Text>Phòng {room.number}</Text>
-                  <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Text color={getStatusColor(room.status)}>{room.status}</Text>
-                    <Ionicons name={'ios-chevron-forward-outline'} size={20} />
-                  </View>
-                </TouchableOpacity>
-                <View height={1} backgroundColor={TERRA_COLOR.GRAY[0]} marginL-15 marginR-15 />
-              </>
-            ))}
+            {rooms
+              .filter((room) => {
+                return index == -1 || room.tabs == index;
+              })
+              .map((room) => (
+                <>
+                  <TouchableOpacity
+                    style={styles.rowContainer}
+                    onPress={() => navigation.navigate('BillDetail', { room })}
+                  >
+                    <Text>Phòng {room.name}</Text>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                      }}
+                    >
+                      <Text color={getStatusColor(room.status)}>{room.status}</Text>
+                      <Ionicons name={'ios-chevron-forward-outline'} size={20} />
+                    </View>
+                  </TouchableOpacity>
+                  <View height={1} backgroundColor={TERRA_COLOR.GRAY[0]} marginL-15 marginR-15 />
+                </>
+              ))}
           </Card>
         </View>
       </ScrollView>

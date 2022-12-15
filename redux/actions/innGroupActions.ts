@@ -9,5 +9,7 @@ export const getAllInns = createAsyncThunk('inn/getAllInns', async () => {
       token: token,
     },
   });
+  console.log(response.data);
+
   return response.data;
 });

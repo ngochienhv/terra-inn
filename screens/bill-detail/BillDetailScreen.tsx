@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import { ScrollView, StyleSheet } from 'react-native';
-import { Button, Card, Text, View } from 'react-native-ui-lib';
+import { Button, Card, LoaderScreen, Text, View } from 'react-native-ui-lib';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { TERRA_COLOR } from '../../constants/theme/color';
 import { BILL_STATUS } from '../../constants/status';
 import { useSelector } from 'react-redux';
 import { selectUserRole } from '../../redux/selectors/userSelectors';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 const data = {
   id: 1,
@@ -63,61 +66,111 @@ const Row = ({ title, content }: { title: string; content: string | number }) =>
   </>
 );
 
-export default function BillDetailScreen({ isPreviewing }: { isPreviewing?: boolean }) {
-  const totalElec = (data.elec_index_after - data.elec_index_before) * data.elec_rate;
-  const totalWater = (data.water_index_after - data.water_index_before) * data.water_rate;
+export default function BillDetailScreen({
+  isPreviewing,
+  route,
+  data,
+}: {
+  isPreviewing?: boolean;
+  route?: any;
+  data?: any;
+}) {
+  const bill = !isPreviewing ? route.params.room : '';
+  const [billData, setBillData] = useState({});
+  const [loading, setLoading] = useState<boolean>(true);
+  const totalElec = (billData.elec_index_after - billData.elec_index_before) * billData.elec_rate;
+  const totalWater =
+    (billData.water_index_after - billData.water_index_before) * billData.water_rate;
   const isAdmin = useSelector(selectUserRole) === 'admin';
 
+  const fetchData = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const res = await axios.get(`/invoice?id=${bill.id}`, {
+        headers: { token },
+      });
+      console.log(res.data);
+      setBillData(res.data);
+      setLoading(false);
+    } catch (err) {
+      console.log(err);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!isPreviewing) {
+      fetchData();
+    } else {
+      setLoading(false);
+      setBillData(data);
+    }
+  }, []);
+
   return (
-    <View flex style={{ backgroundColor: TERRA_COLOR.PRIMARY[1] }}>
-      <ScrollView>
-        <Card margin-20>
-          <Row title="Phòng" content="abc" />
-          <Row title="Tháng/năm" content={data.invoice_date} />
-          <Row title="Ngày chốt" content={new Date(data.create_at).toDateString()} />
-          <View style={{ ...styles.rowContainer, justifyContent: 'flex-start' }}>
-            <Text color={TERRA_COLOR.GRAY[3]}>Chỉ số điện</Text>
-            <Ionicons name={'ios-flash'} size={20} color={TERRA_COLOR.WARNING[3]} />
-          </View>
-          <View height={1} backgroundColor={TERRA_COLOR.GRAY[0]} marginL-15 marginR-15 />
-          <Row title="Chỉ số đầu" content={data.elec_index_before} />
-          <Row title="Chỉ số cuối" content={data.elec_index_after} />
-          <Row title="Sử dụng" content={data.elec_index_after - data.elec_index_before} />
-          <Row title="Đơn giá" content={data.elec_rate + ' KwH'} />
-          <Row title="Thành tiền" content={totalElec + ' đ'} />
-          <View style={{ ...styles.rowContainer, justifyContent: 'flex-start' }}>
-            <Text color={TERRA_COLOR.GRAY[3]}>Chỉ số nước</Text>
-            <Ionicons name={'ios-water'} size={20} color={TERRA_COLOR.DEFAULT[3]} />
-          </View>
-          <View height={1} backgroundColor={TERRA_COLOR.GRAY[0]} marginL-15 marginR-15 />
-          <Row title="Chỉ số đầu" content={data.water_index_before} />
-          <Row title="Chỉ số cuối" content={data.water_index_after} />
-          <Row title="Sử dụng" content={data.water_index_after - data.water_index_before} />
-          <Row title="Đơn giá" content={data.water_rate + ' m3'} />
-          <Row title="Thành tiền" content={totalWater + ' đ'} />
-          <Row title="Tiền phòng" content={data.rental_price + ' đ'} />
-          <Row title="Phí dịch vụ" content={data.service_fee + ' đ'} />
-          <Row
-            title="Tổng tiền"
-            content={totalWater + totalElec + data.rental_price + data.service_fee + ' đ'}
-          />
-          {!isPreviewing ? (
-            <>
-              <Row title="Tình trạng thanh toán" content={data.pay_status} />
-              <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-                {isAdmin ? (
-                  <Button
-                    label={getButtonLabel(data.pay_status)}
-                    backgroundColor={TERRA_COLOR.PRIMARY[4]}
-                    style={{ alignSelf: 'baseline', margin: '5%' }}
-                  />
-                ) : null}
+    <>
+      {loading ? (
+        <LoaderScreen color={TERRA_COLOR.PRIMARY[2]} message="Loading..." overlay />
+      ) : (
+        <View flex style={{ backgroundColor: TERRA_COLOR.PRIMARY[1] }}>
+          <ScrollView>
+            <Card margin-20>
+              <Row title="Phòng" content={bill.name} />
+              <Row title="Tháng/năm" content={billData.invoice_date} />
+              <Row title="Ngày chốt" content={new Date(billData.create_at).toDateString()} />
+              <View style={{ ...styles.rowContainer, justifyContent: 'flex-start' }}>
+                <Text color={TERRA_COLOR.GRAY[3]}>Chỉ số điện</Text>
+                <Ionicons name={'ios-flash'} size={20} color={TERRA_COLOR.WARNING[3]} />
               </View>
-            </>
-          ) : null}
-        </Card>
-      </ScrollView>
-    </View>
+              <View height={1} backgroundColor={TERRA_COLOR.GRAY[0]} marginL-15 marginR-15 />
+              <Row title="Chỉ số đầu" content={billData.elec_index_before} />
+              <Row title="Chỉ số cuối" content={billData.elec_index_after} />
+              <Row
+                title="Sử dụng"
+                content={billData.elec_index_after - billData.elec_index_before}
+              />
+              <Row title="Đơn giá" content={billData.elec_rate + ' KwH'} />
+              <Row title="Thành tiền" content={totalElec + ' đ'} />
+              <View style={{ ...styles.rowContainer, justifyContent: 'flex-start' }}>
+                <Text color={TERRA_COLOR.GRAY[3]}>Chỉ số nước</Text>
+                <Ionicons name={'ios-water'} size={20} color={TERRA_COLOR.DEFAULT[3]} />
+              </View>
+              <View height={1} backgroundColor={TERRA_COLOR.GRAY[0]} marginL-15 marginR-15 />
+              <Row title="Chỉ số đầu" content={billData.water_index_before} />
+              <Row title="Chỉ số cuối" content={billData.water_index_after} />
+              <Row
+                title="Sử dụng"
+                content={billData.water_index_after - billData.water_index_before}
+              />
+              <Row title="Đơn giá" content={billData.water_rate + ' m3'} />
+              <Row title="Thành tiền" content={totalWater + ' đ'} />
+              <Row title="Tiền phòng" content={billData.rental_price + ' đ'} />
+              <Row title="Phí dịch vụ" content={billData.service_fee + ' đ'} />
+              <Row
+                title="Tổng tiền"
+                content={
+                  totalWater + totalElec + billData.rental_price + billData.service_fee + ' đ'
+                }
+              />
+              {!isPreviewing ? (
+                <>
+                  <Row title="Tình trạng thanh toán" content={billData.pay_status} />
+                  <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+                    {isAdmin ? (
+                      <Button
+                        label={getButtonLabel(billData.pay_status)}
+                        backgroundColor={TERRA_COLOR.PRIMARY[4]}
+                        style={{ alignSelf: 'baseline', margin: '5%' }}
+                      />
+                    ) : null}
+                  </View>
+                </>
+              ) : null}
+            </Card>
+          </ScrollView>
+        </View>
+      )}
+    </>
   );
 }
 

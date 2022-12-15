@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { DateTimePicker, Picker, Text, View } from 'react-native-ui-lib';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -6,54 +6,10 @@ import { useSelector } from 'react-redux';
 
 import { selectInnGroups } from '../../../redux/selectors/innGroupSelector';
 import { TERRA_COLOR } from '../../../constants/theme/color';
-
-const data = [
-  {
-    room_name: 'H1-711',
-    elec_used: 80,
-    water_used: 20,
-  },
-  {
-    room_name: 'H1-711',
-    elec_used: 80,
-    water_used: 20,
-  },
-  {
-    room_name: 'H1-711',
-    elec_used: 80,
-    water_used: 20,
-  },
-  {
-    room_name: 'H1-711',
-    elec_used: 80,
-    water_used: 20,
-  },
-  {
-    room_name: 'H1-711',
-    elec_used: 80,
-    water_used: 20,
-  },
-  {
-    room_name: 'H1-711',
-    elec_used: 80,
-    water_used: 20,
-  },
-  {
-    room_name: 'H1-711',
-    elec_used: 80,
-    water_used: 20,
-  },
-  {
-    room_name: 'H1-711',
-    elec_used: 80,
-    water_used: 20,
-  },
-  {
-    room_name: 'H1-711',
-    elec_used: 80,
-    water_used: 20,
-  },
-];
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Toast } from 'react-native-toast-message/lib/src/Toast';
+import axios from 'axios';
+import { BILL_STATUS } from '../../../constants/status';
 
 const Cell = ({ content, color }: { content: string | number; color?: string }) => (
   <View flex style={{ alignSelf: 'flex-start' }}>
@@ -74,8 +30,52 @@ const Row = ({ room, electric, water }: { room: string; electric: number; water:
 
 export default function ElectricWaterScreen() {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [selectedInn, setSelectedInn] = useState<string>();
+  const [selectedInn, setSelectedInn] = useState<{ label: string; value: string }>();
+  const [data, setData] = useState([]);
   const innsList = useSelector(selectInnGroups);
+
+  const fetchData = async () => {
+    Toast.show({
+      type: 'info',
+      text1: 'Đang tải dữ liệu',
+    });
+    try {
+      const month = selectedDate.getMonth() + 1;
+      const year = selectedDate.getFullYear();
+      const monthQuery = year + '-' + month;
+
+      const token = await AsyncStorage.getItem('token');
+      const res = await axios.get(`/invoice?group-id=${selectedInn?.value}&month=${monthQuery}`, {
+        headers: { token },
+      });
+      setData(
+        res.data.map((room) => ({
+          id: room.id,
+          name: room.room_name,
+          status: BILL_STATUS[room.pay_status],
+          electric: room.elec_used,
+          water: room.water_used,
+          tabs: room.pay_status,
+        }))
+      );
+      Toast.show({
+        type: 'success',
+        text1: 'Thành công',
+      });
+    } catch (err) {
+      console.log(err);
+      Toast.show({
+        type: 'error',
+        text1: 'Có lỗi xảy ra',
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (selectedDate && selectedInn) {
+      fetchData();
+    }
+  }, [selectedDate, selectedInn]);
 
   return (
     <View flex style={{ backgroundColor: 'white' }}>
@@ -112,7 +112,8 @@ export default function ElectricWaterScreen() {
         </View>
         <View height={1} backgroundColor={TERRA_COLOR.GRAY[0]} marginL-15 marginR-15 />
         {data.map((room) => (
-          <Row room={room.room_name} electric={room.elec_used} water={room.water_used} />
+          //@ts-ignore
+          <Row room={room.name} electric={room.electric} water={room.water} />
         ))}
       </ScrollView>
     </View>

@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
-import { View, TabController, Text, Card } from 'react-native-ui-lib';
+import { View, TabController, Text, Card, LoaderScreen } from 'react-native-ui-lib';
 import { useNavigation } from '@react-navigation/native';
 import { TERRA_COLOR } from '../../../constants/theme/color';
 import { StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
@@ -24,6 +24,7 @@ const getStatusColor = (status: number) => {
 function AddminInnDetailComponent() {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [loading, setLoading] = useState<boolean>(true);
   const [rooms, setRooms] = useState<IRoom[]>([]);
   const route = useRoute();
   //@ts-ignore
@@ -42,9 +43,11 @@ function AddminInnDetailComponent() {
         .get('motel', { params: { 'group-id': innId } })
         .then((response) => {
           setRooms(response.data);
+          setLoading(false);
         })
         .catch((err) => {
           console.log(err);
+          setLoading(false);
         });
     };
 
@@ -65,7 +68,11 @@ function AddminInnDetailComponent() {
       />
       <View flex style={{ backgroundColor: TERRA_COLOR.PRIMARY[1] }}>
         <TabController.TabPage index={0}>
-          {renderPage(rooms, innId, selectedDate, setSelectedDate, navigation)}
+          {loading ? (
+            <LoaderScreen color={TERRA_COLOR.PRIMARY[1]} message="Loading..." overlay />
+          ) : (
+            renderPage(rooms, innId, selectedDate, setSelectedDate, navigation)
+          )}
         </TabController.TabPage>
         <TabController.TabPage index={1}>
           {/* {renderPage(selectedDate, setSelectedDate)} */}

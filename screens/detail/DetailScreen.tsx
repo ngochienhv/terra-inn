@@ -15,11 +15,6 @@ import { TERRA_COLOR } from '../../constants/theme/color';
 
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-const innImages = [
-  'https://bandon.vn/uploads/posts/thiet-ke-nha-tro-dep-2020-bandon-0.jpg',
-  'https://angcovat.vn/imagesdata/KN208117/thiet-ke-phong-tro-khep-kin-co-gac-lung.jpg',
-  'https://www.hancorp.com.vn/wp-content/uploads/2020/08/phong-tro-2.jpg',
-];
 
 const description = [
   'Thoáng mát',
@@ -31,6 +26,7 @@ const description = [
 
 function DetailComponent({ data }) {
   const motel = data.motel;
+  const images = motel.images.split(',');
   return (
     <View flex>
       <ScrollView>
@@ -39,8 +35,11 @@ function DetailComponent({ data }) {
           loop
           pageControlPosition='under'
         >
-          {innImages.map((image) => (
-            <Image source={{ uri: image }} style={{ height: 200 }} />
+          {images.map((image) => (
+            <Image
+              source={{ uri: `https://terrainn-api.fly.dev/assets/${image}` }}
+              style={{ height: 200 }}
+            />
           ))}
         </Carousel>
         <View padding-15>

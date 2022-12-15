@@ -11,6 +11,7 @@ export default function InnCard({
   navigation: NativeStackNavigationProp<HomeNavigatorParamList>;
   motel: any;
 }) {
+  const coverImage = motel.images.split(',')[0];
   return (
     <Card
       containerStyle={{ marginBottom: 15 }}
@@ -20,7 +21,7 @@ export default function InnCard({
       <Card.Image
         style={{ height: 200 }}
         source={{
-          uri: 'https://terrainn-api.fly.dev/assets/no-image.png',
+          uri: `https://terrainn-api.fly.dev/assets/${coverImage}`,
         }}
       />
       <View padding-20>

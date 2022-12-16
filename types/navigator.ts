@@ -1,6 +1,7 @@
 export type HomeNavigatorParamList = {
   Home: undefined;
   Detail: undefined;
+  Add: undefined;
 };
 
 export type RenterHomeNavigatorParamList = {

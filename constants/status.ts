@@ -15,7 +15,6 @@ export const INN_STATUS = {
 };
 
 export const ADMIN_REQUEST_STATUS = {
-  0: 'Đã hoàn thành',
-  1: 'Chờ thanh toán',
-  2: 'Chưa hoàn thành',
+  0: 'Chưa hoàn thành',
+  1: 'Đã hoàn thành',
 };

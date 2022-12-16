@@ -9,6 +9,10 @@ import { TERRA_COLOR } from '../../constants/theme/color';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { HomeNavigatorParamList } from 'types/navigator';
+
 const description = ['Thoáng mát', 'Có bảo vệ', 'Không chung chủ', 'Giờ giấc thoải mái', 'Sạch sẽ'];
 
 //@ts-ignore
@@ -93,41 +97,46 @@ const renderDescription = (description: string) => {
 export default function DetailScreen(props) {
   const { width } = Dimensions.get('window');
   const itemWidth = width / 2;
+  const navigation = useNavigation<NativeStackNavigationProp<HomeNavigatorParamList>>();
   const motel = props.route.params.motel;
 
-  const handleRequest = async () => {
-    Toast.show({
-      type: 'info',
-      text1: 'Đang gửi yêu cầu',
-    });
-    try {
-      const token = await AsyncStorage.getItem('token');
-      const res = await axios.post(
-        '/request',
-        {
-          is_from_admin: false,
-          motel_id: motel.id,
-          type: 1,
-          status: 0,
-          title: 'Yêu cầu thuê phòng',
-          due_date: '2022-12-15',
-          content: `Yêu cầu thuê phòng cho ${motel.name}`,
-        },
-        { headers: { token } }
-      );
+  const check = () => {
+    console.log(motel)
+  }
 
-      Toast.show({
-        type: 'success',
-        text1: 'Đã gửi yêu cầu',
-      });
-    } catch (err) {
-      console.log(err);
-      Toast.show({
-        type: 'error',
-        text1: 'Có lỗi xảy ra:(',
-      });
-    }
-  };
+  // const handleRequest = async () => {
+  //   Toast.show({
+  //     type: 'info',
+  //     text1: 'Đang gửi yêu cầu',
+  //   });
+  //   try {
+  //     const token = await AsyncStorage.getItem('token');
+  //     const res = await axios.post(
+  //       '/request',
+  //       {
+  //         is_from_admin: false,
+  //         motel_id: motel.id,
+  //         type: 1,
+  //         status: 0,
+  //         title: 'Yêu cầu thuê phòng',
+  //         due_date: '2022-12-15',
+  //         content: `Yêu cầu thuê phòng cho ${motel.name}`,
+  //       },
+  //       { headers: { token } }
+  //     );
+
+  //     Toast.show({
+  //       type: 'success',
+  //       text1: 'Đã gửi yêu cầu',
+  //     });
+  //   } catch (err) {
+  //     console.log(err);
+  //     Toast.show({
+  //       type: 'error',
+  //       text1: 'Có lỗi xảy ra:(',
+  //     });
+  //   }
+  // };
   return (
     <GridList
       ListHeaderComponent={<DetailComponent data={motel} />}
@@ -141,7 +150,7 @@ export default function DetailScreen(props) {
             label="Yêu cầu thuê phòng"
             backgroundColor={TERRA_COLOR.PRIMARY[3]}
             style={styles.button}
-            onPress={handleRequest}
+            onPress={() => navigation.navigate('Add', {motel_id: motel.id, request: "Yêu cầu thuê phòng"})}
           />
         </View>
       }

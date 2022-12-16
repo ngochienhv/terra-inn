@@ -68,8 +68,8 @@ export default function SignupScreen({
   return (
     <View style={styles.container}>
       <ImageBackground
-        source={require('../../assets/register-background.png')}
-        resizeMode='cover'
+        source={{ uri: 'https://i.ibb.co/znBxTDM/register-background.png' }}
+        resizeMode="cover"
         style={styles.image}
       >
         <View center style={styles.box}>
@@ -82,13 +82,13 @@ export default function SignupScreen({
             </Text>
           </View>
           <TextField
-            placeholder='Số điện thoại'
+            placeholder="Số điện thoại"
             {...textFieldProps}
             value={phone}
             onChangeText={setPhone}
           />
           <TextField
-            placeholder='Mật khẩu'
+            placeholder="Mật khẩu"
             {...textFieldProps}
             value={password}
             onChangeText={setPassword}
@@ -116,14 +116,14 @@ export default function SignupScreen({
             </RadioGroup>
           </View>
           <Button
-            label='Đăng Ký'
+            label="Đăng Ký"
             backgroundColor={TERRA_COLOR.PRIMARY[3]}
             style={styles.button}
             onPress={() => handleSignUp()}
             text60
           />
           <Button
-            label='Đã có tài khoản? Đăng nhập ngay'
+            label="Đã có tài khoản? Đăng nhập ngay"
             color={TERRA_COLOR.PRIMARY[3]}
             style={styles.hyperLink}
             link

@@ -25,7 +25,7 @@ export default function HomeRentScreen({ navigation }) {
             TerraInn Xin chào!
           </Text>
           <View margin-20 marginT-40 style={styles.title}>
-            <Avatar source={require('../../assets/terra-logo.png')} size={60} />
+            <Avatar source={{ uri: '../../assets/terra-logo.png' }} size={60} />
             <Text text50 marginL-10>
               {userProfile.full_name.length > 0 ? userProfile.full_name : 'Người dùng'}
             </Text>

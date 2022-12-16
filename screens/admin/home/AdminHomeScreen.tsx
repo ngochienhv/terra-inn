@@ -23,7 +23,12 @@ export default function AdminHomeScreen({
               Xin chào, Admin
             </Text>
           </View>
-          <Avatar source={require('../../../assets/terra-logo.png')} size={60} />
+          <Avatar
+            source={{
+              uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQBwBc9x_-B3ksahoBkr9zvK22-C-iA-eKORg&usqp=CAU',
+            }}
+            size={60}
+          />
         </View>
         <View style={{ justifyContent: 'center' }}>
           <View style={styles.utilityBox}>

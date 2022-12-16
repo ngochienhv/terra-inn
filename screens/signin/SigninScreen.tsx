@@ -67,7 +67,7 @@ export default function SigninScreen({
   return (
     <View style={styles.container}>
       <ImageBackground
-        source={require('../../assets/login-background.png')}
+        source={{ uri: 'https://i.ibb.co/VgwX35J/login-background.png' }}
         resizeMode="cover"
         style={styles.image}
       >

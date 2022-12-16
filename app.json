@@ -26,14 +26,14 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.ddung.terrainn"
+      "package": "com.ngochienhv.terrainn"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "extra": {
       "eas": {
-        "projectId": "b34bdcf0-d07a-47a9-ac01-706da487c4c2"
+        "projectId": "27edf001-fd45-4aae-867a-a7eeb986d760"
       }
     }
   }

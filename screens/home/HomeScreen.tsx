@@ -26,12 +26,12 @@ export default function HomeScreen({
   }, []);
   return (
     <ImageBackground
-      source={require('../../assets/home-background.png')}
-      resizeMode='cover'
+      source={{ uri: 'https://i.ibb.co/105qd0V/home-background.png' }}
+      resizeMode="cover"
       style={styles.image}
     >
       <View flex padding-20>
-        <TextInput style={styles.input} placeholder='Tìm kiếm' />
+        <TextInput style={styles.input} placeholder="Tìm kiếm" />
         <View margin-20 style={styles.title}>
           <View>
             <Text text50 color={TERRA_COLOR.GRAY[4]}>
@@ -41,16 +41,17 @@ export default function HomeScreen({
               TerraInn
             </Text>
           </View>
-          <Avatar source={require('../../assets/terra-logo.png')} size={60} />
+          <Avatar
+            source={{
+              uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdgKnRGHPC_HSqeO4lUvjyxHaTxrmc-uIeiw&usqp=CAU',
+            }}
+            size={60}
+          />
         </View>
         <Text marginB-10 text7>
           Khám phá trọ gần bạn
         </Text>
-        <Carousel
-          onChangePage={() => console.log('page changed')}
-          loop
-          pageControlPosition='under'
-        >
+        <Carousel onChangePage={() => console.log('page changed')} loop pageControlPosition="under">
           {motels.map((motel) => (
             <InnCard navigation={navigation} motel={motel} />
           ))}

@@ -71,7 +71,7 @@ const pageContent = () => {
     try {
       const requests = await axios({
         method: 'get',
-        url: `/request?room-id=1`,
+        url: `/request?by-admin=true`,
         headers: {
           token: token
         }
@@ -97,10 +97,11 @@ const pageContent = () => {
             key={user.id}
             title={user.title}
             content={user.content}
-            creator={user.creator}
+            creator_name={user.creator_name}
             create_at={user.create_at}
             status={user.status}
-            roomId = {user.room_id}/>
+            room_name={user.room_name}
+            group_name = {user.group_name}/>
         ))}
 
       </View>

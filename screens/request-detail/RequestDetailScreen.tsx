@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { Button, Card, Text, View } from 'react-native-ui-lib';
 import { StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
@@ -7,6 +7,8 @@ import { selectUserRole } from '../../redux/selectors/userSelectors';
 import { TERRA_COLOR } from '../../constants/theme';
 import { REQUEST_STATUS } from '../../constants/status';
 import { ScrollView } from 'react-native-gesture-handler';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 const getStatusColor = (status: number) => {
   if (status === 1) {
@@ -32,6 +34,8 @@ const data = {
   create_at: '2022-12-14T08:45:29.221+07:00',
 };
 
+
+
 const Row = ({ title, content }: { title: string; content: string | number }) => (
   <>
     <View style={styles.rowContainer}>
@@ -45,7 +49,22 @@ const Row = ({ title, content }: { title: string; content: string | number }) =>
   </>
 );
 
-export default function RequestDetailScreen() {
+export default function RequestDetailScreen(id: number) {
+  const [datum, setDatum] = useState({})
+  const handleRequest = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const res = await axios.post(`/request?id=${1}`, {
+        headers: { token },
+      });
+      console.log(res)
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  useEffect(() => {
+    handleRequest()
+  }, [])
   return (
     <ScrollView>
       <View flex style={{ backgroundColor: TERRA_COLOR.PRIMARY[1] }}>

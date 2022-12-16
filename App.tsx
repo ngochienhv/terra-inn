@@ -71,6 +71,11 @@ const GuestHomeStackScreen = () => {
         options={{ title: 'Trang chủ', headerShown: false }}
       />
       <HomeStack.Screen name="Detail" component={DetailScreen} />
+      <HomeStack.Screen
+        name="Add"
+        component={RequestFormScreen}
+        options={{ title: 'Thêm yêu cầu' }}
+      />
     </HomeStack.Navigator>
   );
 };

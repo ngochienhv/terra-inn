@@ -70,7 +70,7 @@ const pageContent = (index: number) => {
   };
   useEffect(() => {
     getRequest()
-  }, [])
+  }, [5000])
   return (
     <ScrollView>
       <View>
@@ -85,6 +85,7 @@ const pageContent = (index: number) => {
             create_at={user.create_at}
             status={user.status}
             roomId = {roomID}
+            id = {user.id}
           />
         ))}
       </View>
@@ -120,7 +121,7 @@ function RequestComponents() {
         <TabController.TabPage index={2}>{pageContent(0)}</TabController.TabPage>
       </View>
       
-      <TouchableOpacity onPress={() => navigation.navigate('Add')} style={styles.affixButton}>
+      <TouchableOpacity onPress={() => navigation.navigate("Add", {motel_id: ""})} style={styles.affixButton}>
         <Text style={{ fontSize: 40, color: 'white' }}>+</Text>
       </TouchableOpacity>
     </TabController>
